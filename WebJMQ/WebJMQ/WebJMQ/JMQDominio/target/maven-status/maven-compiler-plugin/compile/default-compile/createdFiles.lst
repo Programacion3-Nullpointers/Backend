@@ -1,0 +1,17 @@
+com\jmq\inversiones\dominio\ventas\OrdenVenta.class
+com\jmq\inversiones\dominio\logistica\Entrega.class
+com\jmq\inversiones\dominio\ventas\Categoria.class
+com\jmq\inversiones\dominio\ventas\Detalle.class
+com\jmq\inversiones\dominio\ventas\EstadoCompra.class
+com\jmq\inversiones\dominio\contizaciones\Cotizacion.class
+com\jmq\inversiones\dominio\pagos\Boleta.class
+com\jmq\inversiones\dominio\pagos\ComprobantePago.class
+com\jmq\inversiones\dominio\pagos\Factura.class
+com\jmq\inversiones\dominio\usuario\TipoUsuario.class
+com\jmq\inversiones\dominio\logistica\TipoEntrega.class
+com\jmq\inversiones\dominio\usuario\Usuario.class
+com\jmq\inversiones\dominio\contizaciones\ProductoCotizacion.class
+com\jmq\inversiones\dominio\notificaciones\Notificacion.class
+com\jmq\inversiones\dominio\pagos\Descuento.class
+com\jmq\inversiones\dominio\pagos\MetodoPago.class
+com\jmq\inversiones\dominio\ventas\Producto.class
