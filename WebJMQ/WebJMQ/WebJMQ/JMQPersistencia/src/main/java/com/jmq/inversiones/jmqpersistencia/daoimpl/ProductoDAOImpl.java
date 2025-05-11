@@ -1,12 +1,18 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
+import com.jmq.inversiones.dbmanager.DBManager;
+import com.jmq.inversiones.dominio.pagos.Descuento;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoDAO;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDAO {
@@ -19,17 +25,17 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
     
     @Override
     protected String getInsertQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{CALL PRODUCTO_INSERTAR( ?, ?, ?, ?, ?, ?, ?, ?)}";
     }
 
     @Override
     protected String getUpdateQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{CALL PRODUCTO_MODIFICAR( ?, ?, ?, ?, ?, ?, ?, ?)}";
     }
 
     @Override
     protected String getDeleteQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{CALL PRODUCTO_ELIMINAR( ? )}";
     }
 
     @Override
@@ -39,7 +45,7 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
 
     @Override
     protected String getSelectAllQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{CALL PRODUCTO_LISTAR()}";
     }
 
     @Override
@@ -72,6 +78,91 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         entity.setId(id);
     }
     
+    @Override
+    public void agregar(Producto pro) {
+        // Sobrescribimos el método para usar el SP
+        try (Connection conn = DBManager.getInstance().obtenerConexion()) {
+            conn.setAutoCommit(false);
+            try {
+                // Registrar la venta
+                try (CallableStatement cs = conn.prepareCall(getInsertQuery())) {
+                    
+                    cs.registerOutParameter(1, Types.INTEGER);
+                    cs.setString(2, pro.getNombre());
+                    cs.setString(3, pro.getDescripcion());
+                    cs.setInt(4, pro.getStock());
+                    cs.setDouble(5, pro.getPrecio());
+                    cs.setString(6, pro.getImagen());
+                    cs.setBoolean(7, pro.isActivo());
+                    cs.setInt(8,pro.getCategoria().getId());
+                    cs.execute();
+                    setId(pro, cs.getInt(1));
+                }
+                
+                
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al registrar descuento", e);
+        }
+    }
+    
+    
+    @Override
+    public void actualizar(Producto pro) {
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(getUpdateQuery())) {
+            
+            cs.setInt(1, pro.getId());
+            cs.setString(2, pro.getNombre());
+            cs.setString(3, pro.getDescripcion());
+            cs.setInt(4, pro.getStock());
+            cs.setDouble(5, pro.getPrecio());
+            cs.setString(6, pro.getImagen());
+            cs.setBoolean(7, pro.isActivo());
+            cs.setInt(8, pro.getCategoria().getId());
+            
+            cs.execute();
+            
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar descuento", e);
+        }
+    }
+    
+    @Override
+    public void eliminar(Integer id) {
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(getUpdateQuery())) {
+            
+            cs.setInt(1,id);
+            //cs.setDouble(2, desc.getPorcentaje());
+            cs.execute();
+            
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar descuento", e);
+        }
+    }
+    
+    @Override
+    public List<Producto> listarTodos() {
+        List<Producto> productos = new ArrayList<>();
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(getSelectAllQuery());
+             ResultSet rs = cs.executeQuery()) {
+            
+            while (rs.next()) {
+                productos.add(createFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar descuentos", e);
+        }
+        return productos;
+    }
     
     
 }

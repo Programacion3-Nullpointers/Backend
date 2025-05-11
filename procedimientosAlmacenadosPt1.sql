@@ -85,11 +85,12 @@ END $
 
 CREATE PROCEDURE DESCUENTO_INSERTAR(
     OUT _id_descuento INT,
-    IN _num_descuento INT
+    IN _num_descuento INT,
+    IN _activo TINYINT
 )
 BEGIN
-    INSERT INTO Descuento(idDescuento, numDescuento)
-    VALUES (_id_descuento, _num_descuento);
+    INSERT INTO Descuento(idDescuento, numDescuento, activo)
+    VALUES (_id_descuento, _num_descuento, _activo);
     SET _id_descuento = LAST_INSERT_ID();
 END $
 
@@ -107,7 +108,7 @@ CREATE PROCEDURE DESCUENTO_ELIMINAR(
     IN _id_descuento INT
 )
 BEGIN
-    DELETE FROM Descuento WHERE idDescuento = _id_descuento;
+    UPDATE Descuento SET activo = 0 WHERE idDescuento = _id_descuento;
 END $
 
 CREATE PROCEDURE DESCUENTO_LISTAR()
@@ -157,7 +158,7 @@ CREATE PROCEDURE USUARIO_INSERTAR(
     OUT _id_usuario INT,
     IN _nombre_usuario VARCHAR(45),
     IN _contrasena VARCHAR(45),
-    IN _activo INT,
+    IN _activo TINYINT,
     IN _correo VARCHAR(45),
     IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
     IN _razon_social VARCHAR(45),
@@ -174,7 +175,7 @@ CREATE PROCEDURE USUARIO_MODIFICAR(
     IN _id_usuario INT,
     IN _nombre_usuario VARCHAR(45),
     IN _contrasena VARCHAR(45),
-    IN _activo INT,
+    IN _activo TINYINT,
     IN _correo VARCHAR(45),
     IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
     IN _razon_social VARCHAR(45),
@@ -210,11 +211,12 @@ CREATE PROCEDURE ORDENVENTA_INSERTAR(
     OUT _id_ordenventa INT,
     IN _estado_compra ENUM('pendiente', 'pagado', 'enviado', 'entregado'),
     IN _fecha_orden DATE,
+    IN _activo TINYINT,
     IN _id_usuario INT
 )
 BEGIN
-    INSERT INTO OrdenVenta(estado_compra, fecha_orden, idUsuario)
-    VALUES (_estado_compra, _fecha_orden, _id_usuario);
+    INSERT INTO OrdenVenta(estado_compra, fecha_orden, activo, idUsuario)
+    VALUES (_estado_compra, _fecha_orden, _activo, _id_usuario);
     SET _id_ordenventa = LAST_INSERT_ID();
 END $
 
@@ -222,12 +224,14 @@ CREATE PROCEDURE ORDENVENTA_MODIFICAR(
     IN _id_ordenventa INT,
     IN _estado_compra ENUM('pendiente', 'pagado', 'enviado', 'entregado'),
     IN _fecha_orden DATE,
+    IN _activo TINYINT,
     IN _id_usuario INT
 )
 BEGIN
     UPDATE OrdenVenta
     SET estado_compra = _estado_compra,
         fecha_orden = _fecha_orden,
+        activo = _activo,
         idUsuario = _id_usuario
     WHERE idOrdenVenta = _id_ordenventa;
 END $
@@ -236,7 +240,7 @@ CREATE PROCEDURE ORDENVENTA_ELIMINAR(
     IN _id_ordenventa INT
 )
 BEGIN
-    DELETE FROM OrdenVenta WHERE idOrdenVenta = _id_ordenventa;
+    UPDATE OrdenVenta SET activo = 0 WHERE idOrdenVenta = _id_ordenventa;
 END $
 
 CREATE PROCEDURE ORDENVENTA_LISTAR()

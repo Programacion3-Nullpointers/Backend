@@ -8,6 +8,7 @@ public class OrdenVenta {
     private int id;
     private EstadoCompra estado_compra;
     private Date fecha_orden;
+    private boolean activo;
     private Usuario usuario;
     private List<Detalle>detalles;
     public OrdenVenta(){
@@ -70,6 +71,20 @@ public class OrdenVenta {
      */
     public void setDetalle(List<Detalle> detalle) {
         this.detalles = detalle;
+    }
+
+    /**
+     * @return the activo
+     */
+    public boolean isActivo() {
+        return activo;
+    }
+
+    /**
+     * @param activo the activo to set
+     */
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
     
     

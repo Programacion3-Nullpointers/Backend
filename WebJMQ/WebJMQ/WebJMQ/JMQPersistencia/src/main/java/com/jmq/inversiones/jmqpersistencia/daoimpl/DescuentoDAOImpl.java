@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements DescuentoDAO{
@@ -18,7 +20,7 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
     
     @Override
     protected String getInsertQuery() {
-        return "{CALL DESCUENTO_INSERTAR(?, ?)}";
+        return "{CALL DESCUENTO_INSERTAR(?, ?, ?)}";
     }
 
     @Override
@@ -33,12 +35,12 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
 
     @Override
     protected String getSelectByIdQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{SELECT * FROM Descuento d WHERE d.id=?}";
     }
 
     @Override
     protected String getSelectAllQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{CALL DESCUENTO_LISTAR()}";
     }
 
     @Override
@@ -70,11 +72,12 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
         try (Connection conn = DBManager.getInstance().obtenerConexion()) {
             conn.setAutoCommit(false);
             try {
-                // Registrar la venta
+                // Registrar el descuento
                 try (CallableStatement cs = conn.prepareCall(getInsertQuery())) {
                     
                     cs.registerOutParameter(1, Types.INTEGER);
                     cs.setDouble(2, desc.getPorcentaje());
+                    cs.setBoolean(3, true);
                     cs.execute();
                     setId(desc, cs.getInt(1));
                 }
@@ -105,4 +108,34 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
             throw new RuntimeException("Error al actualizar descuento", e);
         }
     }
+    @Override
+    public void eliminar(Integer id) {
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(getUpdateQuery())) {
+            
+            cs.setInt(1,id);
+            //cs.setDouble(2, desc.getPorcentaje());
+            cs.execute();
+            
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar descuento", e);
+        }
+    }
+    
+    @Override
+    public List<Descuento> listarTodos() {
+        List<Descuento> descuentos = new ArrayList<>();
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(getSelectAllQuery());
+             ResultSet rs = cs.executeQuery()) {
+            
+            while (rs.next()) {
+                descuentos.add(createFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar descuentos", e);
+        }
+        return descuentos;
+    }
+    
 }
