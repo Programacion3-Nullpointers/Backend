@@ -7,6 +7,7 @@ public class Usuario {
     private boolean activo;
     private String correo;
     private TipoUsuario tipoUsuario;
+    private int dni;
     private String razonsocial;
     private String direccion;
     private String RUC;
@@ -102,6 +103,20 @@ public class Usuario {
     @Override
     public String toString() {
         return "Usuario{" + "id=" + id + ", nombreUsuario=" + nombreUsuario + ", contrasena=" + contrasena + ", activo=" + activo + ", correo=" + correo + ", tipoUsuario=" + tipoUsuario + ", razonsocial=" + razonsocial + ", direccion=" + direccion + ", RUC=" + RUC + '}';
+    }
+
+    /**
+     * @return the dni
+     */
+    public int getDni() {
+        return dni;
+    }
+
+    /**
+     * @param dni the dni to set
+     */
+    public void setDni(int dni) {
+        this.dni = dni;
     }
     
 }
