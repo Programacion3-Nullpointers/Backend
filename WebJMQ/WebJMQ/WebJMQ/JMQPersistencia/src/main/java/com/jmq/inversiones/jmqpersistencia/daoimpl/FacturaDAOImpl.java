@@ -3,26 +3,29 @@ package com.jmq.inversiones.jmqpersistencia.daoimpl;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.dominio.pagos.Factura;
 import com.jmq.inversiones.jmqpersistencia.dao.FacturaDAO;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 
 
 public class FacturaDAOImpl extends BaseDAOImpl<Factura> implements FacturaDAO{
 
     @Override
     protected String getInsertQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{CALL FACTURA_INSERTAR(?,?,?,?,?)}";
     }
 
     @Override
     protected String getUpdateQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{CALL FACTURA_MODIFICAR(?,?,?,?,?,?,?,?,?)}";
     }
 
     @Override
     protected String getDeleteQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{CALL FACTURA_ELIMINAR(?)}";
     }
 
     @Override
@@ -32,12 +35,14 @@ public class FacturaDAOImpl extends BaseDAOImpl<Factura> implements FacturaDAO{
 
     @Override
     protected String getSelectAllQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "{CALL FACTURA_LISTAR()}";
     }
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, Factura entity) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ps.setInt(1,entity.getId());
+        
+        
     }
 
     @Override
