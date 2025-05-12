@@ -7,7 +7,7 @@ public class Usuario {
     private boolean activo;
     private String correo;
     private TipoUsuario tipoUsuario;
-    private int dni;
+    private String dni;
     private String razonsocial;
     private String direccion;
     private String RUC;
@@ -108,14 +108,14 @@ public class Usuario {
     /**
      * @return the dni
      */
-    public int getDni() {
+    public String getDni() {
         return dni;
     }
 
     /**
      * @param dni the dni to set
      */
-    public void setDni(int dni) {
+    public void setDni(String dni) {
         this.dni = dni;
     }
     

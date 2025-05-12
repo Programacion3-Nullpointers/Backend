@@ -161,13 +161,14 @@ CREATE PROCEDURE USUARIO_INSERTAR(
     IN _activo TINYINT,
     IN _correo VARCHAR(45),
     IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
+    IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
     IN _direccion VARCHAR(45),
     IN _ruc VARCHAR(45)
 )
 BEGIN
-    INSERT INTO Usuario(nombreUsuario, contrasena, activo, correo, tipoUsuario, razonsocial, direccion, RUC)
-    VALUES (_nombre_usuario, _contrasena, _activo, _correo, _tipo_usuario, _razon_social, _direccion, _ruc);
+    INSERT INTO Usuario(nombreUsuario, contrasena, activo, correo, tipoUsuario, dni, razonsocial, direccion, RUC)
+    VALUES (_nombre_usuario, _contrasena, _activo, _correo, _tipo_usuario, dni, _razon_social, _direccion, _ruc);
     SET _id_usuario = LAST_INSERT_ID();
 END $
 
@@ -178,6 +179,7 @@ CREATE PROCEDURE USUARIO_MODIFICAR(
     IN _activo TINYINT,
     IN _correo VARCHAR(45),
     IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
+    IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
     IN _direccion VARCHAR(45),
     IN _ruc VARCHAR(45)
@@ -189,6 +191,7 @@ BEGIN
         activo = _activo,
         correo = _correo,
         tipoUsuario = _tipo_usuario,
+        dni = _dni,
         razonsocial = _razon_social,
         direccion = _direccion,
         RUC = _ruc

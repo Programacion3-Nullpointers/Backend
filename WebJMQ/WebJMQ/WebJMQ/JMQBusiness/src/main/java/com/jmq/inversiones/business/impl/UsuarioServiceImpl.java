@@ -33,7 +33,14 @@ public class UsuarioServiceImpl implements UsuarioService{
             if (usuario.getTipoUsuario() == null) {
                 usuario.setTipoUsuario(TipoUsuario.CLIENTE); 
             }
-            
+            if(usuario.getTipoUsuario() == TipoUsuario.CLIENTE && usuario.getDni()== null
+                    && usuario.getNombreUsuario()== null){
+                throw new Exception("El dni y nombre de usuario es requerido para los clientes");
+            }
+            if(usuario.getTipoUsuario() == TipoUsuario.EMPRESA && 
+                    usuario.getRazonsocial() == null && usuario.getRUC() == null){
+                throw new Exception("La razon social y el RUC es requerido para las empresas");
+            }
             usuarioDAO.agregar(usuario);
         } catch (Exception e) {
             throw new Exception("Error al registrar usuario: " + e.getMessage(), e);
