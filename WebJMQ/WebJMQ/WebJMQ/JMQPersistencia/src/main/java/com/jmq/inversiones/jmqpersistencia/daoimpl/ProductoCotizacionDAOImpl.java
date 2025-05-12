@@ -3,9 +3,11 @@ package com.jmq.inversiones.jmqpersistencia.daoimpl;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> implements ProductoCotizacionDAO{
@@ -60,6 +62,22 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
     @Override
     protected void setId(ProductoCotizacion entity, Integer id) {
         entity.setId(id);
+    }
+
+    void agregar(ProductoCotizacion pc, int id, Connection conn) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void eliminarPorCotizacion(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void agregar(ProductoCotizacion pc, int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    List<ProductoCotizacion> obtenerPorCotizacion(int aInt) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

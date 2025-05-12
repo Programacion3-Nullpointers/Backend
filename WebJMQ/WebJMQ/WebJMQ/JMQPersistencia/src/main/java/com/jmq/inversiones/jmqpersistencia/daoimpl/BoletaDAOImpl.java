@@ -6,43 +6,52 @@ import com.jmq.inversiones.jmqpersistencia.dao.BoletaDAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
  
 
 public class BoletaDAOImpl extends BaseDAOImpl<Boleta> implements BoletaDAO{
 
+    private final ComprobantePagoDAOImpl comprobanteDAO = new ComprobantePagoDAOImpl() {};
+    
     @Override
     protected String getInsertQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "INSERT INTO Boleta(id,dni,nombre,fecha_emision) VALUES (?, ?, ?, ?)";
     }
 
     @Override
     protected String getUpdateQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "UPDATE Boleta SET dni = ?, nombre = ?, fecha_emision = ? WHERE id = ?";
     }
 
     @Override
     protected String getDeleteQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "DELETE FROM Boleta WHERE id = ?";
     }
 
     @Override
     protected String getSelectByIdQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "SELECT * FROM Boleta INNER JOIN ComprobantePago USING(id) WHERE id = ?";
     }
 
     @Override
     protected String getSelectAllQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "SELECT * FROM Boleta INNER JOIN ComprobantePago USING(id)";
     }
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, Boleta entity) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ps.setInt(1, entity.getId());
+        ps.setString(2, entity.getDni());
+        ps.setString(3, entity.getNombre());
+        ps.setTimestamp(4, new Timestamp(entity.getFecha_emision().getTime()));
     }
 
     @Override
     protected void setUpdateParameters(PreparedStatement ps, Boleta entity) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ps.setString(1,entity.getDni());
+        ps.setString(2,entity.getNombre());
+        ps.setTimestamp(3,new Timestamp(entity.getFecha_emision().getTime()));
+        ps.setInt(4, entity.getId());
     }
 
     @Override
@@ -63,4 +72,21 @@ public class BoletaDAOImpl extends BaseDAOImpl<Boleta> implements BoletaDAO{
         entity.setId(id);
     }
     
+    @Override 
+    public void agregar(Boleta f){
+        comprobanteDAO.agregar(f);
+        super.agregar(f);
+    }
+    
+    @Override
+    public void actualizar(Boleta f){
+        comprobanteDAO.actualizar(f);
+        super.actualizar(f);
+    }
+    
+    
+    public void eliminar(int id){
+        super.eliminar(id);
+        comprobanteDAO.eliminar(id);
+    }
 }
