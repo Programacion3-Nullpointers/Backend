@@ -9,6 +9,7 @@
         <module>JMQDominio</module>
         <module>JMQPersistencia</module>
         <module>JMQDBManager</module>
+        <module>../../../../../../Downloads/Backend/Backend/WebJMQ/WebJMQ/WebJMQ/JMQBusiness</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
