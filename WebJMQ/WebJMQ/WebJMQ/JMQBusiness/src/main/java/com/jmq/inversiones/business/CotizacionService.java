@@ -1,6 +1,6 @@
 package com.jmq.inversiones.business;
 
-import com.jmq.inversiones.dominio.cotizacion.Cotizacion;
+import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
 import java.util.List;
 
 public interface CotizacionService {

@@ -8,6 +8,8 @@ public class Notificacion {
     private String mensaje;
     private Date fecha_envio;
     private String estado;
+    private String asunto;
+    private String destinatario;
     
     public Notificacion(){
         
@@ -64,6 +66,34 @@ public class Notificacion {
     @Override
     public String toString() {
         return "Notificacion{" + "id=" + id + ", tipo=" + tipo + ", mensaje=" + mensaje + ", fecha_envio=" + fecha_envio + ", estado=" + estado + '}';
+    }
+
+    /**
+     * @return the asunto
+     */
+    public String getAsunto() {
+        return asunto;
+    }
+
+    /**
+     * @param asunto the asunto to set
+     */
+    public void setAsunto(String asunto) {
+        this.asunto = asunto;
+    }
+
+    /**
+     * @return the destinatario
+     */
+    public String getDestinatario() {
+        return destinatario;
+    }
+
+    /**
+     * @param destinatario the destinatario to set
+     */
+    public void setDestinatario(String destinatario) {
+        this.destinatario = destinatario;
     }
     
     
