@@ -6,7 +6,7 @@ import com.jmq.inversiones.jmqpersistencia.dao.BoletaDAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+ 
 
 public class BoletaDAOImpl extends BaseDAOImpl<Boleta> implements BoletaDAO{
 
