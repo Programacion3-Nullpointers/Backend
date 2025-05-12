@@ -13,7 +13,7 @@ public class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago> impleme
 
     @Override
     protected String getInsertQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "INSERT INTO ComprobantePago(idOrdenVenta, metodo_pago, fecha_pago, monto_total) VALUES (?,?,?,?)";
     }
 
     @Override
@@ -59,6 +59,7 @@ public class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago> impleme
     @Override
     protected void setId(ComprobantePago entity, Integer id) {
         entity.setId(id);
+        
     }
     
 }

@@ -40,11 +40,8 @@ public class FacturaDAOImpl extends BaseDAOImpl<Factura> implements FacturaDAO{
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, Factura entity) throws SQLException {
-        CallableStatement cs = (CallableStatement) ps;
-        cs.registerOutParameter(1, Types.INTEGER);
-        cs.setInt(2,entity.getOrden().getId());
-        cs.setString(3, entity.getMetodoPago().name());
-        cs.setTimestamp(4, new Timestamp(entity.getFecha_emision().getTime())));
+        ps.setInt(1,entity.getId());
+        
         
     }
 
