@@ -1,7 +1,7 @@
 package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.CotizacionService;
-import com.jmq.inversiones.dominio.cotizacion.Cotizacion;
+import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
 import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
 import java.util.List;
 
