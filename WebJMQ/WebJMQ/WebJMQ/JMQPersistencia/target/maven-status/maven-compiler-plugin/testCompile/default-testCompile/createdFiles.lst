@@ -1,10 +1,12 @@
 com\jmq\inversiones\jmqpersistencia\test\testEntregaDAO.class
 com\jmq\inversiones\jmqpersistencia\test\testOrdenVentaDAO.class
-com\jmq\inversiones\jmqpersistencia\test\testBoletaDAO.class
 com\jmq\inversiones\jmqpersistencia\test\testUsuarioDAO.class
+com\jmq\inversiones\jmqpersistencia\test\testComprobantePagoDAO.class
 com\jmq\inversiones\jmqpersistencia\test\testDescuentoDAO.class
 com\jmq\inversiones\jmqpersistencia\test\testCategoriaDAO.class
 com\jmq\inversiones\jmqpersistencia\test\testDetalleDAO.class
+com\jmq\inversiones\jmqpersistencia\test\testComprobantePagoDAO$1.class
+com\jmq\inversiones\jmqpersistencia\test\testBoletaDAO.class
 com\jmq\inversiones\jmqpersistencia\test\testFacturaDAO.class
 com\jmq\inversiones\jmqpersistencia\test\testNotificacionDAO.class
 com\jmq\inversiones\jmqpersistencia\test\testProductoCotizacionDAO.class
