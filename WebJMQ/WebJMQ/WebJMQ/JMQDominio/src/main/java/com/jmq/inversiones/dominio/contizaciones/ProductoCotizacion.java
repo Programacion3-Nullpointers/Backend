@@ -5,6 +5,7 @@ public class ProductoCotizacion {
     private String descripcion;
     private int cantidad;
     private double precioCotizado;
+    private int fid_cotizacion;
     
     public ProductoCotizacion(){
         
@@ -47,6 +48,20 @@ public class ProductoCotizacion {
 
     public void setPrecioCotizado(double precioCotizado) {
         this.precioCotizado = precioCotizado;
+    }
+
+    /**
+     * @return the fid_cotizacion
+     */
+    public int getFid_cotizacion() {
+        return fid_cotizacion;
+    }
+
+    /**
+     * @param fid_cotizacion the fid_cotizacion to set
+     */
+    public void setFid_cotizacion(int fid_cotizacion) {
+        this.fid_cotizacion = fid_cotizacion;
     }
     
 }

@@ -234,7 +234,6 @@ DROP TABLE IF EXISTS `mydb`.`Cotizacion` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`Cotizacion` (
   `idCotizacion` INT NOT NULL,
   `idUsuario` INT NOT NULL,
-  `activo` INT NULL,
   `estadoCotizacion` VARCHAR(45) NOT NULL COMMENT 'estado de la cotización:\nEn proceso\nRevisado',
   PRIMARY KEY (`idCotizacion`),
   INDEX `fk_Cotización_Usuario1_idx` (`idUsuario` ASC) ,

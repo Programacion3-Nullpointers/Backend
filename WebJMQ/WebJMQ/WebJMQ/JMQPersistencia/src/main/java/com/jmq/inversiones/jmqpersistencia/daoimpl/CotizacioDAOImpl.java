@@ -24,7 +24,7 @@ public class CotizacioDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotizac
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE Cotizacion SET idUsuario = ?, estadoCotizacion = ? WHERE id= ?";
+        return "UPDATE Cotizacion SET estadoCotizacion = ? WHERE id= ?";
     }
 
     @Override
@@ -34,12 +34,12 @@ public class CotizacioDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotizac
 
     @Override
     protected String getSelectByIdQuery() {
-        return "SELECT *FROM Cotizacion WHERE id= ?";
+        return "SELECT * FROM Cotizacion WHERE id= ?";
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELECT *FROM Cotizacion";
+        return "SELECT * FROM Cotizacion";
     }
 
     @Override
@@ -50,9 +50,9 @@ public class CotizacioDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotizac
 
     @Override
     protected void setUpdateParameters(PreparedStatement ps, Cotizacion entity) throws SQLException {
-        ps.setInt(1, entity.getUsuario().getId());
-        ps.setString(2, entity.getEstadoCotizacion());
-        ps.setInt(3, entity.getId());
+        
+        ps.setString(1, entity.getEstadoCotizacion());
+        ps.setInt(2, entity.getId());
     }
 
     @Override
@@ -61,7 +61,6 @@ public class CotizacioDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotizac
         coti.setId(rs.getInt("idCotizacion"));
         coti.setUsuario(usuario.obtener(rs.getInt("idUsuario")));
         coti.setEstadoCotizacion(rs.getString("estadoCotizacion"));
-        coti.setProductos(productoCotizacionDAO.obtenerPorCotizacion(rs.getInt("id")));
         
         return coti;
     }
@@ -87,7 +86,7 @@ public class CotizacioDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotizac
                 }
 
                 for (ProductoCotizacion pc : cotizacion.getProductos()) {
-                    productoCotizacionDAO.agregar(pc, cotizacion.getId(), conn);
+                    productoCotizacionDAO.agregar(pc);
                 }
 
                 conn.commit();
@@ -103,18 +102,24 @@ public class CotizacioDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotizac
         }
     }
 
-    @Override
-    public void actualizar(Cotizacion cotizacion) {
-        super.actualizar(cotizacion);
-        productoCotizacionDAO.eliminarPorCotizacion(cotizacion.getId());
-        for (ProductoCotizacion pc : cotizacion.getProductos()) {
-            productoCotizacionDAO.agregar(pc, cotizacion.getId());
-        }
-    }
 
     @Override
     public void eliminar(Integer id) {
-        productoCotizacionDAO.eliminarPorCotizacion(id);
-        super.eliminar(id);
+        Cotizacion coti = new Cotizacion();
+        
+        coti.setId(id);
+        coti.setEstadoCotizacion("Cancelada");
+        actualizar(coti);
     }
+
+    @Override
+    public void actualizarEstado(int id, String estado) {
+        Cotizacion coti = new Cotizacion();
+        coti.setId(id);
+        coti.setEstadoCotizacion(estado);
+        actualizar(coti);
+    }
+    
+    
+    
 }

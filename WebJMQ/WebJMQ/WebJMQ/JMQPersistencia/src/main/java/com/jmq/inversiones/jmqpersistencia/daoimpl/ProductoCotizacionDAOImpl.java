@@ -1,5 +1,7 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
+import com.jmq.inversiones.dbmanager.DBManager;
+import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
@@ -7,19 +9,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> implements ProductoCotizacionDAO{
 
+    
+    
     @Override
     protected String getInsertQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "INSERT INTO Cotizacion (idproductoCotizado,descripcion,cantidad,"
+                + "precioCotizado,idCotizacion) VALUES ( ?, ?, ?, ?, ? )";
     }
 
     @Override
     protected String getUpdateQuery() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "UPDATE productoCotizado SET precioCotizado = ?"
+                + " WHERE idproductoCotizado = ? AND idCotizacion = ?";
     }
 
     @Override
@@ -35,16 +42,23 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
     @Override
     protected String getSelectAllQuery() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        //return "SELECT * FROM productoCotizado WHERE idCotizacion = ?";
     }
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, ProductoCotizacion entity) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ps.setInt(1, entity.getId());
+        ps.setString(2, entity.getDescripcion());
+        ps.setInt(3, entity.getCantidad());
+        ps.setDouble(4, entity.getPrecioCotizado());
+        ps.setInt(5, entity.getFid_cotizacion());
     }
 
     @Override
     protected void setUpdateParameters(PreparedStatement ps, ProductoCotizacion entity) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ps.setDouble(1, entity.getPrecioCotizado());
+        ps.setInt(2, entity.getId());
+        ps.setInt(3, entity.getFid_cotizacion());
     }
 
     @Override
@@ -55,7 +69,6 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
         prod.setCantidad(rs.getInt("cantidad"));
         prod.setDescripcion(rs.getString("descripcion"));
         prod.setPrecioCotizado(rs.getDouble("precioCotizado"));
-        
         return prod;
     }
 
@@ -64,20 +77,17 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
         entity.setId(id);
     }
 
-    void agregar(ProductoCotizacion pc, int id, Connection conn) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    
+    @Override
+    public void actualizarPrecioCotizacion(Integer id, Integer fid,double precio) {
+        ProductoCotizacion pro = new ProductoCotizacion();
+        pro.setId(id);
+        pro.setFid_cotizacion(fid);
+        pro.setPrecioCotizado(precio);
+        actualizar(pro);
     }
 
-    void eliminarPorCotizacion(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    void agregar(ProductoCotizacion pc, int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    List<ProductoCotizacion> obtenerPorCotizacion(int aInt) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
+    
     
 }

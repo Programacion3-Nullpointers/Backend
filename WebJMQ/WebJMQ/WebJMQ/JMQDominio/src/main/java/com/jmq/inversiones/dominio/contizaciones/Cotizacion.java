@@ -60,6 +60,7 @@ public class Cotizacion {
     public void setProductos(List<ProductoCotizacion> productos) {
         this.productos = productos;
     }
+
     
     
 }

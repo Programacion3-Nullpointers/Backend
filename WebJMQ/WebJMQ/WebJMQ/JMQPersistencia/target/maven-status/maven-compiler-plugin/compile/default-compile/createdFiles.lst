@@ -1,3 +1,4 @@
+com\jmq\inversiones\jmqpersistencia\daoimpl\BoletaDAOImpl$1.class
 com\jmq\inversiones\jmqpersistencia\daoimpl\ComprobantePagoDAOImpl.class
 com\jmq\inversiones\jmqpersistencia\dao\NotificacionDAO.class
 com\jmq\inversiones\jmqpersistencia\dao\EntregaDAO.class
@@ -10,6 +11,7 @@ com\jmq\inversiones\jmqpersistencia\daoimpl\NotificacionDAOImpl.class
 com\jmq\inversiones\jmqpersistencia\daoimpl\BoletaDAOImpl.class
 com\jmq\inversiones\jmqpersistencia\daoimpl\CategoriaDAOImpl.class
 com\jmq\inversiones\jmqpersistencia\dao\CotizacionDAO.class
+com\jmq\inversiones\jmqpersistencia\daoimpl\FacturaDAOImpl$1.class
 com\jmq\inversiones\jmqpersistencia\dao\ProductoDAO.class
 com\jmq\inversiones\jmqpersistencia\daoimpl\FacturaDAOImpl.class
 com\jmq\inversiones\jmqpersistencia\dao\OrdenVentaDAO.class
