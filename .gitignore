@@ -1,5 +1,2 @@
-/WebJMQ/WebJMQ/WebJMQ/JMQBusiness/target/
+**/target/
 db.properties
-target/
-*/target/
-*/*/target/
