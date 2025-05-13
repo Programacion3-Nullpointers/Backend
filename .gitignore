@@ -1,3 +1,5 @@
 /WebJMQ/WebJMQ/WebJMQ/JMQBusiness/target/
 db.properties
-"*/target/" 
+target/
+*/target/
+*/*/target/
