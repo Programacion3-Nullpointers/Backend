@@ -1,11 +1,12 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
+import com.jmq.inversiones.dominio.notificaciones.Notificacion;
 import com.jmq.inversiones.jmqpersistencia.dao.NotificacionDAO;
-import com.jmq.inversiones.jmqpersistencia.modelo.Notificacion;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.NotificacionDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,78 +17,61 @@ public class testNotificacionDAO {
 
     @BeforeEach
     public void setUp() {
-        notificacionDAO = new NotificacionDAO(); // Asegúrate que esté correctamente implementado
+        notificacionDAO = new NotificacionDAOImpl();
     }
 
     @Test
-    public void testAgregarYObtener() {
-        Notificacion noti = new Notificacion();
-        noti.setIdNotificacion(1);
-        noti.setTipo("INFO");
-        noti.setMensaje("Compra realizada");
-        noti.setFecha_envio(Timestamp.valueOf("2025-05-13 12:00:00"));
-        noti.setEstado("Enviado");
-
+    public void testAgregarYListar() {
+        Notificacion noti = crearNotificacionEjemplo();
         notificacionDAO.agregar(noti);
-        Notificacion obtenido = notificacionDAO.obtener(1);
 
-        assertNotNull(obtenido);
-        assertEquals("Compra realizada", obtenido.getMensaje());
-    }
+        List<Notificacion> lista = notificacionDAO.listarTodos();
+        boolean encontrado = lista.stream()
+                .anyMatch(n -> n.getMensaje().equals(noti.getMensaje()) &&
+                               n.getTipo().equals(noti.getTipo()));
 
-    @Test
-    public void testListarTodos() {
-        Notificacion n1 = new Notificacion();
-        n1.setIdNotificacion(2);
-        n1.setTipo("ALERTA");
-        n1.setMensaje("Pago fallido");
-        n1.setFecha_envio(Timestamp.valueOf("2025-05-13 13:00:00"));
-        n1.setEstado("Pendiente");
-
-        Notificacion n2 = new Notificacion();
-        n2.setIdNotificacion(3);
-        n2.setTipo("INFO");
-        n2.setMensaje("Producto enviado");
-        n2.setFecha_envio(Timestamp.valueOf("2025-05-13 14:00:00"));
-        n2.setEstado("Entregado");
-
-        notificacionDAO.agregar(n1);
-        notificacionDAO.agregar(n2);
-
-        List<Notificacion> notificaciones = notificacionDAO.listarTodos();
-        assertTrue(notificaciones.size() >= 2);
+        assertTrue(encontrado);
     }
 
     @Test
     public void testActualizar() {
-        Notificacion noti = new Notificacion();
-        noti.setIdNotificacion(4);
-        noti.setTipo("INFO");
-        noti.setMensaje("Mensaje temporal");
-        noti.setFecha_envio(Timestamp.valueOf("2025-05-13 15:00:00"));
-        noti.setEstado("Borrador");
-
+        Notificacion noti = crearNotificacionEjemplo();
         notificacionDAO.agregar(noti);
 
-        noti.setEstado("Enviado");
+        noti.setEstado("leído");
+        noti.setMensaje("Mensaje actualizado");
         notificacionDAO.actualizar(noti);
 
-        Notificacion actualizado = notificacionDAO.obtener(4);
-        assertEquals("Enviado", actualizado.getEstado());
+        List<Notificacion> lista = notificacionDAO.listarTodos();
+        Notificacion actualizado = lista.stream()
+                .filter(n -> n.getId() == noti.getId())
+                .findFirst().orElse(null);
+
+        assertNotNull(actualizado);
+        assertEquals("leído", actualizado.getEstado());
+        assertEquals("Mensaje actualizado", actualizado.getMensaje());
     }
 
     @Test
     public void testEliminar() {
-        Notificacion noti = new Notificacion();
-        noti.setIdNotificacion(5);
-        noti.setTipo("ALERTA");
-        noti.setMensaje("Eliminar prueba");
-        noti.setFecha_envio(Timestamp.valueOf("2025-05-13 16:00:00"));
-        noti.setEstado("Eliminado");
-
+        Notificacion noti = crearNotificacionEjemplo();
         notificacionDAO.agregar(noti);
-        notificacionDAO.eliminar(5);
 
-        assertNull(notificacionDAO.obtener(5));
+        notificacionDAO.eliminar(noti.getId());
+
+        List<Notificacion> lista = notificacionDAO.listarTodos();
+        boolean eliminado = lista.stream()
+                .noneMatch(n -> n.getId() == noti.getId());
+
+        assertTrue(eliminado);
+    }
+
+    private Notificacion crearNotificacionEjemplo() {
+        Notificacion n = new Notificacion();
+        n.setTipo("Sistema");
+        n.setMensaje("Este es un mensaje de prueba");
+        n.setFecha_envio(new Date());
+        n.setEstado("pendiente");
+        return n;
     }
 }

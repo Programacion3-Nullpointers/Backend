@@ -1,10 +1,14 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
+import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
+import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
-import com.jmq.inversiones.jmqpersistencia.modelo.Cotizacion;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.CotizacioDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,69 +19,64 @@ public class testCotizacionDAO {
 
     @BeforeEach
     public void setUp() {
-        cotizacionDAO = new CotizacionDAO(); // Implementación requerida
+        cotizacionDAO = new CotizacioDAOImpl(); // corrige a CotizacionDAOImpl si renombraste la clase
     }
 
     @Test
     public void testAgregarYObtener() {
-        Cotizacion cot = new Cotizacion();
-        cot.setIdCotizacion(1);
-        cot.setIdUsuario(1);
-        cot.setEstadoCotizacion("En proceso");
-
+        Cotizacion cot = crearCotizacionEjemplo(1);
         cotizacionDAO.agregar(cot);
-        Cotizacion obtenido = cotizacionDAO.obtener(1);
+
+        Cotizacion obtenido = cotizacionDAO.obtener(cot.getId());
 
         assertNotNull(obtenido);
         assertEquals("En proceso", obtenido.getEstadoCotizacion());
-    }
-
-    @Test
-    public void testListarTodos() {
-        Cotizacion c1 = new Cotizacion();
-        c1.setIdCotizacion(1);
-        c1.setIdUsuario(2);
-        c1.setEstadoCotizacion("En proceso");
-
-        Cotizacion c2 = new Cotizacion();
-        c2.setIdCotizacion(2);
-        c2.setIdUsuario(3);
-        c2.setEstadoCotizacion("Revisado");
-
-        cotizacionDAO.agregar(c1);
-        cotizacionDAO.agregar(c2);
-
-        List<Cotizacion> cotizaciones = cotizacionDAO.listarTodos();
-        assertTrue(cotizaciones.size() >= 2);
+        assertEquals(1, obtenido.getProductos().size());
     }
 
     @Test
     public void testActualizar() {
-        Cotizacion cot = new Cotizacion();
-        cot.setIdCotizacion(3);
-        cot.setIdUsuario(1);
-        cot.setEstadoCotizacion("En proceso");
-
+        Cotizacion cot = crearCotizacionEjemplo(2);
         cotizacionDAO.agregar(cot);
 
         cot.setEstadoCotizacion("Revisado");
+        cot.getProductos().get(0).setCantidad(10);
         cotizacionDAO.actualizar(cot);
 
-        Cotizacion actualizado = cotizacionDAO.obtener(3);
+        Cotizacion actualizado = cotizacionDAO.obtener(cot.getId());
         assertEquals("Revisado", actualizado.getEstadoCotizacion());
+        assertEquals(10, actualizado.getProductos().get(0).getCantidad());
     }
 
     @Test
     public void testEliminar() {
-        Cotizacion cot = new Cotizacion();
-        cot.setIdCotizacion(4);
-        cot.setIdUsuario(4);
-        cot.setEstadoCotizacion("Eliminar");
-
+        Cotizacion cot = crearCotizacionEjemplo(3);
         cotizacionDAO.agregar(cot);
-        cotizacionDAO.eliminar(4);
 
-        assertNull(cotizacionDAO.obtener(4));
+        cotizacionDAO.eliminar(cot.getId());
+
+        Cotizacion eliminado = cotizacionDAO.obtener(cot.getId());
+        assertNull(eliminado);
+    }
+
+    private Cotizacion crearCotizacionEjemplo(int dummyId) {
+        Usuario u = new Usuario();
+        u.setId(1); // ⚠️ Este usuario debe existir en la BD
+
+        ProductoCotizacion pc = new ProductoCotizacion();
+        pc.setId(dummyId);
+        pc.setDescripcion("Producto " + dummyId);
+        pc.setCantidad(1);
+        pc.setPrecioCotizado(100.0);
+
+        List<ProductoCotizacion> productos = new ArrayList<>();
+        productos.add(pc);
+
+        Cotizacion cot = new Cotizacion();
+        cot.setUsuario(u);
+        cot.setEstadoCotizacion("En proceso");
+        cot.setProductos(productos);
+
+        return cot;
     }
 }
-

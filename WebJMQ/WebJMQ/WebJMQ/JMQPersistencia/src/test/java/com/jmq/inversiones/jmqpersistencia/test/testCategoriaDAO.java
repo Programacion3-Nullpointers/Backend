@@ -1,7 +1,9 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
 import com.jmq.inversiones.jmqpersistencia.dao.CategoriaDAO;
-import com.jmq.inversiones.jmqpersistencia.modelo.Categoria;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.CategoriaDAOImpl;
+import com.jmq.inversiones.dominio.ventas.Categoria;
+import com.jmq.inversiones.dominio.pagos.Descuento;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,65 +17,58 @@ public class testCategoriaDAO {
 
     @BeforeEach
     public void setUp() {
-        categoriaDAO = new CategoriaDAO(); // Asegúrate que esta clase tenga implementación válida
+        categoriaDAO = new CategoriaDAOImpl(); // DAO funcional que usa SP
     }
 
     @Test
     public void testAgregarYObtener() {
-        Categoria cat = new Categoria();
-        cat.setIdCategoria(1);
-        cat.setNombre("Electrónica");
-        cat.setDescripcion("Dispositivos tecnológicos");
-        cat.setIdDescuento(1);
+        Categoria cat = crearCategoriaEjemplo(1);
 
         categoriaDAO.agregar(cat);
-        Categoria obtenido = categoriaDAO.obtener(1);
 
-        assertNotNull(obtenido);
-        assertEquals("Electrónica", obtenido.getNombre());
-    }
+        List<Categoria> lista = categoriaDAO.listarTodos();
+        boolean encontrada = lista.stream().anyMatch(c -> c.getNombre().equals("Electrohogar Test"));
 
-    @Test
-    public void testListarTodos() {
-        Categoria c1 = new Categoria();
-        c1.setIdCategoria(1);
-        c1.setNombre("A");
-
-        Categoria c2 = new Categoria();
-        c2.setIdCategoria(2);
-        c2.setNombre("B");
-
-        categoriaDAO.agregar(c1);
-        categoriaDAO.agregar(c2);
-
-        List<Categoria> categorias = categoriaDAO.listarTodos();
-        assertTrue(categorias.size() >= 2);
+        assertTrue(encontrada);
     }
 
     @Test
     public void testActualizar() {
-        Categoria cat = new Categoria();
-        cat.setIdCategoria(1);
-        cat.setNombre("Oficina");
-
+        Categoria cat = crearCategoriaEjemplo(2);
         categoriaDAO.agregar(cat);
 
-        cat.setNombre("Oficina y Papelería");
+        cat.setNombre("Categoría Modificada");
         categoriaDAO.actualizar(cat);
 
-        Categoria actualizado = categoriaDAO.obtener(1);
-        assertEquals("Oficina y Papelería", actualizado.getNombre());
+        List<Categoria> lista = categoriaDAO.listarTodos();
+        boolean modificada = lista.stream().anyMatch(c -> c.getNombre().equals("Categoría Modificada"));
+
+        assertTrue(modificada);
     }
 
     @Test
     public void testEliminar() {
-        Categoria cat = new Categoria();
-        cat.setIdCategoria(1);
-        cat.setNombre("Eliminar");
-
+        Categoria cat = crearCategoriaEjemplo(3);
         categoriaDAO.agregar(cat);
-        categoriaDAO.eliminar(1);
 
-        assertNull(categoriaDAO.obtener(1));
+        categoriaDAO.eliminar(cat.getId());
+
+        List<Categoria> lista = categoriaDAO.listarTodos();
+        boolean eliminada = lista.stream().noneMatch(c -> c.getId() == cat.getId());
+
+        assertTrue(eliminada);
+    }
+
+    private Categoria crearCategoriaEjemplo(int idDummy) {
+        Descuento descuento = new Descuento();
+        descuento.setId(1); // ⚠️ debe existir en BD; si no, crea un descuento válido primero
+
+        Categoria cat = new Categoria();
+        cat.setId(idDummy); // no obligatorio, SP te devuelve ID
+        cat.setDescripcion("Descripción ejemplo");
+        cat.setNombre("Electrohogar Test");
+        cat.setDescuento(descuento);
+
+        return cat;
     }
 }

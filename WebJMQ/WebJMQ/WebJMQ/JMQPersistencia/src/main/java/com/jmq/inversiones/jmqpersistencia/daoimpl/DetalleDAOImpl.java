@@ -1,5 +1,6 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
+import com.jmq.inversiones.dbmanager.DBManager;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.dominio.ventas.Detalle;
 import com.jmq.inversiones.dominio.ventas.Producto;
@@ -73,4 +74,15 @@ public class DetalleDAOImpl extends BaseDAOImpl<Detalle> implements DetalleDAO{
         entity.setId(id);
     }
     
+    @Override
+    public void eliminar(int idOrden, int idProducto) {
+    try (var conn = DBManager.getInstance().obtenerConexion();
+         var cs = conn.prepareCall(getDeleteQuery())) {
+        cs.setInt(1, idOrden);
+        cs.setInt(2, idProducto);
+        cs.execute();
+    } catch (SQLException e) {
+        throw new RuntimeException("Error al eliminar detalle", e);
+    }
+}
 }

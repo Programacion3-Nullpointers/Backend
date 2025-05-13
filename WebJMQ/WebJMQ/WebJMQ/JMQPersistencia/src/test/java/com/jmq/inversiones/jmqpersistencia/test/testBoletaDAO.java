@@ -1,11 +1,14 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
 import com.jmq.inversiones.jmqpersistencia.dao.BoletaDAO;
-import com.jmq.inversiones.jmqpersistencia.modelo.Boleta;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.BoletaDAOImpl;
+import com.jmq.inversiones.dominio.pagos.Boleta;
+import com.jmq.inversiones.dominio.ventas.OrdenVenta;
+import com.jmq.inversiones.dominio.pagos.MetodoPago;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,40 +19,25 @@ public class testBoletaDAO {
 
     @BeforeEach
     public void setUp() {
-        boletaDAO = new BoletaDAO(); // Asegúrate que esté implementado correctamente
+        boletaDAO = new BoletaDAOImpl(); // Asegúrate que este DAO se conecta o está simulado correctamente
     }
 
     @Test
     public void testAgregarYObtener() {
-        Boleta bol = new Boleta();
-        bol.setIdBoleta(1); // es también idComprobantePago
-        bol.setDni("12345678");
-        bol.setNombre("Cliente Ejemplo");
-        bol.setFecha_emision(Timestamp.valueOf("2025-05-13 11:00:00"));
+        Boleta bol = crearBoletaEjemplo(1);
 
         boletaDAO.agregar(bol);
         Boleta obtenido = boletaDAO.obtener(1);
 
         assertNotNull(obtenido);
-        assertEquals("Cliente Ejemplo", obtenido.getNombre());
+        assertEquals("Cliente Test", obtenido.getNombre());
+        assertEquals("12345678", obtenido.getDni());
     }
 
     @Test
     public void testListarTodos() {
-        Boleta b1 = new Boleta();
-        b1.setIdBoleta(1);
-        b1.setDni("87654321");
-        b1.setNombre("Cliente A");
-        b1.setFecha_emision(Timestamp.valueOf("2025-05-13 12:00:00"));
-
-        Boleta b2 = new Boleta();
-        b2.setIdBoleta(2);
-        b2.setDni("11223344");
-        b2.setNombre("Cliente B");
-        b2.setFecha_emision(Timestamp.valueOf("2025-05-13 13:00:00"));
-
-        boletaDAO.agregar(b1);
-        boletaDAO.agregar(b2);
+        boletaDAO.agregar(crearBoletaEjemplo(2));
+        boletaDAO.agregar(crearBoletaEjemplo(3));
 
         List<Boleta> boletas = boletaDAO.listarTodos();
         assertTrue(boletas.size() >= 2);
@@ -57,32 +45,38 @@ public class testBoletaDAO {
 
     @Test
     public void testActualizar() {
-        Boleta bol = new Boleta();
-        bol.setIdBoleta(3);
-        bol.setDni("00000000");
-        bol.setNombre("Temporal");
-        bol.setFecha_emision(Timestamp.valueOf("2025-05-13 14:00:00"));
-
+        Boleta bol = crearBoletaEjemplo(4);
         boletaDAO.agregar(bol);
 
-        bol.setNombre("Nombre Actualizado");
+        bol.setNombre("Cliente Actualizado");
         boletaDAO.actualizar(bol);
 
-        Boleta actualizado = boletaDAO.obtener(3);
-        assertEquals("Nombre Actualizado", actualizado.getNombre());
+        Boleta actualizado = boletaDAO.obtener(4);
+        assertEquals("Cliente Actualizado", actualizado.getNombre());
     }
 
     @Test
     public void testEliminar() {
-        Boleta bol = new Boleta();
-        bol.setIdBoleta(4);
-        bol.setDni("99999999");
-        bol.setNombre("Eliminar");
-        bol.setFecha_emision(Timestamp.valueOf("2025-05-13 15:00:00"));
-
+        Boleta bol = crearBoletaEjemplo(5);
         boletaDAO.agregar(bol);
-        boletaDAO.eliminar(4);
 
-        assertNull(boletaDAO.obtener(4));
+        boletaDAO.eliminar(5);
+        assertNull(boletaDAO.obtener(5));
+    }
+
+    private Boleta crearBoletaEjemplo(int id) {
+        OrdenVenta ordenDummy = new OrdenVenta();
+        ordenDummy.setId(1000 + id); // solo para referencia interna
+
+        Boleta boleta = new Boleta();
+        boleta.setId(id);
+        boleta.setOrden(ordenDummy);
+        boleta.setMetodoPago(MetodoPago.tarjeta); // Asumiendo que es un enum
+        boleta.setFecha_pago(new Date());
+        boleta.setMonto_total(250.0);
+        boleta.setDni("12345678");
+        boleta.setNombre("Cliente Test");
+        boleta.setFecha_emision(new Date());
+        return boleta;
     }
 }

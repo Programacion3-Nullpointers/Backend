@@ -1,7 +1,7 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
-import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
-import com.jmq.inversiones.jmqpersistencia.modelo.ProductoCotizacion;
+import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoCotizacionDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,84 +11,46 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class testProductoCotizacionDAO {
 
-    private ProductoCotizacionDAO productoCotizacionDAO;
+    private ProductoCotizacionDAOImpl dao;
 
     @BeforeEach
     public void setUp() {
-        productoCotizacionDAO = new ProductoCotizacionDAO(); // Asegúrate que esté correctamente implementado
+        dao = new ProductoCotizacionDAOImpl();
     }
 
     @Test
-    public void testAgregarYObtener() {
-        ProductoCotizacion pc = new ProductoCotizacion();
-        pc.setIdproductoCotizado(1);
-        pc.setDescripcion("Laptop cotizada");
-        pc.setCantidad(2);
-        pc.setPrecioCotizado(4500.0);
-        pc.setIdCotizacion(1);
+    public void testAgregarYObtenerPorCotizacion() {
+        int idCotizacion = 1; // ⚠️ asegúrate que existe en tu BD
 
-        productoCotizacionDAO.agregar(pc);
-        ProductoCotizacion obtenido = productoCotizacionDAO.obtener(1);
+        ProductoCotizacion prod = new ProductoCotizacion();
+        prod.setId(9999); // usa un ID alto para evitar colisiones
+        prod.setDescripcion("Producto de prueba");
+        prod.setCantidad(5);
+        prod.setPrecioCotizado(120.50);
 
-        assertNotNull(obtenido);
-        assertEquals("Laptop cotizada", obtenido.getDescripcion());
+        dao.agregar(prod, idCotizacion);
+
+        List<ProductoCotizacion> lista = dao.obtenerPorCotizacion(idCotizacion);
+        boolean encontrado = lista.stream()
+                .anyMatch(p -> p.getId() == prod.getId());
+
+        assertTrue(encontrado, "Producto cotizado no fue encontrado");
     }
 
     @Test
-    public void testListarTodos() {
-        ProductoCotizacion p1 = new ProductoCotizacion();
-        p1.setIdproductoCotizado(2);
-        p1.setDescripcion("Producto A");
-        p1.setCantidad(1);
-        p1.setPrecioCotizado(100.0);
-        p1.setIdCotizacion(2);
+    public void testEliminarPorCotizacion() {
+        int idCotizacion = 1;
 
-        ProductoCotizacion p2 = new ProductoCotizacion();
-        p2.setIdproductoCotizado(3);
-        p2.setDescripcion("Producto B");
-        p2.setCantidad(3);
-        p2.setPrecioCotizado(300.0);
-        p2.setIdCotizacion(2);
+        // Agrega 2 productos
+        ProductoCotizacion p1 = new ProductoCotizacion(8001, "Eliminar 1", 2, 50.0, null);
+        ProductoCotizacion p2 = new ProductoCotizacion(8002, "Eliminar 2", 3, 75.0, null);
 
-        productoCotizacionDAO.agregar(p1);
-        productoCotizacionDAO.agregar(p2);
+        dao.agregar(p1, idCotizacion);
+        dao.agregar(p2, idCotizacion);
 
-        List<ProductoCotizacion> lista = productoCotizacionDAO.listarTodos();
-        assertTrue(lista.size() >= 2);
-    }
+        dao.eliminar(idCotizacion);
 
-    @Test
-    public void testActualizar() {
-        ProductoCotizacion pc = new ProductoCotizacion();
-        pc.setIdproductoCotizado(4);
-        pc.setDescripcion("Producto X");
-        pc.setCantidad(1);
-        pc.setPrecioCotizado(500.0);
-        pc.setIdCotizacion(3);
-
-        productoCotizacionDAO.agregar(pc);
-
-        pc.setCantidad(5);
-        pc.setPrecioCotizado(2500.0);
-        productoCotizacionDAO.actualizar(pc);
-
-        ProductoCotizacion actualizado = productoCotizacionDAO.obtener(4);
-        assertEquals(5, actualizado.getCantidad());
-        assertEquals(2500.0, actualizado.getPrecioCotizado());
-    }
-
-    @Test
-    public void testEliminar() {
-        ProductoCotizacion pc = new ProductoCotizacion();
-        pc.setIdproductoCotizado(5);
-        pc.setDescripcion("Producto a eliminar");
-        pc.setCantidad(1);
-        pc.setPrecioCotizado(100.0);
-        pc.setIdCotizacion(4);
-
-        productoCotizacionDAO.agregar(pc);
-        productoCotizacionDAO.eliminar(5);
-
-        assertNull(productoCotizacionDAO.obtener(5));
+        List<ProductoCotizacion> lista = dao.obtenerPorCotizacion(idCotizacion);
+        assertTrue(lista.isEmpty(), "No se eliminaron productos cotizados");
     }
 }

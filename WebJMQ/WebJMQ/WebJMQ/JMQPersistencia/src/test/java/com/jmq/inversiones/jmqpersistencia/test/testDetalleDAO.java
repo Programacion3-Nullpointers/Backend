@@ -1,7 +1,9 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
+import com.jmq.inversiones.dominio.ventas.Detalle;
+import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.dao.DetalleDAO;
-import com.jmq.inversiones.jmqpersistencia.modelo.Detalle;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.DetalleDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,75 +17,63 @@ public class testDetalleDAO {
 
     @BeforeEach
     public void setUp() {
-        detalleDAO = new DetalleDAO(); // Asegúrate de tener métodos que reciban dos claves
+        detalleDAO = new DetalleDAOImpl();
     }
 
     @Test
-    public void testAgregarYObtener() {
-        Detalle detalle = new Detalle();
-        detalle.setId_orden(1);
-        detalle.setId_producto(101);
-        detalle.setCantidad(2);
-        detalle.setPrecio_unitario(1750.25);
-
+    public void testAgregarYListar() {
+        Detalle detalle = crearDetalleEjemplo(1, 1);
         detalleDAO.agregar(detalle);
-        Detalle obtenido = detalleDAO.obtener(1, 101); // Usa ambas claves
 
-        assertNotNull(obtenido);
-        assertEquals(2, obtenido.getCantidad());
-    }
+        List<Detalle> lista = detalleDAO.listarTodos();
+        boolean encontrado = lista.stream()
+                .anyMatch(d -> d.getId() == detalle.getId() && d.getProducto().getId() == detalle.getProducto().getId());
 
-    @Test
-    public void testListarTodos() {
-        Detalle d1 = new Detalle();
-        d1.setId_orden(1);
-        d1.setId_producto(201);
-        d1.setCantidad(1);
-        d1.setPrecio_unitario(100.0);
-
-        Detalle d2 = new Detalle();
-        d2.setId_orden(2);
-        d2.setId_producto(202);
-        d2.setCantidad(3);
-        d2.setPrecio_unitario(300.0);
-
-        detalleDAO.agregar(d1);
-        detalleDAO.agregar(d2);
-
-        List<Detalle> detalles = detalleDAO.listarTodos();
-        assertTrue(detalles.size() >= 2);
+        assertTrue(encontrado);
     }
 
     @Test
     public void testActualizar() {
-        Detalle detalle = new Detalle();
-        detalle.setId_orden(3);
-        detalle.setId_producto(301);
-        detalle.setCantidad(2);
-        detalle.setPrecio_unitario(200.0);
-
+        Detalle detalle = crearDetalleEjemplo(2, 2);
         detalleDAO.agregar(detalle);
 
-        detalle.setCantidad(5);
-        detalle.setPrecio_unitario(500.0);
+        detalle.setCantidad(10);
+        detalle.setPrecio_unitario(55.0);
         detalleDAO.actualizar(detalle);
 
-        Detalle actualizado = detalleDAO.obtener(3, 301);
-        assertEquals(5, actualizado.getCantidad());
-        assertEquals(500.0, actualizado.getPrecio_unitario());
+        List<Detalle> lista = detalleDAO.listarTodos();
+        Detalle actualizado = lista.stream()
+                .filter(d -> d.getId() == detalle.getId() && d.getProducto().getId() == detalle.getProducto().getId())
+                .findFirst().orElse(null);
+
+        assertNotNull(actualizado);
+        assertEquals(10, actualizado.getCantidad());
+        assertEquals(55.0, actualizado.getPrecio_unitario());
     }
 
     @Test
     public void testEliminar() {
-        Detalle detalle = new Detalle();
-        detalle.setId_orden(4);
-        detalle.setId_producto(401);
-        detalle.setCantidad(2);
-        detalle.setPrecio_unitario(100.0);
-
+        Detalle detalle = crearDetalleEjemplo(3, 3);
         detalleDAO.agregar(detalle);
-        detalleDAO.eliminar(4, 401);
 
-        assertNull(detalleDAO.obtener(4, 401));
+        detalleDAO.eliminar(detalle.getId(), detalle.getProducto().getId());
+
+        List<Detalle> lista = detalleDAO.listarTodos();
+        boolean eliminado = lista.stream()
+                .noneMatch(d -> d.getId() == detalle.getId() && d.getProducto().getId() == detalle.getProducto().getId());
+
+        assertTrue(eliminado);
+    }
+
+    private Detalle crearDetalleEjemplo(int idOrden, int idProducto) {
+        Producto prod = new Producto();
+        prod.setId(idProducto); // ⚠️ Este producto debe existir
+
+        Detalle detalle = new Detalle();
+        detalle.setId(idOrden);  // id_orden
+        detalle.setProducto(prod);
+        detalle.setCantidad(5);
+        detalle.setPrecio_unitario(25.0);
+        return detalle;
     }
 }

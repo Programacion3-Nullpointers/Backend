@@ -1,11 +1,14 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
+import com.jmq.inversiones.dominio.logistica.Entrega;
+import com.jmq.inversiones.dominio.logistica.TipoEntrega;
+import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.jmqpersistencia.dao.EntregaDAO;
-import com.jmq.inversiones.jmqpersistencia.modelo.Entrega;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.EntregaDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,83 +19,66 @@ public class testEntregaDAO {
 
     @BeforeEach
     public void setUp() {
-        entregaDAO = new EntregaDAO(); // Implementación concreta requerida
+        entregaDAO = new EntregaDAOImpl();
     }
 
     @Test
-    public void testAgregarYObtener() {
-        Entrega entrega = new Entrega();
-        entrega.setIdEntrega(1);
-        entrega.setId_orden(1001);
-        entrega.setFecha_entrega(Timestamp.valueOf("2025-05-15 12:00:00"));
-        entrega.setDireccion("Av. Los Rosales 123");
-        entrega.setDni(12345678);
-        entrega.setTipoEntrega("DELIVERY");
-
+    public void testAgregarYListar() {
+        Entrega entrega = crearEntregaEjemplo(1);
         entregaDAO.agregar(entrega);
-        Entrega obtenido = entregaDAO.obtener(1);
-
-        assertNotNull(obtenido);
-        assertEquals("DELIVERY", obtenido.getTipoEntrega());
-    }
-
-    @Test
-    public void testListarTodos() {
-        Entrega e1 = new Entrega();
-        e1.setIdEntrega(1);
-        e1.setId_orden(2001);
-        e1.setFecha_entrega(Timestamp.valueOf("2025-05-16 10:00:00"));
-        e1.setDireccion("Jr. Lima 456");
-        e1.setDni(11112222);
-        e1.setTipoEntrega("RECOJO");
-
-        Entrega e2 = new Entrega();
-        e2.setIdEntrega(2);
-        e2.setId_orden(2002);
-        e2.setFecha_entrega(Timestamp.valueOf("2025-05-17 15:00:00"));
-        e2.setDireccion("Av. Perú 789");
-        e2.setDni(22223333);
-        e2.setTipoEntrega("DELIVERY");
-
-        entregaDAO.agregar(e1);
-        entregaDAO.agregar(e2);
 
         List<Entrega> entregas = entregaDAO.listarTodos();
-        assertTrue(entregas.size() >= 2);
+        boolean encontrado = entregas.stream()
+                .anyMatch(e -> e.getOrden().getId() == entrega.getOrden().getId() &&
+                               e.getDireccion().equals(entrega.getDireccion()));
+
+        assertTrue(encontrado);
     }
 
     @Test
     public void testActualizar() {
-        Entrega entrega = new Entrega();
-        entrega.setIdEntrega(3);
-        entrega.setId_orden(3001);
-        entrega.setFecha_entrega(Timestamp.valueOf("2025-05-18 08:00:00"));
-        entrega.setDireccion("Calle Falsa 123");
-        entrega.setDni(33334444);
-        entrega.setTipoEntrega("RECOJO");
-
+        Entrega entrega = crearEntregaEjemplo(2);
         entregaDAO.agregar(entrega);
 
-        entrega.setTipoEntrega("DELIVERY");
+        entrega.setDireccion("Calle Nueva 123");
+        entrega.setDniRecibo(76543210);
         entregaDAO.actualizar(entrega);
 
-        Entrega actualizado = entregaDAO.obtener(3);
-        assertEquals("DELIVERY", actualizado.getTipoEntrega());
+        List<Entrega> entregas = entregaDAO.listarTodos();
+        Entrega actualizado = entregas.stream()
+                .filter(e -> e.getId() == entrega.getId())
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(actualizado);
+        assertEquals("Calle Nueva 123", actualizado.getDireccion());
+        assertEquals(76543210, actualizado.getDniRecibo());
     }
 
     @Test
     public void testEliminar() {
-        Entrega entrega = new Entrega();
-        entrega.setIdEntrega(4);
-        entrega.setId_orden(4001);
-        entrega.setFecha_entrega(Timestamp.valueOf("2025-05-19 17:00:00"));
-        entrega.setDireccion("Av. Ejemplo 321");
-        entrega.setDni(44445555);
-        entrega.setTipoEntrega("DELIVERY");
-
+        Entrega entrega = crearEntregaEjemplo(3);
         entregaDAO.agregar(entrega);
-        entregaDAO.eliminar(4);
 
-        assertNull(entregaDAO.obtener(4));
+        entregaDAO.eliminar(entrega.getId());
+
+        List<Entrega> entregas = entregaDAO.listarTodos();
+        boolean eliminado = entregas.stream()
+                .noneMatch(e -> e.getId() == entrega.getId());
+
+        assertTrue(eliminado);
+    }
+
+    private Entrega crearEntregaEjemplo(int ordenId) {
+        OrdenVenta orden = new OrdenVenta();
+        orden.setId(ordenId); // ⚠️ Asegúrate de que este ID exista en la BD
+
+        Entrega entrega = new Entrega();
+        entrega.setOrden(orden);
+        entrega.setFecha_entrega(new Date());
+        entrega.setDireccion("Av. Test #" + ordenId);
+        entrega.setDniRecibo(12345678);
+        entrega.setTipoEntrega(TipoEntrega.DELIVERY); // o RECOJO
+        return entrega;
     }
 }

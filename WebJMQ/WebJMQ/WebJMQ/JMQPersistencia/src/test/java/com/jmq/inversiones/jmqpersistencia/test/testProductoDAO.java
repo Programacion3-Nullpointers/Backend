@@ -1,7 +1,12 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
+import com.jmq.inversiones.dominio.pagos.Descuento;
+import com.jmq.inversiones.dominio.ventas.Categoria;
+import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoDAO;
-import com.jmq.inversiones.jmqpersistencia.modelo.Producto;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.CategoriaDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.dao.CategoriaDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,73 +17,73 @@ import static org.junit.jupiter.api.Assertions.*;
 public class testProductoDAO {
 
     private ProductoDAO productoDAO;
+    private CategoriaDAO categoriaDAO;
 
     @BeforeEach
     public void setUp() {
-        productoDAO = new ProductoDAO(); // Asegúrate que esta clase tenga implementación válida
+        productoDAO = new ProductoDAOImpl();
+        categoriaDAO = new CategoriaDAOImpl();
     }
 
     @Test
-    public void testAgregarYObtener() {
-        Producto prod = new Producto();
-        prod.setIdProducto(1);
-        prod.setNombre("Laptop");
-        prod.setDescripcion("Portátil 15 pulgadas");
-        prod.setStock(10);
-        prod.setPrecio(3500.50);
-        prod.setImagen("imagen.jpg");
-        prod.setActivo(1);
-        prod.setIdCategoria(1);
-
+    public void testAgregarYListar() {
+        Producto prod = crearProductoEjemplo();
         productoDAO.agregar(prod);
-        Producto obtenido = productoDAO.obtener(1);
 
-        assertNotNull(obtenido);
-        assertEquals("Laptop", obtenido.getNombre());
-    }
+        List<Producto> lista = productoDAO.listarTodos();
+        boolean encontrado = lista.stream()
+                .anyMatch(p -> p.getId() == prod.getId());
 
-    @Test
-    public void testListarTodos() {
-        Producto p1 = new Producto();
-        p1.setIdProducto(2);
-        p1.setNombre("Producto A");
-
-        Producto p2 = new Producto();
-        p2.setIdProducto(3);
-        p2.setNombre("Producto B");
-
-        productoDAO.agregar(p1);
-        productoDAO.agregar(p2);
-
-        List<Producto> productos = productoDAO.listarTodos();
-        assertTrue(productos.size() >= 2);
+        assertTrue(encontrado);
     }
 
     @Test
     public void testActualizar() {
-        Producto prod = new Producto();
-        prod.setIdProducto(4);
-        prod.setNombre("Tablet");
-        prod.setPrecio(2000.00);
-
+        Producto prod = crearProductoEjemplo();
         productoDAO.agregar(prod);
 
-        prod.setPrecio(1800.00);
+        prod.setNombre("Producto Actualizado");
+        prod.setPrecio(99.99);
         productoDAO.actualizar(prod);
 
-        Producto actualizado = productoDAO.obtener(4);
-        assertEquals(1800.00, actualizado.getPrecio());
+        List<Producto> lista = productoDAO.listarTodos();
+        Producto actualizado = lista.stream()
+                .filter(p -> p.getId() == prod.getId())
+                .findFirst().orElse(null);
+
+        assertNotNull(actualizado);
+        assertEquals("Producto Actualizado", actualizado.getNombre());
+        assertEquals(99.99, actualizado.getPrecio());
     }
 
     @Test
     public void testEliminar() {
-        Producto prod = new Producto();
-        prod.setIdProducto(5);
-        prod.setNombre("Eliminar");
-
+        Producto prod = crearProductoEjemplo();
         productoDAO.agregar(prod);
-        productoDAO.eliminar(5);
 
-        assertNull(productoDAO.obtener(5));
+        productoDAO.eliminar(prod.getId());
+
+        List<Producto> lista = productoDAO.listarTodos();
+        boolean eliminado = lista.stream()
+                .noneMatch(p -> p.getId() == prod.getId());
+
+        assertTrue(eliminado);
+    }
+
+    private Producto crearProductoEjemplo() {
+        // ⚠️ Este ID de categoría debe existir o puedes crear una
+        Categoria cat = categoriaDAO.listarTodos().stream().findFirst().orElse(null);
+        assertNotNull(cat, "No hay categoría disponible");
+
+        Producto p = new Producto();
+        p.setNombre("Producto Prueba");
+        p.setDescripcion("Descripción prueba");
+        p.setStock(20);
+        p.setPrecio(50.5);
+        p.setImagen("imagen.jpg");
+        p.setActivo(true);
+        p.setCategoria(cat);
+
+        return p;
     }
 }

@@ -1,7 +1,8 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
+import com.jmq.inversiones.dominio.pagos.Descuento;
 import com.jmq.inversiones.jmqpersistencia.dao.DescuentoDAO;
-import com.jmq.inversiones.jmqpersistencia.modelo.Descuento;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.DescuentoDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,64 +16,59 @@ public class testDescuentoDAO {
 
     @BeforeEach
     public void setUp() {
-        descuentoDAO = new DescuentoDAO(); // Implementación necesaria para pruebas
+        descuentoDAO = new DescuentoDAOImpl();
     }
 
     @Test
     public void testAgregarYObtener() {
         Descuento desc = new Descuento();
-        desc.setIdDescuento(1);
-        desc.setNumDescuento(10);
-        desc.setActivo(1);
+        desc.setPorcentaje(15);
 
         descuentoDAO.agregar(desc);
-        Descuento obtenido = descuentoDAO.obtener(1);
+
+        Descuento obtenido = descuentoDAO.obtener(desc.getId());
 
         assertNotNull(obtenido);
-        assertEquals(10, obtenido.getNumDescuento());
-    }
-
-    @Test
-    public void testListarTodos() {
-        Descuento d1 = new Descuento();
-        d1.setIdDescuento(1);
-        d1.setNumDescuento(10);
-
-        Descuento d2 = new Descuento();
-        d2.setIdDescuento(2);
-        d2.setNumDescuento(20);
-
-        descuentoDAO.agregar(d1);
-        descuentoDAO.agregar(d2);
-
-        List<Descuento> descuentos = descuentoDAO.listarTodos();
-        assertTrue(descuentos.size() >= 2);
+        assertEquals(15, obtenido.getPorcentaje());
     }
 
     @Test
     public void testActualizar() {
         Descuento desc = new Descuento();
-        desc.setIdDescuento(1);
-        desc.setNumDescuento(10);
-
+        desc.setPorcentaje(20);
         descuentoDAO.agregar(desc);
 
-        desc.setNumDescuento(15);
+        desc.setPorcentaje(25);
         descuentoDAO.actualizar(desc);
 
-        Descuento actualizado = descuentoDAO.obtener(1);
-        assertEquals(15, actualizado.getNumDescuento());
+        Descuento actualizado = descuentoDAO.obtener(desc.getId());
+        assertEquals(25, actualizado.getPorcentaje());
     }
 
     @Test
     public void testEliminar() {
         Descuento desc = new Descuento();
-        desc.setIdDescuento(1);
-        desc.setNumDescuento(5);
-
+        desc.setPorcentaje(30);
         descuentoDAO.agregar(desc);
-        descuentoDAO.eliminar(1);
 
-        assertNull(descuentoDAO.obtener(1));
+        descuentoDAO.eliminar(desc.getId());
+
+        Descuento eliminado = descuentoDAO.obtener(desc.getId());
+        assertNull(eliminado);
+    }
+
+    @Test
+    public void testListarTodos() {
+        Descuento d1 = new Descuento();
+        d1.setPorcentaje(5);
+
+        Descuento d2 = new Descuento();
+        d2.setPorcentaje(10);
+
+        descuentoDAO.agregar(d1);
+        descuentoDAO.agregar(d2);
+
+        List<Descuento> lista = descuentoDAO.listarTodos();
+        assertTrue(lista.size() >= 2);
     }
 }
