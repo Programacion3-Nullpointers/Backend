@@ -4,5 +4,5 @@ import com.jmq.inversiones.jmqpersistencia.BaseDAO;
 import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
 
 public interface CotizacionDAO extends BaseDAO<Cotizacion>{
-    
+    void actualizarEstado(int id,String estado);
 }

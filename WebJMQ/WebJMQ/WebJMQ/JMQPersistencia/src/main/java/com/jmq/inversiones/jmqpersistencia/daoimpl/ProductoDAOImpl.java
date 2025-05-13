@@ -163,6 +163,19 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         }
         return productos;
     }
+
+    @Override
+    public void descontarStock(int id, int stock) {
+        String query = "UPDATE Producto SET stock = stock - ? WHERE idProducto = ?"; 
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, stock);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al descontar stock", e);
+        }
+    }
     
     
 }
