@@ -1,6 +1,7 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 import com.jmq.inversiones.dbmanager.DBManager;
+import com.jmq.inversiones.dominio.ventas.EstadoCompra;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.dominio.ventas.Producto;
@@ -50,13 +51,21 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
     }
 
     @Override
-    protected void setInsertParameters(PreparedStatement ps, OrdenVenta entity) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    protected void setInsertParameters(PreparedStatement ps, OrdenVenta orden) throws SQLException {
+        ps.setString(1, orden.getEstado_compra().name());
+        ps.setDate(2, new java.sql.Date(orden.getFecha_orden().getTime()));
+        ps.setBoolean(3, orden.isActivo());
+        ps.setInt(4, orden.getUsuario().getId());
     }
 
+
     @Override
-    protected void setUpdateParameters(PreparedStatement ps, OrdenVenta entity) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    protected void setUpdateParameters(PreparedStatement ps, OrdenVenta orden) throws SQLException {
+        ps.setInt(1, orden.getId());
+        ps.setString(2, orden.getEstado_compra().name());
+        ps.setDate(3, new java.sql.Date(orden.getFecha_orden().getTime()));
+        ps.setBoolean(4, orden.isActivo());
+        ps.setInt(5, orden.getUsuario().getId());
     }
 
     @Override
@@ -66,7 +75,9 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
         venta.setId(rs.getInt("idOrdenVenta"));
         venta.setUsuario(usuario.obtener(rs.getInt("idUsuario")));
         venta.setFecha_orden(rs.getDate("fecha_orden"));
-        
+        venta.setActivo(rs.getBoolean("activo"));
+        venta.setEstado_compra(EstadoCompra.valueOf(rs.getString("estado_compra")));
+
         return venta;
     }
 
@@ -127,17 +138,16 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
     @Override
     public void eliminar(Integer id) {
         try (Connection conn = DBManager.getInstance().obtenerConexion();
-             CallableStatement cs = conn.prepareCall(getUpdateQuery())) {
-            
-            cs.setInt(1,id);
-            //cs.setDouble(2, desc.getPorcentaje());
+             CallableStatement cs = conn.prepareCall(getDeleteQuery())) {
+
+            cs.setInt(1, id);
             cs.execute();
-            
+
         } catch (SQLException e) {
-            throw new RuntimeException("Error al actualizar descuento", e);
+            throw new RuntimeException("Error al eliminar orden", e);
         }
     }
-    
+
     @Override
     public List<OrdenVenta> listarTodos() {
         List<OrdenVenta> ordenes = new ArrayList<>();

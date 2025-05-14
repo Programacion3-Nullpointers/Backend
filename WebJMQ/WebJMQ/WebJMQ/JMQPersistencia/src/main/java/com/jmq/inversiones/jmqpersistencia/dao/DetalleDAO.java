@@ -5,5 +5,5 @@ import com.jmq.inversiones.dominio.ventas.Detalle;
 
 
 public interface DetalleDAO extends BaseDAO<Detalle>{
-    
+    void eliminar(int idOrden, int idProducto);
 }

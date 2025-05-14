@@ -111,7 +111,7 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
     @Override
     public void eliminar(Integer id) {
         try (Connection conn = DBManager.getInstance().obtenerConexion();
-             CallableStatement cs = conn.prepareCall(getUpdateQuery())) {
+             CallableStatement cs = conn.prepareCall(getDeleteQuery())) {
             
             cs.setInt(1,id);
             //cs.setDouble(2, desc.getPorcentaje());
