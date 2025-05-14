@@ -74,7 +74,6 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         usu.setActivo(rs.getBoolean("activo"));
         usu.setCorreo(rs.getString("correo"));
         usu.setTipoUsuario(TipoUsuario.valueOf(rs.getString("tipoUsuario")));
-<<<<<<< HEAD
         if(rs.getString("tipoUsuario").equals("EMPRESA")){
             usu.setRUC(rs.getString("RUC"));
             usu.setRazonsocial(rs.getString("razonsocial"));
@@ -84,15 +83,6 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
             usu.setDni(rs.getString("dni"));
         }
         
-        
-=======
-        usu.setRazonsocial(rs.getString("razonsocial"));
-        usu.setDireccion(rs.getString("direccion"));
-        usu.setRUC(rs.getString("RUC"));
-
-        // El campo `dni` está en la clase pero no en el SP ni el ResultSet
-        // Si decides usarlo, deberías modificar el SP y agregarlo al SELECT
->>>>>>> ramaDaysi
         return usu;
     }
 

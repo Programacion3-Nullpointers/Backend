@@ -87,7 +87,6 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
     protected void setId(Producto entity, Integer id) {
         entity.setId(id);
     }
-<<<<<<< HEAD
     
     @Override
     public void agregar(Producto pro) {
@@ -189,8 +188,5 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
     }
     
     
-=======
 
-   
->>>>>>> ramaDaysi
 }
