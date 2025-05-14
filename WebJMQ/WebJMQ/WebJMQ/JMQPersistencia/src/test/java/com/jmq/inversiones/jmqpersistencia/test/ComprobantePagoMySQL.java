@@ -11,7 +11,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class testComprobantePagoDAO {
+public class ComprobantePagoMySQL {
 
     private ComprobantePagoDAOImpl dao;
 

@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class testProductoDAO {
+public class ProductoMySQL {
 
     private ProductoDAO productoDAO;
     private CategoriaDAO categoriaDAO;
