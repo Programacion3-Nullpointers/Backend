@@ -1,2 +1,11 @@
+# Ignorar todas las carpetas target/ en cualquier nivel
 **/target/
+
+# Ignorar archivos .class y .jar
+*.class
+*.jar
+
+# Ignorar configuración local
 db.properties
+
+
