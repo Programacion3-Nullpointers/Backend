@@ -1,12 +1,10 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
-import com.jmq.inversiones.dominio.pagos.Descuento;
 import com.jmq.inversiones.dominio.ventas.Categoria;
 import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.CategoriaDAOImpl;
-import com.jmq.inversiones.jmqpersistencia.dao.CategoriaDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ProductoMySQL {
 
     private ProductoDAO productoDAO;
-    private CategoriaDAO categoriaDAO;
+    private CategoriaDAOImpl categoriaDAO;
 
     @BeforeEach
     public void setUp() {
@@ -26,31 +24,29 @@ public class ProductoMySQL {
     }
 
     @Test
-    public void testAgregarYListar() {
+    public void testAgregarYObtenerYListar() {
         Producto prod = crearProductoEjemplo();
         productoDAO.agregar(prod);
 
-        List<Producto> lista = productoDAO.listarTodos();
-        boolean encontrado = lista.stream()
-                .anyMatch(p -> p.getId() == prod.getId());
+        assertTrue(prod.getId() > 0, "El ID generado debe ser mayor a 0");
 
-        assertTrue(encontrado);
+        Producto obtenido = productoDAO.obtener(prod.getId());
+        assertNotNull(obtenido, "El producto debe existir después de agregarlo");
+
+        List<Producto> lista = productoDAO.listarTodos();
+        assertTrue(lista.stream().anyMatch(p -> p.getId() == prod.getId()));
     }
 
     @Test
     public void testActualizar() {
-        Producto prod = crearProductoEjemplo();
+        Producto prod = crearProductoEjemplo(); 
         productoDAO.agregar(prod);
 
         prod.setNombre("Producto Actualizado");
         prod.setPrecio(99.99);
         productoDAO.actualizar(prod);
 
-        List<Producto> lista = productoDAO.listarTodos();
-        Producto actualizado = lista.stream()
-                .filter(p -> p.getId() == prod.getId())
-                .findFirst().orElse(null);
-
+        Producto actualizado = productoDAO.obtener(prod.getId());
         assertNotNull(actualizado);
         assertEquals("Producto Actualizado", actualizado.getNombre());
         assertEquals(99.99, actualizado.getPrecio());
@@ -58,22 +54,21 @@ public class ProductoMySQL {
 
     @Test
     public void testEliminar() {
-        Producto prod = crearProductoEjemplo();
+        Producto prod = crearProductoEjemplo();//crea un nuevo producto y lo elimina a la vez
         productoDAO.agregar(prod);
 
         productoDAO.eliminar(prod.getId());
 
-        List<Producto> lista = productoDAO.listarTodos();
-        boolean eliminado = lista.stream()
-                .noneMatch(p -> p.getId() == prod.getId());
+        Producto eliminado = productoDAO.obtener(prod.getId());
+        assertNull(eliminado, "Después de eliminar, no debería encontrarse el producto activo");
 
-        assertTrue(eliminado);
+        List<Producto> lista = productoDAO.listarTodos();
+        assertFalse(lista.stream().anyMatch(p -> p.getId() == prod.getId()));
     }
 
     private Producto crearProductoEjemplo() {
-        // ⚠️ Este ID de categoría debe existir o puedes crear una
         Categoria cat = categoriaDAO.listarTodos().stream().findFirst().orElse(null);
-        assertNotNull(cat, "No hay categoría disponible");
+        assertNotNull(cat, "Debe existir al menos una categoría válida en la BD");
 
         Producto p = new Producto();
         p.setNombre("Producto Prueba");
