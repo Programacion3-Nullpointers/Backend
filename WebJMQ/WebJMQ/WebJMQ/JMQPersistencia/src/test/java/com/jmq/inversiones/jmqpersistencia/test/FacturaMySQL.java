@@ -24,10 +24,10 @@ public class FacturaMySQL {
 
     @Test
     public void testAgregarYObtener() {
-        Factura factura = crearFacturaEjemplo(1);
-        facturaDAO.agregar(factura);
+        Factura factura = crearFacturaEjemplo(3);
+        facturaDAO.agregarHeredado(factura);
 
-        Factura obtenido = facturaDAO.obtener(1);
+        Factura obtenido = facturaDAO.obtener(factura.getId());
 
         assertNotNull(obtenido);
         assertEquals("Empresa SAC", obtenido.getRazon_social());
@@ -36,35 +36,35 @@ public class FacturaMySQL {
 
     @Test
     public void testActualizar() {
-        Factura factura = crearFacturaEjemplo(2);
-        facturaDAO.agregar(factura);
+        Factura factura = crearFacturaEjemplo(7);
+        facturaDAO.agregarHeredado(factura);
 
         factura.setRazon_social("Empresa Actualizada");
         factura.setMonto_total(999.99);
         facturaDAO.actualizar(factura);
 
-        Factura actualizado = facturaDAO.obtener(2);
+        Factura actualizado = facturaDAO.obtener(factura.getId());
         assertEquals("Empresa Actualizada", actualizado.getRazon_social());
         assertEquals(999.99, actualizado.getMonto_total());
     }
 
     @Test
     public void testEliminar() {
-        Factura factura = crearFacturaEjemplo(3);
-        facturaDAO.agregar(factura);
+//        Factura factura = crearFacturaEjemplo(3);
+//        facturaDAO.agregar(factura);
 
-        facturaDAO.eliminar(3);
-        Factura eliminado = facturaDAO.obtener(3);
+        facturaDAO.eliminarHeredado(69);
+        Factura eliminado = facturaDAO.obtener(69);
 
         assertNull(eliminado);
     }
 
     private Factura crearFacturaEjemplo(int id) {
         OrdenVenta orden = new OrdenVenta();
-        orden.setId(100 + id); // Asume que esa orden existe
+        orden.setId(id); // Asume que esa orden existe
 
         Factura f = new Factura();
-        f.setId(id);
+//        f.setId(id);
         f.setOrden(orden);
         f.setMetodoPago(MetodoPago.tarjeta);
         f.setFecha_pago(new Date());

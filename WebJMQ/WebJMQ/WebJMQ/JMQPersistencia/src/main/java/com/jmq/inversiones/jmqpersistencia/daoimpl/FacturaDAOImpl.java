@@ -1,10 +1,12 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
+import com.jmq.inversiones.dbmanager.DBManager;
 import com.jmq.inversiones.dominio.pagos.ComprobantePago;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.dominio.pagos.Factura;
 import com.jmq.inversiones.jmqpersistencia.dao.FacturaDAO;
 import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,46 +20,52 @@ public class FacturaDAOImpl extends BaseDAOImpl<Factura> implements FacturaDAO{
         
     @Override
     protected String getInsertQuery() {
-        return  " INSERT INTO Factura (id, RUC, razon_social, direccion, fecha_emision) VALUES (?, ?, ?, ?, ?)";
+        return "{CALL FACTURA_INSERTAR(?, ?, ?, ?, ?)}";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE Factura SET RUC=?, razon_social = ?, direccion = ?, fecha_emision = ? WHERE id = ?";
+         return "{CALL FACTURA_ACTUALIZAR(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
     }
 
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM Factura WHERE id = ?";
+        return "DELETE FROM Factura WHERE idFactura = ?";
     }
 
     @Override
     protected String getSelectByIdQuery() {
-        return "SELECT * FROM Factura INNER JOIN ComprobantePago USING(id) WHERE id = ?";
+        return "{CALL FACTURA_OBTENER_POR_ID(?)}";
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELECT *FROM Factura INNER JOIN ComprobantePago USING(id)";
+         return "SELECT * FROM Factura INNER JOIN ComprobantePago ON Factura.idFactura = ComprobantePago.idComprobantePago";
     }
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, Factura entity) throws SQLException {
         //ya fue insertado en comprobantePago antes de llegar aquí
-        ps.setInt(1,entity.getId()); //clave heredada
-        ps.setString(2,entity.getRUC());
-        ps.setString(3,entity.getRazon_social());
-        ps.setString(4,entity.getDireccion());
-        ps.setTimestamp(5,new Timestamp(entity.getFecha_emision().getTime()));  
+        CallableStatement cs = (CallableStatement) ps;
+        cs.setInt(1,entity.getId()); //clave heredada
+        cs.setString(2,entity.getRUC());
+        cs.setString(3,entity.getRazon_social());
+        cs.setString(4,entity.getDireccion());
+        cs.setTimestamp(5,new Timestamp(entity.getFecha_emision().getTime()));  
     }
 
     @Override
     protected void setUpdateParameters(PreparedStatement ps, Factura entity) throws SQLException {
-        ps.setString(1,entity.getRUC());
-        ps.setString(2,entity.getRazon_social());
-        ps.setString(3,entity.getDireccion());
-        ps.setTimestamp(4,new Timestamp(entity.getFecha_emision().getTime()));  
-        ps.setInt(5, entity.getId());
+        CallableStatement cs = (CallableStatement) ps;
+        cs.setInt(1, entity.getId());
+        cs.setString(2,entity.getRUC());
+        cs.setString(3,entity.getRazon_social());
+        cs.setString(4,entity.getDireccion());
+        cs.setTimestamp(5,new Timestamp(entity.getFecha_emision().getTime()));  
+        cs.setInt(6, entity.getOrden().getId());
+        cs.setString(7, entity.getMetodoPago().name());
+        cs.setTimestamp(8, new Timestamp(entity.getFecha_pago().getTime()));
+        cs.setDouble(9, entity.getMonto_total());
     }
 
     @Override
@@ -67,8 +75,9 @@ public class FacturaDAOImpl extends BaseDAOImpl<Factura> implements FacturaDAO{
         //Datos Propios
         f.setRUC(rs.getString("RUC"));
         f.setRazon_social(rs.getString("razon_social"));
-        f.setDireccion(rs.getString("direccion"));
+        f.setDireccion(rs.getString("direccion_fiscal"));
         f.setFecha_emision(rs.getDate("fecha_emision"));
+        
         return f;
     }
 
@@ -93,6 +102,32 @@ public class FacturaDAOImpl extends BaseDAOImpl<Factura> implements FacturaDAO{
     public void eliminar(int id){
         super.eliminar(id);
         comprobanteDAO.eliminar(id);
+    }
+
+    @Override
+    public void agregarHeredado(Factura entity) {
+        comprobanteDAO.agregar(entity);
+
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+            CallableStatement ps = conn.prepareCall(getInsertQuery())) {
+           setInsertParameters(ps, entity);
+           ps.execute();
+       } catch (SQLException e) {
+           throw new RuntimeException("Error al insertar Factura", e);
+       }
+    }
+
+    @Override
+    public void eliminarHeredado(int id) {
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+                    PreparedStatement ps = conn.prepareStatement(getDeleteQuery())) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            comprobanteDAO.eliminar(id);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar entidad", e);
+        }    
     }
     
 }
