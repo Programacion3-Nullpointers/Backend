@@ -25,14 +25,14 @@ public class ProductoCotizacionMySQL {
         pc.setDescripcion("Producto solicitado por cliente");
         pc.setCantidad(3);
         pc.setPrecioCotizado(0.0); // inicialmente sin precio
+        pc.setFid_cotizacion(1);
+        dao.agregar(pc);
 
-        dao.agregar(pc, idCotizacionDummy);
-
-        List<ProductoCotizacion> lista = dao.obtenerPorCotizacion(idCotizacionDummy);
-        boolean encontrado = lista.stream()
-                .anyMatch(p -> p.getId() == pc.getId());
-
-        assertTrue(encontrado, "El producto cotizado no se encontró luego de agregar");
+        ProductoCotizacion prueba = dao.obtener(pc.getId());
+        
+        assertNotNull(prueba, "El producto de la cotizacion debe existir después de agregarlo");
+        
+        //assertTrue(encontrado, "El producto cotizado no se encontró luego de agregar");
     }
 
    @Test
@@ -42,16 +42,17 @@ public class ProductoCotizacionMySQL {
         pc.setDescripcion("Producto actualizable");
         pc.setCantidad(2);
         pc.setPrecioCotizado(100.0); // precio inicial
-        dao.agregar(pc, idCotizacionDummy); // se guarda y se le asigna ID
+        pc.setFid_cotizacion(1);
+        dao.agregar(pc); // se guarda y se le asigna ID
 
         int idProducto = pc.getId(); // obtener el ID asignado
         double nuevoPrecio = 345.75;
 
         // Ejecutamos el método a probar
-        dao.actualizarPrecioCotizacion(idProducto, idCotizacionDummy, nuevoPrecio);
+        dao.actualizarPrecioCotizacion(pc, nuevoPrecio);
 
         // Verificamos
-        ProductoCotizacion actualizado = dao.obtenerPorIdYCotizacion(idProducto, idCotizacionDummy);
+        ProductoCotizacion actualizado = dao.obtener(idProducto);
 
         assertNotNull(actualizado, "El producto actualizado no fue encontrado");
         assertEquals(nuevoPrecio, actualizado.getPrecioCotizado(), 0.01);
@@ -61,15 +62,15 @@ public class ProductoCotizacionMySQL {
 
     @Test
     public void testEliminarPorCotizacion() {
-        ProductoCotizacion p1 = new ProductoCotizacion(8001, "Eliminar P1", 2, 50.0, idCotizacionDummy);
-        ProductoCotizacion p2 = new ProductoCotizacion(8002, "Eliminar P2", 3, 75.0, idCotizacionDummy);
+        ProductoCotizacion p1 = new ProductoCotizacion( "Eliminar P1", 2, 50.0, idCotizacionDummy);
+        ProductoCotizacion p2 = new ProductoCotizacion( "Eliminar P2", 3, 75.0, idCotizacionDummy);
+        int cantidad_Pre_inserts = dao.listarTodos().size();
+        dao.agregar(p1);
+        dao.agregar(p2);
 
-        dao.agregar(p1, idCotizacionDummy);
-        dao.agregar(p2, idCotizacionDummy);
-
-        dao.eliminar(idCotizacionDummy);
-
-        List<ProductoCotizacion> lista = dao.obtenerPorCotizacion(idCotizacionDummy);
-        assertTrue(lista.isEmpty(), "Los productos cotizados no fueron eliminados correctamente");
+        dao.eliminar(p1.getId());
+        dao.eliminar(p2.getId());
+        List<ProductoCotizacion> lista = dao.listarTodos();
+        assertTrue(lista.size()==cantidad_Pre_inserts, "Los productos cotizados no fueron eliminados correctamente");
     }
 }

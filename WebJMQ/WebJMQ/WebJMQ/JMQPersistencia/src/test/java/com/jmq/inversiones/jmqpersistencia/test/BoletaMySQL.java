@@ -66,11 +66,11 @@ public class BoletaMySQL {
 
     @Test
     public void testEliminar() {
-//        Boleta bol = crearBoletaEjemplo(5);
-//        boletaDAO.agregar(bol);
+        Boleta bol = crearBoletaEjemplo();
+        boletaDAO.agregar(bol);
 
-        boletaDAO.eliminar(52);
-        assertNull(boletaDAO.obtener(52));
+        boletaDAO.eliminar(bol.getId());
+        assertNull(boletaDAO.obtener(bol.getId()));
     }
 
     private Boleta crearBoletaEjemplo() {
@@ -84,7 +84,6 @@ public class BoletaMySQL {
         ordenDummy.setUsuario(u);
 
         ordenVentaDAO.agregar(ordenDummy); // se guarda y se genera el ID
-        int idGenerado = ordenDummy.getId();
 
         Boleta boleta = new Boleta();
         boleta.setOrden(ordenDummy); // ya no es null
