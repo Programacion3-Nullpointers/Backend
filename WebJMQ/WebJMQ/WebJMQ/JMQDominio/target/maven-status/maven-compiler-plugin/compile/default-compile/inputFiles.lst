@@ -1,17 +1,17 @@
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\contizaciones\Cotizacion.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\contizaciones\ProductoCotizacion.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\logistica\Entrega.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\logistica\TipoEntrega.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\notificaciones\Notificacion.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\Boleta.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\ComprobantePago.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\Descuento.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\Factura.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\MetodoPago.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\usuario\TipoUsuario.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\usuario\Usuario.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\Categoria.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\Detalle.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\EstadoCompra.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\OrdenVenta.java
-C:\Users\daysi\Documents\PUCP\Ciclo2025.1\PROGRAMACIÓN 3\TA\PROYECTO\Backend\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\Producto.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\contizaciones\Cotizacion.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\contizaciones\ProductoCotizacion.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\logistica\Entrega.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\logistica\TipoEntrega.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\notificaciones\Notificacion.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\Boleta.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\ComprobantePago.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\Descuento.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\Factura.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\pagos\MetodoPago.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\usuario\TipoUsuario.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\usuario\Usuario.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\Categoria.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\Detalle.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\EstadoCompra.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\OrdenVenta.java
+C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQDominio\src\main\java\com\jmq\inversiones\dominio\ventas\Producto.java

@@ -11,7 +11,7 @@ public class ProductoCotizacion {
         
     }
 
-    public ProductoCotizacion(int id, String descripcion, int cantidad, double precioCotizado, int fid_cotizacion) {
+    public ProductoCotizacion(String descripcion, int cantidad, double precioCotizado, int fid_cotizacion) {
        this.id = id;
        this.descripcion = descripcion;
        this.cantidad = cantidad;

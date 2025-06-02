@@ -30,7 +30,8 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
 
     @Override
     protected String getDeleteQuery() {
-        return "{CALL PRODUCTO_ELIMINAR(?)}";
+        return "DELETE FROM productoCotizado"
+                + "WHERE idproductoCotizado = _id_productocotizacion";
     }
 
     @Override
@@ -41,7 +42,7 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
 
     @Override
     protected String getSelectAllQuery() {
-        return "{CALL PRODUCTO_LISTAR()}";
+        return "SELECT * FROM productoCotizado";
     }
 
     @Override
