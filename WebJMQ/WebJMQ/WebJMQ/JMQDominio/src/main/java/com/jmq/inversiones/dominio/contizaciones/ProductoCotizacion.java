@@ -11,12 +11,13 @@ public class ProductoCotizacion {
         
     }
 
-    public ProductoCotizacion(int id, String descripcion, int cantidad, double precioCotizado, Cotizacion cotizacion) {
-        this.id = id;
-        this.descripcion = descripcion;
-        this.cantidad = cantidad;
-        this.precioCotizado = precioCotizado;
-    }
+    public ProductoCotizacion(int id, String descripcion, int cantidad, double precioCotizado, int fid_cotizacion) {
+       this.id = id;
+       this.descripcion = descripcion;
+       this.cantidad = cantidad;
+       this.precioCotizado = precioCotizado;
+       this.fid_cotizacion = fid_cotizacion;
+   }
 
     public int getId() {
         return id;
