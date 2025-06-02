@@ -5,6 +5,8 @@ import com.jmq.inversiones.jmqpersistencia.daoimpl.BoletaDAOImpl;
 import com.jmq.inversiones.dominio.pagos.Boleta;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.dominio.pagos.MetodoPago;
+import com.jmq.inversiones.dominio.usuario.Usuario;
+import com.jmq.inversiones.dominio.ventas.EstadoCompra;
 import com.jmq.inversiones.jmqpersistencia.dao.OrdenVentaDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.OrdenVentaDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,14 +29,18 @@ public class BoletaMySQL {
 
     @Test
     public void testAgregarYObtener() {
-        Boleta bol = crearBoletaEjemplo(10);
+        Boleta bol = crearBoletaEjemplo();
 
-        boletaDAO.agregarHeredado(bol);
+        boletaDAO.agregar(bol);
+        
         Boleta obtenido = boletaDAO.obtener(bol.getId());
 
-        assertNotNull(obtenido);
+          // Verificaciones
+        assertNotNull(obtenido, "La boleta no fue encontrada luego de insertarse");
         assertEquals("Cliente Test", obtenido.getNombre());
         assertEquals("12345678", obtenido.getDni());
+        assertEquals(bol.getMetodoPago(), obtenido.getMetodoPago());
+        assertEquals(bol.getMonto_total(), obtenido.getMonto_total(), 0.01);
     }
 
     @Test
@@ -63,17 +69,26 @@ public class BoletaMySQL {
 //        Boleta bol = crearBoletaEjemplo(5);
 //        boletaDAO.agregar(bol);
 
-        boletaDAO.eliminarHeredado(52);
+        boletaDAO.eliminar(52);
         assertNull(boletaDAO.obtener(52));
     }
 
-    private Boleta crearBoletaEjemplo(int id) {
-        OrdenVenta ordenDummy = ordenVentaDAO.obtener(id);
+    private Boleta crearBoletaEjemplo() {
+        OrdenVenta ordenDummy = new OrdenVenta();
+        ordenDummy.setEstado_compra(EstadoCompra.pagado); // o el estado que desees
+        ordenDummy.setFecha_orden(new Date());
+        ordenDummy.setActivo(true);
+
+        Usuario u = new Usuario(); // ⚠️ ID debe existir
+        u.setId(1);
+        ordenDummy.setUsuario(u);
+
+        ordenVentaDAO.agregar(ordenDummy); // se guarda y se genera el ID
+        int idGenerado = ordenDummy.getId();
 
         Boleta boleta = new Boleta();
-//        boleta.setId(id);
-        boleta.setOrden(ordenDummy);
-        boleta.setMetodoPago(MetodoPago.tarjeta); // Asumiendo que es un enum
+        boleta.setOrden(ordenDummy); // ya no es null
+        boleta.setMetodoPago(MetodoPago.tarjeta);
         boleta.setFecha_pago(new Date());
         boleta.setMonto_total(250.0);
         boleta.setDni("12345678");
@@ -81,4 +96,5 @@ public class BoletaMySQL {
         boleta.setFecha_emision(new Date());
         return boleta;
     }
+
 }

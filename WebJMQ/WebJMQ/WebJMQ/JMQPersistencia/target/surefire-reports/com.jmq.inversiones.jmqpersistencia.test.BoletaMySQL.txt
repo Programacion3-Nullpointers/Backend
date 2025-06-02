@@ -1,15 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.jmq.inversiones.jmqpersistencia.test.BoletaMySQL
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.944 s <<< FAILURE! -- in com.jmq.inversiones.jmqpersistencia.test.BoletaMySQL
-com.jmq.inversiones.jmqpersistencia.test.BoletaMySQL.testAgregarYObtener -- Time elapsed: 1.918 s <<< ERROR!
-java.lang.NullPointerException: Cannot invoke "com.jmq.inversiones.dominio.ventas.OrdenVenta.getId()" because the return value of "com.jmq.inversiones.dominio.pagos.ComprobantePago.getOrden()" is null
-	at com.jmq.inversiones.jmqpersistencia.daoimpl.ComprobantePagoDAOImpl.setInsertParameters(ComprobantePagoDAOImpl.java:49)
-	at com.jmq.inversiones.jmqpersistencia.daoimpl.ComprobantePagoDAOImpl.setInsertParameters(ComprobantePagoDAOImpl.java:16)
-	at com.jmq.inversiones.jmqpersistencia.BaseDAOImpl.agregar(BaseDAOImpl.java:25)
-	at com.jmq.inversiones.jmqpersistencia.daoimpl.BoletaDAOImpl.agregarHeredado(BoletaDAOImpl.java:114)
-	at com.jmq.inversiones.jmqpersistencia.test.BoletaMySQL.testAgregarYObtener(BoletaMySQL.java:32)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.743 s -- in com.jmq.inversiones.jmqpersistencia.test.BoletaMySQL

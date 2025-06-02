@@ -85,12 +85,30 @@ public class FacturaDAOImpl extends BaseDAOImpl<Factura> implements FacturaDAO{
     protected void setId(Factura entity, Integer id) {
         entity.setId(id);
     }
-    
-    @Override 
-    public void agregar(Factura f){
-        comprobanteDAO.agregar(f);
-        super.agregar(f);
+
+    @Override
+    public void agregar(Factura factura) {
+        // Paso 1: Insertar en ComprobantePago (padre)
+        comprobanteDAO.agregar(factura); // Este debe establecer el ID en la entidad
+
+        // Paso 2: Insertar en Factura (hija)
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(getInsertQuery())) {
+
+            setInsertParameters(cs, factura);
+            cs.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al agregar Factura", e);
+        }
     }
+    
+
+//    @Override 
+//    public void agregar(Factura f){
+//        comprobanteDAO.agregar(f);
+//        super.agregar(f);
+//    }
     
     @Override
     public void actualizar(Factura f){
@@ -98,36 +116,9 @@ public class FacturaDAOImpl extends BaseDAOImpl<Factura> implements FacturaDAO{
         super.actualizar(f);
     }
     
-    
     public void eliminar(int id){
         super.eliminar(id);
         comprobanteDAO.eliminar(id);
-    }
-
-    @Override
-    public void agregarHeredado(Factura entity) {
-        comprobanteDAO.agregar(entity);
-
-        try (Connection conn = DBManager.getInstance().obtenerConexion();
-            CallableStatement ps = conn.prepareCall(getInsertQuery())) {
-           setInsertParameters(ps, entity);
-           ps.execute();
-       } catch (SQLException e) {
-           throw new RuntimeException("Error al insertar Factura", e);
-       }
-    }
-
-    @Override
-    public void eliminarHeredado(int id) {
-        try (Connection conn = DBManager.getInstance().obtenerConexion();
-                    PreparedStatement ps = conn.prepareStatement(getDeleteQuery())) {
-
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            comprobanteDAO.eliminar(id);
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar entidad", e);
-        }    
     }
     
 }
