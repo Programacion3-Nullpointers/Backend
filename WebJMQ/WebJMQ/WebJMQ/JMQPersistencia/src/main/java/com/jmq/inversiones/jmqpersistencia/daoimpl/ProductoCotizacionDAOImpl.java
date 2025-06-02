@@ -28,30 +28,43 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
 
     @Override
     protected String getUpdateQuery() {
+<<<<<<< HEAD
         return "UPDATE productoCotizado SET descripcion = ?, cantidad = ?, precioCotizado = ?"
                 + " WHERE idproductoCotizado = ? AND idCotizacion = ?";
         
+=======
+        return "{CALL PRODUCTOCOTIZACION_MODIFICAR(?, ?, ?, ?, ?)}";
+>>>>>>> origin/main
     }
 
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM productoCotizado WHERE idCotizacion=?";
+        return "{CALL PRODUCTOCOTIZACION_ELIMINAR(?)}";
     }
 
     @Override
     protected String getSelectByIdQuery() {
+<<<<<<< HEAD
         return "SELECT * FROM productoCotizado WHERE idproductoCotizado = ? AND idCotizacion = ?";
+=======
+        return "{CALL PRODUCTOCOTIZACION_OBTENER(?)}";
+>>>>>>> origin/main
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELECT * FROM productoCotizado";
+        return "{CALL PRODUCTOCOTIZACION_LISTAR()}";
     }
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, ProductoCotizacion entity) throws SQLException {
+<<<<<<< HEAD
         CallableStatement cs = (CallableStatement) ps;
         cs.registerOutParameter(1, Types.INTEGER); // OUT _id
+=======
+        CallableStatement cs = (CallableStatement)ps;
+        cs.registerOutParameter(1, Types.INTEGER);
+>>>>>>> origin/main
         cs.setString(2, entity.getDescripcion());
         cs.setInt(3, entity.getCantidad());
         cs.setDouble(4, entity.getPrecioCotizado());
@@ -60,11 +73,19 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
 
     @Override
     protected void setUpdateParameters(PreparedStatement ps, ProductoCotizacion entity) throws SQLException {
+<<<<<<< HEAD
         ps.setString(1, entity.getDescripcion());
         ps.setInt(2, entity.getCantidad());
         ps.setDouble(3, entity.getPrecioCotizado());
         ps.setInt(4, entity.getId());
         ps.setInt(5, entity.getFid_cotizacion());
+=======
+        CallableStatement cs = (CallableStatement)ps;
+        cs.setString(1, entity.getDescripcion());
+        cs.setInt(2, entity.getCantidad());
+        cs.setDouble(3, entity.getPrecioCotizado());
+        cs.setInt(4, entity.getId());
+>>>>>>> origin/main
     }
 
     @Override
@@ -84,6 +105,7 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
     }
     
     @Override
+<<<<<<< HEAD
     public void actualizarPrecioCotizacion(Integer id, Integer fid,double precio) {
         ProductoCotizacion existente = obtenerPorIdYCotizacion(id,fid); // Trae el actual de la BD
         if (existente != null) {
@@ -150,6 +172,12 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
         } catch (SQLException e) {
             throw new RuntimeException("Error al eliminar productos cotizados", e);
         }
+=======
+    public void actualizarPrecioCotizacion(ProductoCotizacion pro,double precio) {
+        
+        pro.setPrecioCotizado(precio);
+        actualizar(pro);
+>>>>>>> origin/main
     }
 
 }
