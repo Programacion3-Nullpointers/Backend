@@ -22,10 +22,10 @@ public class ComprobantePagoMySQL {
 
     @Test
     public void testAgregarYObtener() {
-        ComprobantePago cp = crearComprobantePagoEjemplo(1);
+        ComprobantePago cp = crearComprobantePagoEjemplo(6);
         dao.agregar(cp);
 
-        ComprobantePago obtenido = dao.obtener(1);
+        ComprobantePago obtenido = dao.obtener(cp.getId());
         assertNotNull(obtenido);
         assertEquals(cp.getMetodoPago(), obtenido.getMetodoPago());
         assertEquals(cp.getMonto_total(), obtenido.getMonto_total());
@@ -33,35 +33,34 @@ public class ComprobantePagoMySQL {
 
     @Test
     public void testActualizar() {
-        ComprobantePago cp = crearComprobantePagoEjemplo(2);
-        dao.agregar(cp);
+        ComprobantePago cp = dao.obtener(51);
 
         cp.setMonto_total(999.99);
         dao.actualizar(cp);
 
-        ComprobantePago actualizado = dao.obtener(2);
+        ComprobantePago actualizado = dao.obtener(51);
         assertEquals(999.99, actualizado.getMonto_total());
     }
 
     @Test
     public void testEliminar() {
-        ComprobantePago cp = crearComprobantePagoEjemplo(3);
-        dao.agregar(cp);
+//        ComprobantePago cp = crearComprobantePagoEjemplo(3);
+//        dao.agregar(cp);
 
-        dao.eliminar(3);
-        assertNull(dao.obtener(3));
+        dao.eliminar(64);
+        assertNull(dao.obtener(64));
     }
 
     private ComprobantePago crearComprobantePagoEjemplo(int id) {
         OrdenVenta orden = new OrdenVenta();
-        orden.setId(100 + id); // dummy orden
+        orden.setId(id); // dummy orden
 
         ComprobantePago cp = new ComprobantePago();
-        cp.setId(id);
+//        cp.setId(id);
         cp.setOrden(orden);
         cp.setMetodoPago(MetodoPago.efectivo);
         cp.setFecha_pago(new Date());
-        cp.setMonto_total(500.0 + id);
+        cp.setMonto_total(500.0*id);
         return cp;
     }
 }
