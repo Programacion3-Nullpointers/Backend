@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.jmq.inversiones.jmqpersistencia.test.CategoriaMySQL
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.007 s -- in com.jmq.inversiones.jmqpersistencia.test.CategoriaMySQL
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.644 s -- in com.jmq.inversiones.jmqpersistencia.test.CategoriaMySQL
