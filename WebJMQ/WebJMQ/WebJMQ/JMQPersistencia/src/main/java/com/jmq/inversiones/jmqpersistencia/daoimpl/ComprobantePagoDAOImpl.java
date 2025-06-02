@@ -3,11 +3,14 @@ package com.jmq.inversiones.jmqpersistencia.daoimpl;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.dominio.pagos.ComprobantePago;
 import com.jmq.inversiones.dominio.pagos.MetodoPago;
+import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.jmqpersistencia.dao.ComprobantePagoDAO;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 
 
 public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago> implements ComprobantePagoDAO{
@@ -16,22 +19,22 @@ public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO ComprobantePago(idOrdenVenta, metodo_pago, fecha_pago, monto_total) VALUES (?,?,?,?)";
+         return "{CALL COMPROBANTE_PAGO_INSERTAR(?, ?, ?, ?, ?)}";
     }
 
     @Override
     protected String getUpdateQuery() {
-       return "UPDATE ComprobantePago SET idOrdenVenta= ?, metodoPago = ?, fecha_pago = ?, monto_total=? WHERE id=?";
+       return "{CALL COMPROBANTE_PAGO_ACTUALIZAR(?, ?, ?, ?, ?)}";
     }
 
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM ComprobantePago WHERE id = ?";
+        return "DELETE FROM ComprobantePago WHERE idComprobantePago = ?";
     }
 
     @Override
     protected String getSelectByIdQuery() {
-        return "SELEC * FROM ComprobantePago WHERE id = ?";
+        return "{CALL GetComprobantePagoById(?)}";
     }
 
     @Override
@@ -41,16 +44,18 @@ public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, ComprobantePago entity) throws SQLException {
-        ps.setInt(1,entity.getOrden().getId());
-        ps.setString(2, entity.getMetodoPago().name()); //usamos el nombre del enum
-        ps.setTimestamp(3, new Timestamp(entity.getFecha_pago().getTime()));
-        ps.setDouble(4, entity.getMonto_total());
+        CallableStatement cs = (CallableStatement) ps;
+        cs.registerOutParameter(1, Types.INTEGER);
+        cs.setInt(2,entity.getOrden().getId());
+        cs.setString(3, entity.getMetodoPago().name()); //usamos el nombre del enum
+        cs.setTimestamp(4, new Timestamp(entity.getFecha_pago().getTime()));
+        cs.setDouble(5, entity.getMonto_total());
     }
 
     @Override
     protected void setUpdateParameters(PreparedStatement ps, ComprobantePago entity) throws SQLException {
         ps.setInt(1, entity.getOrden().getId());
-        ps.setString(2, entity.getMetodoPago().name());
+        ps.setString(2, entity.getMetodoPago().name()); // Enum como String
         ps.setTimestamp(3, new Timestamp(entity.getFecha_pago().getTime()));
         ps.setDouble(4, entity.getMonto_total());
         ps.setInt(5, entity.getId());
@@ -67,7 +72,16 @@ public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago
     
     @Override
     protected ComprobantePago createFromResultSet(ResultSet rs) throws SQLException {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ComprobantePago comprobante = new ComprobantePago();
+        
+        comprobante.setId(rs.getInt("idComprobantePago"));
+        OrdenVenta orden = new OrdenVenta();
+        orden.setId(rs.getInt("id_orden"));
+        comprobante.setOrden(orden);
+        comprobante.setMetodoPago(MetodoPago.valueOf(rs.getString("metodo_pago")));
+        comprobante.setFecha_pago(rs.getTimestamp("fecha_pago"));
+        comprobante.setMonto_total(rs.getDouble("monto_total"));
+        return comprobante;
     }
     
     @Override
