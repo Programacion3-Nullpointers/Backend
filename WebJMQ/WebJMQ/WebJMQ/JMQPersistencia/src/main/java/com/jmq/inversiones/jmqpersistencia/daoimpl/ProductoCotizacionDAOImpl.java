@@ -50,7 +50,7 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, ProductoCotizacion entity) throws SQLException {
-        ps.setInt(1, entity.getId());
+        ps.registerOutParameter(1, Types.INTEGER);
         ps.setString(2, entity.getDescripcion());
         ps.setInt(3, entity.getCantidad());
         ps.setDouble(4, entity.getPrecioCotizado());
@@ -81,10 +81,8 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
     }
     
     @Override
-    public void actualizarPrecioCotizacion(Integer id, Integer fid,double precio) {
-        ProductoCotizacion pro = new ProductoCotizacion();
-        pro.setId(id);
-        pro.setFid_cotizacion(fid);
+    public void actualizarPrecioCotizacion(ProductoCotizacion pro,double precio) {
+        
         pro.setPrecioCotizado(precio);
         actualizar(pro);
     }
