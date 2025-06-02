@@ -12,7 +12,7 @@ public class ProductoCotizacion {
     }
 
     public ProductoCotizacion(String descripcion, int cantidad, double precioCotizado, int fid_cotizacion) {
-       this.id = id;
+       
        this.descripcion = descripcion;
        this.cantidad = cantidad;
        this.precioCotizado = precioCotizado;
