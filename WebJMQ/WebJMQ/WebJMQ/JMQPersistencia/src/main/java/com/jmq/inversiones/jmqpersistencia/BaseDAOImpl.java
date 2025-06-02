@@ -19,18 +19,18 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     
     @Override
     public void agregar(T entity) {
-    try (Connection conn = DBManager.getInstance().obtenerConexion();
-         CallableStatement cs = conn.prepareCall(getInsertQuery())) {
-        
-        setInsertParameters(cs, entity);
-        cs.execute();
-        
-        setId(entity, cs.getInt(1));
-        
-    } catch (SQLException e) {
-        throw new RuntimeException("Error al agregar entidad", e);
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(getInsertQuery())) {
+
+            setInsertParameters(cs, entity);
+            cs.execute();
+
+            setId(entity, cs.getInt(1));
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al agregar entidad", e);
+        }
     }
-}
 
     @Override
     public T obtener(Integer id) {
