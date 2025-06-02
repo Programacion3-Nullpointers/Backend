@@ -34,7 +34,7 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
 
     @Override
     protected String getDeleteQuery() {
-        return "{CALL PRODUCTOCOTIZACION_ELIMINAR(?)}";
+        return "DELETE FROM productoCotizado WHERE idCotizacion=?";
     }
 
     @Override
