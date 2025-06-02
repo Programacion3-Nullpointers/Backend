@@ -1,23 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.jmq.inversiones.jmqpersistencia.test.DetalleMySQL
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 2.617 s <<< FAILURE! -- in com.jmq.inversiones.jmqpersistencia.test.DetalleMySQL
-com.jmq.inversiones.jmqpersistencia.test.DetalleMySQL.testAgregarYListar -- Time elapsed: 2.587 s <<< ERROR!
-java.lang.RuntimeException: Error al agregar detalle
-	at com.jmq.inversiones.jmqpersistencia.daoimpl.DetalleDAOImpl.agregar(DetalleDAOImpl.java:111)
-	at com.jmq.inversiones.jmqpersistencia.daoimpl.DetalleDAOImpl.agregar(DetalleDAOImpl.java:14)
-	at com.jmq.inversiones.jmqpersistencia.test.DetalleMySQL.testAgregarYListar(DetalleMySQL.java:27)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-Caused by: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '3-5' for key 'Detalle.PRIMARY'
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:117)
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953)
-	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:371)
-	at com.mysql.cj.jdbc.CallableStatement.execute(CallableStatement.java:847)
-	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
-	at com.zaxxer.hikari.pool.HikariProxyCallableStatement.execute(HikariProxyCallableStatement.java)
-	at com.jmq.inversiones.jmqpersistencia.daoimpl.DetalleDAOImpl.agregar(DetalleDAOImpl.java:109)
-	... 5 more
-
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.08 s -- in com.jmq.inversiones.jmqpersistencia.test.DetalleMySQL
