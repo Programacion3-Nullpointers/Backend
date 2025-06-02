@@ -22,47 +22,46 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
     
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO Cotizacion (idproductoCotizado,descripcion,cantidad,"
-                + "precioCotizado,idCotizacion) VALUES ( ?, ?, ?, ?, ? )";
+        return "{CALL PRODUCTOCOTIZACION_INSERTAR(?, ?, ?, ?, ?)}";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE productoCotizado SET precioCotizado = ?"
-                + " WHERE idproductoCotizado = ? AND idCotizacion = ?";
-        
+        return "{CALL PRODUCTOCOTIZACION_MODIFICAR(?, ?, ?, ?, ?)}";
     }
 
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM productoCotizado WHERE idCotizacion=?";
+        return "{CALL PRODUCTOCOTIZACION_ELIMINAR(?)}";
     }
 
     @Override
     protected String getSelectByIdQuery() {
-        return "SELECT * FROM productoCotizado WHERE idproductoCotizado = ?";
+        return "{CALL PRODUCTOCOTIZACION_OBTENER(?)}";
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELECT * FROM productoCotizado";
+        return "{CALL PRODUCTOCOTIZACION_LISTAR()}";
     }
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, ProductoCotizacion entity) throws SQLException {
-        ps.setInt(1, entity.getId());
-        ps.setString(2, entity.getDescripcion());
-        ps.setInt(3, entity.getCantidad());
-        ps.setDouble(4, entity.getPrecioCotizado());
-        ps.setInt(5, entity.getFid_cotizacion());
+        CallableStatement cs = (CallableStatement)ps;
+        cs.registerOutParameter(1, Types.INTEGER);
+        cs.setString(2, entity.getDescripcion());
+        cs.setInt(3, entity.getCantidad());
+        cs.setDouble(4, entity.getPrecioCotizado());
+        cs.setInt(5, entity.getFid_cotizacion());
     }
 
     @Override
     protected void setUpdateParameters(PreparedStatement ps, ProductoCotizacion entity) throws SQLException {
-        ps.setString(1, entity.getDescripcion());
-        ps.setInt(2, entity.getCantidad());
-        ps.setDouble(3, entity.getPrecioCotizado());
-        ps.setInt(4, entity.getId());
+        CallableStatement cs = (CallableStatement)ps;
+        cs.setString(1, entity.getDescripcion());
+        cs.setInt(2, entity.getCantidad());
+        cs.setDouble(3, entity.getPrecioCotizado());
+        cs.setInt(4, entity.getId());
     }
 
     @Override
@@ -81,10 +80,8 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
     }
     
     @Override
-    public void actualizarPrecioCotizacion(Integer id, Integer fid,double precio) {
-        ProductoCotizacion pro = new ProductoCotizacion();
-        pro.setId(id);
-        pro.setFid_cotizacion(fid);
+    public void actualizarPrecioCotizacion(ProductoCotizacion pro,double precio) {
+        
         pro.setPrecioCotizado(precio);
         actualizar(pro);
     }

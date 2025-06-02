@@ -30,6 +30,11 @@ DROP PROCEDURE IF EXISTS NOTIFICACION_INSERTAR
 DROP PROCEDURE IF EXISTS NOTIFICACION_MODIFICAR
 DROP PROCEDURE IF EXISTS NOTIFICACION_ELIMINAR 
 DROP PROCEDURE IF EXISTS NOTIFICACION_LISTAR
+DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_INSERTAR
+DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_MODIFICAR
+DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_ELIMINAR
+DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_LISTAR
+DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_OBTENER
 
 
 DELIMITER $
@@ -330,6 +335,57 @@ END $
 CREATE PROCEDURE ENTREGA_LISTAR()
 BEGIN
     SELECT * FROM Entrega;
+END $
+
+CREATE PROCEDURE PRODUCTOCOTIZACION_INSERTAR(
+	OUT _id_productocotizacion INT,
+    IN _descripcion VARCHAR(45),
+    IN _cantidad INT,
+    IN _precioCotizado DOUBLE,
+    IN _idCotizacion INT
+)
+BEGIN
+	INSERT INTO Cotizacion (descripcion,cantidad, precioCotizado,
+    idCotizacion) VALUES ( _descripcion, _cantidad, 
+    _precioCotizado, _idCotizacion );
+    SET _id_productocotizacion = LAST_INSERT_ID();
+END $
+
+CREATE PROCEDURE PRODUCTOCOTIZACION_MODIFICAR(
+	IN _descripcion VARCHAR(45),
+    IN _cantidad INT,
+    IN _precioCotizado DOUBLE,
+    IN _idCotizacion INT,
+    IN _id_productocotizacion INT
+)
+BEGIN
+	UPDATE productoCotizado
+    SET descripcion = _descripcion,
+    cantidad = _cantidad,
+    precioCotizado = _precioCotizado,
+    idCotizacion = _idCotizacion
+    WHERE idproductoCotizado = _id_productocotizacion;
+END $
+
+CREATE PROCEDURE PRODUCTOCOTIZACION_ELIMINAR(
+	IN _id_productocotizacion INT
+)
+BEGIN
+	DELETE FROM productoCotizado
+    WHERE idproductoCotizado = _id_productocotizacion;
+END $
+
+CREATE PROCEDURE PRODUCTOCOTIZACION_LISTAR()
+BEGIN
+	SELECT * FROM productoCotizado;
+END $
+
+CREATE PROCEDURE PRODUCTOCOTIZACION_OBTENER(
+	IN _id_productocotizacion INT
+)
+BEGIN
+	SELECT * FROM productoCotizado 
+    WHERE idproductoCotizado = _id_productocotizacion;
 END $
 
 CREATE PROCEDURE NOTIFICACION_INSERTAR(
