@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.jmq.inversiones.jmqpersistencia.test.EntregaMySQL
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.125 s -- in com.jmq.inversiones.jmqpersistencia.test.EntregaMySQL

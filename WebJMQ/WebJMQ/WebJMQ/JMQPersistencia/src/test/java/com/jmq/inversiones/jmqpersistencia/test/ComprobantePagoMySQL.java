@@ -1,5 +1,6 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
+import com.jmq.inversiones.dominio.pagos.Boleta;
 import com.jmq.inversiones.dominio.pagos.ComprobantePago;
 import com.jmq.inversiones.dominio.pagos.MetodoPago;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
@@ -22,7 +23,7 @@ public class ComprobantePagoMySQL {
 
     @Test
     public void testAgregarYObtener() {
-        ComprobantePago cp = crearComprobantePagoEjemplo(6);
+        ComprobantePago cp = crearComprobantePagoEjemplo(6); // se tiene que eliminar la ordenVenta DE ID=6 primero
         dao.agregar(cp);
 
         ComprobantePago obtenido = dao.obtener(cp.getId());
@@ -55,7 +56,7 @@ public class ComprobantePagoMySQL {
         OrdenVenta orden = new OrdenVenta();
         orden.setId(id); // dummy orden
 
-        ComprobantePago cp = new ComprobantePago();
+        ComprobantePago cp = new Boleta();
 //        cp.setId(id);
         cp.setOrden(orden);
         cp.setMetodoPago(MetodoPago.efectivo);

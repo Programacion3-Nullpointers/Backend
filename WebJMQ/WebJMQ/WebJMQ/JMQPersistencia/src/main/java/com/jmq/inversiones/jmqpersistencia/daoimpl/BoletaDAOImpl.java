@@ -91,11 +91,30 @@ public class BoletaDAOImpl extends BaseDAOImpl<Boleta> implements BoletaDAO{
     }
     
     @Override 
-    public void agregar(Boleta f){
-        comprobanteDAO.agregar(f);
-        super.agregar(f);
+    public void agregar(Boleta boleta) {
+        // Primero insertas en ComprobantePago
+        comprobanteDAO.agregar(boleta);
+
+        // Luego insertas en Boleta
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(getInsertQuery())) {
+
+            cs.setInt(1, boleta.getId()); // ID ya seteado por ComprobantePago
+            cs.setString(2, boleta.getDni());
+            cs.setString(3, boleta.getNombre());
+            cs.setTimestamp(4, new Timestamp(boleta.getFecha_emision().getTime()));
+            cs.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al insertar Boleta", e);
+        }
     }
-    
+
+//    @Override
+//    public void agregar(Boleta boleta){
+//        comprobanteDAO.agregar(boleta);
+//        super.agregar(boleta);
+//    }
     @Override
     public void actualizar(Boleta f){
         comprobanteDAO.actualizar(f);
@@ -108,33 +127,16 @@ public class BoletaDAOImpl extends BaseDAOImpl<Boleta> implements BoletaDAO{
         comprobanteDAO.eliminar(id);
     }
     
-    @Override
-    public void agregarHeredado(Boleta entity){
-        
-        comprobanteDAO.agregar(entity);
-        System.out.println(entity.getDni());
-        try (Connection conn = DBManager.getInstance().obtenerConexion();
-            CallableStatement ps = conn.prepareCall(getInsertQuery())) {
-           setInsertParameters(ps, entity);
-           ps.execute();
-           
-//           System.out.println(ps.getInt(1));
-//           setId(entity, ps.getInt(1));
-
-       } catch (SQLException e) {
-           throw new RuntimeException("Error al insertar Boleta", e);
-       }
-    }
-    @Override
-    public void eliminarHeredado(int id){
-        try (Connection conn = DBManager.getInstance().obtenerConexion();
-             PreparedStatement ps = conn.prepareStatement(getDeleteQuery())) {
-            
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            comprobanteDAO.eliminar(id);
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar entidad", e);
-        }
-    }
+//    @Override
+//    public void eliminarHeredado(int id){
+//        try (Connection conn = DBManager.getInstance().obtenerConexion();
+//             PreparedStatement ps = conn.prepareStatement(getDeleteQuery())) {
+//            
+//            ps.setInt(1, id);
+//            ps.executeUpdate();
+//            comprobanteDAO.eliminar(id);
+//        } catch (SQLException e) {
+//            throw new RuntimeException("Error al eliminar entidad", e);
+//        }
+//    }
 }

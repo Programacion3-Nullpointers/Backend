@@ -1,5 +1,6 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
+import com.jmq.inversiones.dominio.pagos.Boleta;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.dominio.pagos.ComprobantePago;
 import com.jmq.inversiones.dominio.pagos.MetodoPago;
@@ -34,7 +35,7 @@ public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago
 
     @Override
     protected String getSelectByIdQuery() {
-        return "{CALL GetComprobantePagoById(?)}";
+        return "{CALL COMPROBANTE_OBTENER(?)}";
     }
 
     @Override
@@ -72,7 +73,7 @@ public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago
     
     @Override
     protected ComprobantePago createFromResultSet(ResultSet rs) throws SQLException {
-        ComprobantePago comprobante = new ComprobantePago();
+        ComprobantePago comprobante = new Boleta(); //por el momento crea boleta
         
         comprobante.setId(rs.getInt("idComprobantePago"));
         OrdenVenta orden = new OrdenVenta();

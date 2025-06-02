@@ -5,6 +5,5 @@ import com.jmq.inversiones.dominio.pagos.Boleta;
 
 
 public interface BoletaDAO extends BaseDAO<Boleta>{
-    void agregarHeredado(Boleta entity);
-    void eliminarHeredado(int id);
+    //void eliminarHeredado(int id);
 }

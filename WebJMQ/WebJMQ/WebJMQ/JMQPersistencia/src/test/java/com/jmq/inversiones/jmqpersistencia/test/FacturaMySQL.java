@@ -2,9 +2,12 @@ package com.jmq.inversiones.jmqpersistencia.test;
 
 import com.jmq.inversiones.dominio.pagos.Factura;
 import com.jmq.inversiones.dominio.pagos.MetodoPago;
+import com.jmq.inversiones.dominio.usuario.Usuario;
+import com.jmq.inversiones.dominio.ventas.EstadoCompra;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.jmqpersistencia.dao.FacturaDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.FacturaDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.OrdenVentaDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +27,8 @@ public class FacturaMySQL {
 
     @Test
     public void testAgregarYObtener() {
-        Factura factura = crearFacturaEjemplo(3);
-        facturaDAO.agregarHeredado(factura);
+        Factura factura = crearFacturaEjemplo();
+        facturaDAO.agregar(factura);
 
         Factura obtenido = facturaDAO.obtener(factura.getId());
 
@@ -36,8 +39,8 @@ public class FacturaMySQL {
 
     @Test
     public void testActualizar() {
-        Factura factura = crearFacturaEjemplo(7);
-        facturaDAO.agregarHeredado(factura);
+        Factura factura = crearFacturaEjemplo();
+        facturaDAO.agregar(factura);
 
         factura.setRazon_social("Empresa Actualizada");
         factura.setMonto_total(999.99);
@@ -53,18 +56,25 @@ public class FacturaMySQL {
 //        Factura factura = crearFacturaEjemplo(3);
 //        facturaDAO.agregar(factura);
 
-        facturaDAO.eliminarHeredado(69);
+        facturaDAO.eliminar(69);
         Factura eliminado = facturaDAO.obtener(69);
 
         assertNull(eliminado);
     }
 
-    private Factura crearFacturaEjemplo(int id) {
+    private Factura crearFacturaEjemplo() {
         OrdenVenta orden = new OrdenVenta();
-        orden.setId(id); // Asume que esa orden existe
+        orden.setEstado_compra(EstadoCompra.pagado);
+        orden.setFecha_orden(new Date());
+        orden.setActivo(true);
+
+        Usuario u = new Usuario();
+        u.setId(1); // Asegúrate que este ID existe
+        orden.setUsuario(u);
+
+        new OrdenVentaDAOImpl().agregar(orden); // guarda la orden
 
         Factura f = new Factura();
-//        f.setId(id);
         f.setOrden(orden);
         f.setMetodoPago(MetodoPago.tarjeta);
         f.setFecha_pago(new Date());
@@ -75,4 +85,5 @@ public class FacturaMySQL {
         f.setFecha_emision(new Date());
         return f;
     }
+
 }
