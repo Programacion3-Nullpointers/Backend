@@ -25,7 +25,7 @@ public class DetalleMySQL {
     public void testAgregarYListar() {
         Detalle detalle = crearDetalleEjemplo(3, 5);
         detalleDAO.agregar(detalle);
-
+        
         List<Detalle> lista = detalleDAO.listarTodos();
         boolean encontrado = lista.stream()
                 .anyMatch(d -> d.getOrden().getId() == detalle.getOrden().getId() && d.getProducto().getId() == detalle.getProducto().getId());

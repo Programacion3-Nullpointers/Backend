@@ -2,9 +2,13 @@ package com.jmq.inversiones.jmqpersistencia.test;
 
 import com.jmq.inversiones.dominio.logistica.Entrega;
 import com.jmq.inversiones.dominio.logistica.TipoEntrega;
+import com.jmq.inversiones.dominio.usuario.Usuario;
+import com.jmq.inversiones.dominio.ventas.EstadoCompra;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.jmqpersistencia.dao.EntregaDAO;
+import com.jmq.inversiones.jmqpersistencia.dao.OrdenVentaDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.EntregaDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.OrdenVentaDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,28 +20,56 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EntregaMySQL {
 
     private EntregaDAO entregaDAO;
+    private OrdenVentaDAO ordenVentaDAO;
 
     @BeforeEach
     public void setUp() {
         entregaDAO = new EntregaDAOImpl();
+        ordenVentaDAO = new OrdenVentaDAOImpl();
+    }
+
+    private OrdenVenta crearOrdenDummy() {
+        OrdenVenta orden = new OrdenVenta();
+        orden.setEstado_compra(EstadoCompra.pendiente);
+        orden.setFecha_orden(new Date());
+        orden.setActivo(true);
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1); // ⚠️ Este usuario DEBE existir en la base de datos
+        orden.setUsuario(usuario);
+
+        ordenVentaDAO.agregar(orden);
+        return orden;
+    }
+
+    private Entrega crearEntregaEjemplo() {
+        OrdenVenta orden = crearOrdenDummy(); // ✅ se asegura que la orden exista
+
+        Entrega entrega = new Entrega();
+        entrega.setOrden(orden);
+        entrega.setFecha_entrega(new Date());
+        entrega.setDireccion("Av. Test #" + orden.getId());
+        entrega.setDniRecibo("12345678");
+        entrega.setTipoEntrega(TipoEntrega.DELIVERY); // o TipoEntrega.RECOJO
+
+        return entrega;
     }
 
     @Test
     public void testAgregarYListar() {
-        Entrega entrega = crearEntregaEjemplo(1);
+        Entrega entrega = crearEntregaEjemplo();
         entregaDAO.agregar(entrega);
 
         List<Entrega> entregas = entregaDAO.listarTodos();
         boolean encontrado = entregas.stream()
-                .anyMatch(e -> e.getOrden().getId() == entrega.getOrden().getId() &&
-                               e.getDireccion().equals(entrega.getDireccion()));
+                .anyMatch(e -> e.getId() == entrega.getId());
 
         assertTrue(encontrado);
     }
 
     @Test
     public void testActualizar() {
-        Entrega entrega = crearEntregaEjemplo(2);
+        Entrega entrega = crearEntregaEjemplo();
         entregaDAO.agregar(entrega);
 
         entrega.setDireccion("Calle Nueva 123");
@@ -52,12 +84,12 @@ public class EntregaMySQL {
 
         assertNotNull(actualizado);
         assertEquals("Calle Nueva 123", actualizado.getDireccion());
-        assertEquals(76543210, actualizado.getDniRecibo());
+        assertEquals("76543210", actualizado.getDniRecibo());
     }
 
     @Test
     public void testEliminar() {
-        Entrega entrega = crearEntregaEjemplo(3);
+        Entrega entrega = crearEntregaEjemplo();
         entregaDAO.agregar(entrega);
 
         entregaDAO.eliminar(entrega.getId());
@@ -67,18 +99,5 @@ public class EntregaMySQL {
                 .noneMatch(e -> e.getId() == entrega.getId());
 
         assertTrue(eliminado);
-    }
-
-    private Entrega crearEntregaEjemplo(int ordenId) {
-        OrdenVenta orden = new OrdenVenta();
-        orden.setId(ordenId); // ⚠️ Asegúrate de que este ID exista en la BD
-
-        Entrega entrega = new Entrega();
-        entrega.setOrden(orden);
-        entrega.setFecha_entrega(new Date());
-        entrega.setDireccion("Av. Test #" + ordenId);
-        entrega.setDniRecibo("12345678");
-        entrega.setTipoEntrega(TipoEntrega.DELIVERY); // o RECOJO
-        return entrega;
     }
 }

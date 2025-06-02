@@ -36,21 +36,23 @@ public class OrdenVentaMySQL {
 
     @Test
     public void testActualizar() {
-        OrdenVenta orden = crearOrdenEjemplo(EstadoCompra.pendiente);
-        ordenVentaDAO.agregar(orden);
+    // 1. Crear una orden pendiente
+    OrdenVenta orden = crearOrdenEjemplo(EstadoCompra.pendiente);
+    ordenVentaDAO.agregar(orden);
 
-        orden.setEstado_compra(EstadoCompra.pagado);
-        orden.setActivo(false);
-        ordenVentaDAO.actualizar(orden);
+    // 2. Cambiar estado, pero dejarla activa para que siga visible
+    orden.setEstado_compra(EstadoCompra.pagado);
+    orden.setActivo(true); // mantener activo
 
-        List<OrdenVenta> lista = ordenVentaDAO.listarTodos();
-        OrdenVenta actualizado = lista.stream()
-                .filter(o -> o.getId() == orden.getId())
-                .findFirst().orElse(null);
+    ordenVentaDAO.actualizar(orden);
 
-        assertNotNull(actualizado);
-        assertEquals(EstadoCompra.pagado, actualizado.getEstado_compra());
-        assertFalse(actualizado.isActivo());
+    // 3. Obtener directamente (filtra por activo = 1)
+    OrdenVenta actualizado = ordenVentaDAO.obtener(orden.getId());
+
+    // 4. Validaciones
+    assertNotNull(actualizado, "La orden actualizada no debe ser null");
+    assertEquals(EstadoCompra.pagado, actualizado.getEstado_compra());
+    assertTrue(actualizado.isActivo(), "La orden debe seguir activa");   
     }
 
     @Test
@@ -60,12 +62,8 @@ public class OrdenVentaMySQL {
 
         ordenVentaDAO.eliminar(orden.getId());
 
-        OrdenVenta nueva= ordenVentaDAO.obtener(orden.getId());
-//        List<OrdenVenta> lista = ordenVentaDAO.listarTodos();
-//        boolean eliminado = lista.stream()
-//                .noneMatch(o -> o.getId() == orden.getId());
-
-        assertEquals(nueva.isActivo(),false);
+        OrdenVenta nueva = ordenVentaDAO.obtener(orden.getId());
+        assertNull(nueva);
     }
 
     private OrdenVenta crearOrdenEjemplo(EstadoCompra estado) {

@@ -41,7 +41,7 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
 
     @Override
     protected String getSelectByIdQuery() {
-        return "SELECT * FROM OrdenVenta WHERE idOrdenVenta = ?"; 
+        return "SELECT * FROM OrdenVenta WHERE idOrdenVenta = ? AND activo = 1"; 
     }
 
     @Override
@@ -91,7 +91,6 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
     
     @Override
     public void agregar(OrdenVenta orden) {
-        // Sobrescribimos el método para usar el SP
         try (Connection conn = DBManager.getInstance().obtenerConexion()) {
             conn.setAutoCommit(false);
             try {
@@ -100,7 +99,7 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
                     
                     cs.registerOutParameter(1, Types.INTEGER);
                     cs.setString(2, orden.getEstado_compra().name());
-                    cs.setDate(3, new java.sql.Date(orden.getFecha_orden().getTime()));
+                    cs.setTimestamp(3, new Timestamp(orden.getFecha_orden().getTime()));
                     cs.setBoolean(4, orden.isActivo());
                     cs.setInt(5, orden.getUsuario().getId());
                     cs.execute();
@@ -116,7 +115,7 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
                 conn.setAutoCommit(true);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al registrar descuento", e);
+            throw new RuntimeException("Error al registrar orden", e);
         }
     }
     
@@ -127,14 +126,14 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
             
             cs.setInt(1, orden.getId());
             cs.setString(2, orden.getEstado_compra().name());
-            cs.setDate(3, new java.sql.Date(orden.getFecha_orden().getTime()));
+            cs.setTimestamp(3, new Timestamp(orden.getFecha_orden().getTime()));
             cs.setBoolean(4, orden.isActivo());
             cs.setInt(5, orden.getUsuario().getId());
             
             cs.execute();
             
         } catch (SQLException e) {
-            throw new RuntimeException("Error al actualizar descuento", e);
+            throw new RuntimeException("Error al actualizar orden", e);
         }
     }
     

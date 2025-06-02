@@ -28,6 +28,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
         setId(entity, cs.getInt(1));
         
     } catch (SQLException e) {
+        e.printStackTrace();
         throw new RuntimeException("Error al agregar entidad", e);
     }
 }

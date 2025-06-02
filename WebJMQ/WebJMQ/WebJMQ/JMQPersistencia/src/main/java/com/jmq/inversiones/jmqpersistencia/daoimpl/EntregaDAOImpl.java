@@ -69,7 +69,7 @@ public class EntregaDAOImpl extends BaseDAOImpl<Entrega> implements EntregaDAO{
         
         entre.setDniRecibo(rs.getString("dni"));
         entre.setDireccion(rs.getString("direccion"));
-        entre.setFecha_entrega(rs.getDate("fecha_entrega"));
+        entre.setFecha_entrega(rs.getTimestamp("fecha_entrega"));
         entre.setTipoEntrega(TipoEntrega.valueOf(rs.getString("TipoEntrega")));
         return entre;
     }
