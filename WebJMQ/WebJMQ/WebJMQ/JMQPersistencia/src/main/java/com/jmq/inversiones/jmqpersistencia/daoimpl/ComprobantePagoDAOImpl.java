@@ -66,7 +66,7 @@ public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago
         cp.setFecha_pago(rs.getDate("fecha_pago"));
         cp.setMetodoPago(MetodoPago.valueOf(rs.getString("metodo_pago")));
         cp.setMonto_total(rs.getDouble("monto_total"));
-        cp.setOrden(ordenVentaDAO.obtener(rs.getInt("idOrdenVenta")));
+        cp.setOrden(ordenVentaDAO.obtener(rs.getInt("id_orden")));
        
     }
     

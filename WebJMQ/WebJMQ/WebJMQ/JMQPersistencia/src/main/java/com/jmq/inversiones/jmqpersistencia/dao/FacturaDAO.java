@@ -5,5 +5,6 @@ import com.jmq.inversiones.dominio.pagos.Factura;
 
 
 public interface FacturaDAO extends BaseDAO<Factura>{
-    
+    void agregarHeredado(Factura entity);
+    void eliminarHeredado(int id);
 }
