@@ -3,6 +3,7 @@ package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 
 
+import com.jmq.inversiones.dbmanager.DBManager;
 import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
@@ -27,7 +28,8 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
 
     @Override
     protected String getUpdateQuery() {
-        return "{CALL PRODUCTOCOTIZACION_MODIFICAR(?, ?, ?, ?, ?)}";
+        return "UPDATE productoCotizado SET descripcion = ?, cantidad = ?, precioCotizado = ?"
+                + " WHERE idproductoCotizado = ? AND idCotizacion = ?";
     }
 
     @Override
@@ -37,7 +39,7 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
 
     @Override
     protected String getSelectByIdQuery() {
-        return "{CALL PRODUCTOCOTIZACION_OBTENER(?)}";
+        return "SELECT * FROM productoCotizado WHERE idproductoCotizado = ? AND idCotizacion = ?";
     }
 
     @Override
@@ -47,8 +49,8 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
 
     @Override
     protected void setInsertParameters(PreparedStatement ps, ProductoCotizacion entity) throws SQLException {
-        CallableStatement cs = (CallableStatement)ps;
-        cs.registerOutParameter(1, Types.INTEGER);
+        CallableStatement cs = (CallableStatement) ps;
+        cs.registerOutParameter(1, Types.INTEGER); // OUT _id
         cs.setString(2, entity.getDescripcion());
         cs.setInt(3, entity.getCantidad());
         cs.setDouble(4, entity.getPrecioCotizado());
@@ -57,11 +59,11 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
 
     @Override
     protected void setUpdateParameters(PreparedStatement ps, ProductoCotizacion entity) throws SQLException {
-        CallableStatement cs = (CallableStatement)ps;
-        cs.setString(1, entity.getDescripcion());
-        cs.setInt(2, entity.getCantidad());
-        cs.setDouble(3, entity.getPrecioCotizado());
-        cs.setInt(4, entity.getId());
+        ps.setString(1, entity.getDescripcion());
+        ps.setInt(2, entity.getCantidad());
+        ps.setDouble(3, entity.getPrecioCotizado());
+        ps.setInt(4, entity.getId());
+        ps.setInt(5, entity.getFid_cotizacion());
     }
 
     @Override
@@ -71,6 +73,7 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
         prod.setCantidad(rs.getInt("cantidad"));
         prod.setDescripcion(rs.getString("descripcion"));
         prod.setPrecioCotizado(rs.getDouble("precioCotizado"));
+        prod.setFid_cotizacion(rs.getInt("idCotizacion"));
         return prod;
     }
 
@@ -79,12 +82,77 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
         entity.setId(id);
     }
     
-    @Override
-    public void actualizarPrecioCotizacion(ProductoCotizacion pro,double precio) {
-        
-        pro.setPrecioCotizado(precio);
-        actualizar(pro);
+    public void actualizarPrecioCotizacion(Integer id, Integer fid,double precio) {
+        ProductoCotizacion existente = obtenerPorIdYCotizacion(id,fid); // Trae el actual de la BD
+        if (existente != null) {
+            existente.setPrecioCotizado(precio);
+            actualizar(existente); // ✅ Ahora tiene todos los campos requeridos
+        } else if (existente.getDescripcion()== null || existente.getDescripcion().isBlank()) {
+            throw new IllegalStateException("La descripción no puede ser nula al actualizar");
+        }else {
+            throw new RuntimeException("ProductoCotizacion no encontrado para ID: " + id+ " y Cotización: " + fid);
+        }
+    }
+    public void agregar(ProductoCotizacion pc, int idCotizacion) {
+        pc.setFid_cotizacion(idCotizacion);
+        super.agregar(pc);
     }
 
- 
+    public List<ProductoCotizacion> obtenerPorCotizacion(int idCotizacion) {
+        List<ProductoCotizacion> lista = new ArrayList<>();
+        String sql = "SELECT * FROM productoCotizado WHERE idCotizacion = ?";
+
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idCotizacion);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(createFromResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener productos por cotización", e);
+        }
+        return lista;
+    }
+
+    public ProductoCotizacion obtenerPorIdYCotizacion(int idProducto, int idCotizacion) {
+        String sql = "SELECT * FROM productoCotizado WHERE idproductoCotizado = ? AND idCotizacion = ?";
+
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idProducto);
+            ps.setInt(2, idCotizacion);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return createFromResultSet(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener producto por ID y cotización", e);
+        }
+
+        return null;
+    }
+
+    
+    public void eliminar(int idCotizacion) {
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(getDeleteQuery())) {
+
+            ps.setInt(1, idCotizacion);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar productos cotizados", e);
+        }
+    }
+
+    @Override
+    public void actualizarPrecioCotizacion(ProductoCotizacion pro, double precio) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }
