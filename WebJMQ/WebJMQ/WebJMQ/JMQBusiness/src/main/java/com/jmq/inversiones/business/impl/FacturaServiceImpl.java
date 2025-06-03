@@ -3,14 +3,15 @@ package com.jmq.inversiones.business.impl;
 import com.jmq.inversiones.business.FacturaService;
 import com.jmq.inversiones.dominio.pagos.Factura;
 import com.jmq.inversiones.jmqpersistencia.dao.FacturaDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.FacturaDAOImpl;
 import java.util.List;
 
 public class FacturaServiceImpl implements FacturaService{
 
     private final FacturaDAO facturaDAO;
     
-    public FacturaServiceImpl(FacturaDAO facturaDAO) {
-        this.facturaDAO = facturaDAO;
+    public FacturaServiceImpl() {
+        this.facturaDAO = new FacturaDAOImpl();
     }
 
     @Override

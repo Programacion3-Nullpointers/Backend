@@ -3,6 +3,7 @@ package com.jmq.inversiones.business.impl;
 import com.jmq.inversiones.business.BoletaService;
 import com.jmq.inversiones.dominio.pagos.Boleta;
 import com.jmq.inversiones.jmqpersistencia.dao.BoletaDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.BoletaDAOImpl;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +11,8 @@ public class BoletaServiceImpl implements BoletaService{
 
     private final BoletaDAO boletaDAO;
 
-    public BoletaServiceImpl(BoletaDAO boletaDAO) {
-        this.boletaDAO = boletaDAO;
+    public BoletaServiceImpl( ) {
+        this.boletaDAO = new BoletaDAOImpl();
     }
 
     @Override
