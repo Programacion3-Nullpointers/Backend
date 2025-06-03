@@ -8,6 +8,7 @@ import jakarta.jws.WebService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.xml.ws.WebServiceException;
+import java.util.List;
 
 
 @WebService(serviceName = "CategoriaWS")
@@ -44,6 +45,36 @@ public class CategoriaWS {
         }
         catch (Exception ex){
             throw new WebServiceException("Error al actualizar la categoria"+ex.getMessage());
+        }
+    }
+    
+    @WebMethod(operationName = "EliminarCategoria")
+    public void eliminarCategoria(int id){
+        try{
+            categoriaWS.eliminarCategoria(id);
+        }
+        catch (Exception ex){
+            throw new WebServiceException("Error al eliminar la categoria "+ex.getMessage());
+        }
+    }
+    
+    @WebMethod(operationName = "ObtenerCategoria")
+    public Categoria buscarCategoria(int id){
+        try{
+            return categoriaWS.buscarCategoria(id);
+        }
+        catch (Exception ex){
+            throw new WebServiceException("Error al eliminar la categoria "+ex.getMessage());
+        }
+    }
+    
+    @WebMethod(operationName = "ListarCategorias")
+    public List<Categoria> listarCategorias(){
+        try{
+            return categoriaWS.listarCategorias();
+        }
+        catch (Exception ex){
+            throw new WebServiceException("Error al eliminar la categoria "+ex.getMessage());
         }
     }
 }
