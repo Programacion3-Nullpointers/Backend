@@ -74,14 +74,15 @@ public class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago> impleme
     @Override
     protected ComprobantePago createFromResultSet(ResultSet rs) throws SQLException {
         ComprobantePago comprobante = new Boleta(); //por el momento crea boleta
-        
         comprobante.setId(rs.getInt("idComprobantePago"));
-        OrdenVenta orden = new OrdenVenta();
-        orden.setId(rs.getInt("id_orden"));
-        comprobante.setOrden(orden);
+//        OrdenVenta orden = new OrdenVenta();
+//        orden.setId(rs.getInt("id_orden"));
+//        comprobante.setOrden(orden);
         comprobante.setMetodoPago(MetodoPago.valueOf(rs.getString("metodo_pago")));
         comprobante.setFecha_pago(rs.getTimestamp("fecha_pago"));
         comprobante.setMonto_total(rs.getDouble("monto_total"));
+        
+        comprobante.setOrden(ordenVentaDAO.obtener(rs.getInt("id_orden")));
         return comprobante;
     }
     
