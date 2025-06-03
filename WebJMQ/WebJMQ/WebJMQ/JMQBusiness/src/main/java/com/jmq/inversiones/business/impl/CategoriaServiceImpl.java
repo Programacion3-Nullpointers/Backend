@@ -3,14 +3,15 @@ package com.jmq.inversiones.business.impl;
 import com.jmq.inversiones.business.CategoriaService;
 import com.jmq.inversiones.dominio.ventas.Categoria;
 import com.jmq.inversiones.jmqpersistencia.dao.CategoriaDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.CategoriaDAOImpl;
 import java.util.List;
 
 public class CategoriaServiceImpl implements CategoriaService{
     
     private final CategoriaDAO categoriaDAO;
     
-    public CategoriaServiceImpl(CategoriaDAO categoriaDAO){
-        this.categoriaDAO = categoriaDAO;
+    public CategoriaServiceImpl(){
+        this.categoriaDAO = new CategoriaDAOImpl();
     }
 
     @Override
