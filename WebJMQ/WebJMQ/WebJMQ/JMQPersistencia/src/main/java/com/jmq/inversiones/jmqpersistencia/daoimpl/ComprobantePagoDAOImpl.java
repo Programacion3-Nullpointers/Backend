@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 
 
-public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago> implements ComprobantePagoDAO{
+public class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago> implements ComprobantePagoDAO{
 
     private final OrdenVentaDAOImpl ordenVentaDAO = new OrdenVentaDAOImpl();
 
@@ -40,7 +40,7 @@ public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELCT * FROM ComprobantePago";
+        return "SELECT * FROM ComprobantePago";
     }
 
     @Override
