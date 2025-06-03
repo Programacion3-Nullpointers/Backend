@@ -30,7 +30,33 @@
             <artifactId>jakarta.xml.ws-api</artifactId>
             <version>4.0.2</version>
         </dependency>
-        
+        <!-- Dominio: contiene la clase Usuario y TipoUsuario -->
+    <dependency>
+        <groupId>com.jmq.inversiones</groupId>
+        <artifactId>JMQDominio</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <!-- Persistencia: contiene UsuarioDAO, BaseDAOImpl, etc. -->
+    <dependency>
+        <groupId>com.jmq.inversiones</groupId>
+        <artifactId>JMQPersistencia</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <!-- Business: contiene UsuarioService y UsuarioServiceImpl -->
+    <dependency>
+        <groupId>com.jmq.inversiones</groupId>
+        <artifactId>JMQBusiness</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.28</version> <!-- o la versión más reciente -->
+    </dependency>
+
     </dependencies>
     
     <build>

@@ -83,7 +83,6 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
             usu.setRazonsocial(rs.getString("razonsocial"));
         }
         else{
-            usu.setNombreUsuario(rs.getString("nombreUsuario"));
             usu.setDni(rs.getString("dni"));
         }
         

@@ -1,5 +1,7 @@
 package com.jmq.inversiones.dominio.usuario;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class Usuario {
     private int id;
     private String nombreUsuario;

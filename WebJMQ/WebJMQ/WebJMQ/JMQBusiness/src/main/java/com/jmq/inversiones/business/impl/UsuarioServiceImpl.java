@@ -27,20 +27,28 @@ public class UsuarioServiceImpl implements UsuarioService{
                 throw new Exception("La contraseña es requerida");
             }
             if (usuario.getCorreo()== null || usuario.getCorreo().isEmpty()) {
-                throw new Exception("La contraseña es requerida");
+                throw new Exception("La correo es requerido");
             }
             // Asignar valores por defecto si es necesario
             if (usuario.getTipoUsuario() == null) {
                 usuario.setTipoUsuario(TipoUsuario.CLIENTE); 
             }
-            if(usuario.getTipoUsuario() == TipoUsuario.CLIENTE && usuario.getDni()== null
-                    && usuario.getNombreUsuario()== null){
-                throw new Exception("El dni y nombre de usuario es requerido para los clientes");
+           
+            if(usuario.getTipoUsuario() == TipoUsuario.CLIENTE) {
+                if(usuario.getDni() == null || usuario.getDni().isEmpty())
+                    throw new Exception("El DNI es requerido para los clientes");
+                if(usuario.getNombreUsuario() == null || usuario.getNombreUsuario().isEmpty())
+                    throw new Exception("El nombre de usuario es requerido para los clientes");
             }
-            if(usuario.getTipoUsuario() == TipoUsuario.EMPRESA && 
-                    usuario.getRazonsocial() == null && usuario.getRUC() == null){
-                throw new Exception("La razon social y el RUC es requerido para las empresas");
+
+            if(usuario.getTipoUsuario() == TipoUsuario.EMPRESA) {
+                if(usuario.getRazonsocial() == null || usuario.getRazonsocial().isEmpty())
+                    throw new Exception("La razón social es requerida para empresas");
+                if(usuario.getRUC() == null || usuario.getRUC().isEmpty())
+                    throw new Exception("El RUC es requerido para empresas");
             }
+
+            
             usuarioDAO.agregar(usuario);
         } catch (Exception e) {
             throw new Exception("Error al registrar usuario: " + e.getMessage(), e);

@@ -40,9 +40,18 @@ public class DBManager {
             throw new RuntimeException("Error al cargar el archivo de propiedades", e);
         }
 
+        
+        
         HikariConfig config = new HikariConfig();
         String dbType = properties.getProperty("db.type").toLowerCase();
-        config.setJdbcUrl(properties.getProperty(dbType + ".jdbcUrl"));
+        String jdbcUrl = properties.getProperty(dbType + ".jdbcUrl");
+        try {
+            // Esta línea es la clave: registrar el driver explícitamente
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Driver JDBC no encontrado", e);
+        }
+        config.setJdbcUrl(jdbcUrl);
         config.setUsername(properties.getProperty(dbType + ".username"));
         config.setPassword(properties.getProperty(dbType + ".password"));
 

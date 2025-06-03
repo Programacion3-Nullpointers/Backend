@@ -1,25 +1,41 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/WebServices/WebService.java to edit this template
- */
 package com.jmq.inversiones.jmqws;
 
-import jakarta.jws.WebService;
+import com.jmq.inversiones.business.UsuarioService;
+import com.jmq.inversiones.business.impl.UsuarioServiceImpl;
+import com.jmq.inversiones.dominio.usuario.Usuario;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.UsuarioDAOImpl;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
+import jakarta.jws.WebService;
+import java.util.List;
 
-/**
- *
- * @author omen
- */
 @WebService(serviceName = "UsuarioWS")
 public class UsuarioWS {
 
-    /**
-     * This is a sample web service operation
-     */
-    @WebMethod(operationName = "hello")
-    public String hello(@WebParam(name = "name") String txt) {
-        return "Hello " + txt + " !";
+    private final UsuarioService usuarioService = new UsuarioServiceImpl(new UsuarioDAOImpl());
+
+    @WebMethod(operationName = "registrarUsuario")
+    public void registrarUsuario(@WebParam(name = "usuario") Usuario usuario) throws Exception {
+        usuarioService.registrarUsuario(usuario);
+    }
+
+    @WebMethod(operationName = "actualizarUsuario")
+    public void actualizarUsuario(@WebParam(name = "usuario") Usuario usuario) throws Exception {
+        usuarioService.actualiarUsuario(usuario);
+    }
+
+    @WebMethod(operationName = "eliminarUsuario")
+    public void eliminarUsuario(@WebParam(name = "id") int id) throws Exception {
+        usuarioService.eliminarUsuario(id);
+    }
+
+    @WebMethod(operationName = "buscarUsuario")
+    public Usuario buscarUsuario(@WebParam(name = "id") int id) throws Exception {
+        return usuarioService.buscarUsuario(id);
+    }
+
+    @WebMethod(operationName = "listarUsuarios")
+    public List<Usuario> listarUsuarios() throws Exception {
+        return usuarioService.listarUsuarios();
     }
 }
