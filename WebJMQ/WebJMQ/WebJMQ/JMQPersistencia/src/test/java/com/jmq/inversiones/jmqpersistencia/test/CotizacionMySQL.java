@@ -4,7 +4,7 @@ import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
 import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.CotizacioDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.CotizacionDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ public class CotizacionMySQL {
 
     @BeforeEach
     public void setUp() {
-        cotizacionDAO = new CotizacioDAOImpl(); // corrige a CotizacionDAOImpl si renombraste la clase
+        cotizacionDAO = new CotizacionDAOImpl(); // corrige a CotizacionDAOImpl si renombraste la clase
     }
 
     @Test

@@ -12,8 +12,8 @@ public class UsuarioServiceImpl implements UsuarioService{
         private final UsuarioDAO usuarioDAO;
 
     // Constructor que recibe el DAO (Inyección de dependencias)
-    public UsuarioServiceImpl(UsuarioDAO usuarioDAO) {
-        this.usuarioDAO = usuarioDAO;
+    public UsuarioServiceImpl() {
+        this.usuarioDAO = new UsuarioDAOImpl();
     }
 
     @Override

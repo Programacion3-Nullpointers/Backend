@@ -13,6 +13,9 @@ public class NotificacionServiceImpl implements NotificacionService {
     private final EmailService emailService; // Servicio para enviar emails
 
     public NotificacionServiceImpl(NotificacionDAO notificacionDAO, EmailService emailService) {
+        if (notificacionDAO == null || emailService == null) {
+            throw new IllegalArgumentException("DAO y EmailService no pueden ser null");
+        }
         this.notificacionDAO = notificacionDAO;
         this.emailService = emailService;
     }
@@ -67,6 +70,7 @@ public class NotificacionServiceImpl implements NotificacionService {
             } else {
                 notificacionDAO.agregar(notificacion);
             }
+            
         } catch (Exception e) {
             notificacion.setEstado("FALLIDA");
             if (notificacion.getId() > 0) {
@@ -111,11 +115,22 @@ public class NotificacionServiceImpl implements NotificacionService {
 
     // Método auxiliar para validaciones comunes
     private void validarNotificacion(Notificacion notificacion) throws Exception {
+        if (notificacion.getTipo() == null || notificacion.getTipo().trim().isEmpty()) {
+            throw new Exception("El tipo de notificación es obligatorio");
+        }
+        
         if (notificacion.getTipo() == null || !notificacion.getTipo().equalsIgnoreCase("EMAIL")) {
             throw new Exception("Solo se admiten notificaciones por EMAIL");
         }
         if (notificacion.getMensaje() == null || notificacion.getMensaje().isEmpty()) {
             throw new Exception("El mensaje es requerido");
+        }
+        
+        if (notificacion.getDestinatario() == null || notificacion.getDestinatario().trim().isEmpty()) {
+            throw new Exception("El destinatario es obligatorio");
+        }
+        if (notificacion.getAsunto() == null || notificacion.getAsunto().trim().isEmpty()) {
+            throw new Exception("El asunto es obligatorio");
         }
     }
 

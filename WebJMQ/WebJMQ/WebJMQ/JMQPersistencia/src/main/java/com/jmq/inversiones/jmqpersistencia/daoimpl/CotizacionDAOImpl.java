@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class CotizacioDAOImpl extends BaseDAOImpl<Cotizacion> implements CotizacionDAO{
+public class CotizacionDAOImpl extends BaseDAOImpl<Cotizacion> implements CotizacionDAO{
 
     private final UsuarioDAOImpl usuario = new UsuarioDAOImpl();
     private final ProductoCotizacionDAOImpl productoCotizacionDAO = new ProductoCotizacionDAOImpl();
@@ -86,6 +86,7 @@ public class CotizacioDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotizac
                 }
 
 //                for (ProductoCotizacion pc : cotizacion.getProductos()) {
+//                    pc.set
 //                    productoCotizacionDAO.agregar(pc);
 //                }
 
@@ -105,11 +106,13 @@ public class CotizacioDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotizac
 
     @Override
     public void eliminar(Integer id) {
-        Cotizacion coti = new Cotizacion();
-        
-        coti.setId(id);
-        coti.setEstadoCotizacion("Cancelada");
-        actualizar(coti);
+        Cotizacion existente = obtener(id);
+        if (existente == null) {
+            throw new RuntimeException("Cotización no encontrada para cancelar");
+        }
+
+        existente.setEstadoCotizacion("CANCELADA");
+        actualizar(existente);
     }
 
     @Override
