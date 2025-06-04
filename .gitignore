@@ -1,2 +1,18 @@
-/WebJMQ/WebJMQ/WebJMQ/JMQPersistencia/nbproject/
-/WebJMQ/WebJMQ/WebJMQ/JMQWS/target/
+# Archivos de compilación y binarios
+/target/
+/bin/
+/out/
+*.class
+*.jar
+
+# Archivos de Maven y build
+*.log
+*.lst
+
+# Archivos de entorno e IDE
+*.swp
+*.swo
+*.iml
+.DS_Store
+.idea/
+.vscode/
