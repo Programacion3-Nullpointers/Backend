@@ -12,11 +12,13 @@ import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.*;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
+import jakarta.jws.WebService;
 import java.util.List;
 /**
  *
  * @author LUIS
  */
+@WebService(serviceName = "OrdenVentaWS")
 public class OrdenVentaWS {
     private final OrdenVentaService ordenVentaService;
     
@@ -50,17 +52,17 @@ public class OrdenVentaWS {
     public List<OrdenVenta> listarOrdenVenta() throws Exception{
         return ordenVentaService.listarOrdenVentas();
     } 
-    @WebMethod
+   @WebMethod(operationName = "agregarDetalleAOrdenVenta")
     public void agregarDetalleOrdenVentaService(@WebParam(name = "ordenVenta") OrdenVenta orden,
             @WebParam(name = "detalle") Detalle detalle) throws Exception{
         ordenVentaService.agregarDetalle(orden, detalle);
     }
-    @WebMethod
+    @WebMethod(operationName = "eliminarDetalleDeOrdenVenta")
     public void eliminarDetalleOrdenVentaService(@WebParam(name = "ordenVenta") OrdenVenta orden,
             @WebParam(name = "detalle") Detalle detalle) throws Exception{
         ordenVentaService.eliminarDetalle(orden, detalle);
     }
-    @WebMethod
+    @WebMethod(operationName = "obtenerOrdenesVentasPorUsuario")
     public List<OrdenVenta> obtenerOrdenVentasByUsuario(@WebParam(name="id") int id) throws Exception{
         return ordenVentaService.listarOrdenVentaByUsuario(id);
     }
