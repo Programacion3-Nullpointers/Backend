@@ -65,7 +65,11 @@ public class OrdenVentaMySQL {
         OrdenVenta nueva = ordenVentaDAO.obtener(orden.getId());
         assertNull(nueva);
     }
-
+    @Test
+    public void testListaOrdenVenta(){
+        List<OrdenVenta> lista = ordenVentaDAO.listarPorUsuario(1);
+        System.out.println(lista.size());
+    }
     private OrdenVenta crearOrdenEjemplo(EstadoCompra estado) {
         Usuario u = new Usuario();
         u.setId(1); // ⚠️ Usuario con ID 1 debe existir

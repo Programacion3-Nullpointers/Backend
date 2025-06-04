@@ -113,7 +113,8 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public Usuario buscarUsuarioPorCorreo(String correo) throws Exception {
         try{
-            if(correo.isEmpty() || correo == null){
+            if(!correo.isEmpty()){
+            } else {
                 throw new Exception("");
             }
             return usuarioDAO.obtenerPorCorreo(correo);

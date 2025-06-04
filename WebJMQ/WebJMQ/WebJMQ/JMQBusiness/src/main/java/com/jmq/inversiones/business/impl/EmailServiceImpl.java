@@ -7,6 +7,7 @@ import jakarta.mail.internet.*;
 import java.util.List;
 import java.util.Properties;
 
+
 public class EmailServiceImpl implements EmailService {
 
     private final String remitente = "daylicamfer123@gmail.com";
@@ -20,6 +21,7 @@ public class EmailServiceImpl implements EmailService {
         props.put("mail.smtp.port", "587");
 
         return Session.getInstance(props, new Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(remitente, contrasena);
             }
