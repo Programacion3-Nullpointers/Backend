@@ -452,4 +452,201 @@ CREATE PROCEDURE BOLETA_LISTAR()
 BEGIN
 	SELECT * FROM Boleta;
 END$
+DELIMITER $$
 
+CREATE PROCEDURE BOLETA_INSERTAR (
+    IN _id_boleta INT,
+    IN _dni VARCHAR(15),
+    IN _nombre VARCHAR(100),
+    IN _fecha_emision DATE
+)
+BEGIN
+    INSERT INTO Boleta (idBoleta, dni, nombre, fecha_emision)
+    VALUES (_id_boleta, _dni, _nombre, _fecha_emision);
+END$$
+
+DELIMITER ;
+DELIMITER $$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `COMPROBANTE_PAGO_INSERTAR` (
+    OUT p_id INT,
+    IN p_id_orden INT,
+    IN p_metodo_pago VARCHAR(50),
+    IN p_fecha_pago DATE,
+    IN p_monto_total DECIMAL(10,2)
+)
+BEGIN
+    INSERT INTO ComprobantePago(id_orden, metodo_pago, fecha_pago, monto_total)
+    VALUES (p_id_orden, p_metodo_pago, p_fecha_pago, p_monto_total);
+
+    SET p_id = LAST_INSERT_ID();
+END$$
+DELIMITER $$
+
+CREATE PROCEDURE BOLETA_OBTENER_POR_ID(IN p_idBoleta INT)
+BEGIN
+    SELECT * 
+    FROM Boleta 
+    INNER JOIN ComprobantePago 
+        ON Boleta.idBoleta = ComprobantePago.idComprobantePago
+    WHERE Boleta.idBoleta = p_idBoleta;
+END$$
+
+DELIMITER ;
+DELIMITER $$
+
+CREATE PROCEDURE BOLETA_ACTUALIZAR(
+    IN p_id INT,
+    IN p_dni VARCHAR(15),
+    IN p_nombre VARCHAR(100),
+    IN p_fecha_emision DATE,
+    IN p_id_orden INT,
+    IN p_metodo_pago VARCHAR(50),
+    IN p_fecha_pago DATE,
+    IN p_monto_total DECIMAL(10,2)
+)
+BEGIN
+    -- Actualizar ComprobantePago (padre)
+    UPDATE ComprobantePago
+    SET id_orden = p_id_orden,
+        metodo_pago = p_metodo_pago,
+        fecha_pago = p_fecha_pago,
+        monto_total = p_monto_total
+    WHERE idComprobantePago = p_id;
+
+    -- Actualizar Boleta (hija)
+    UPDATE Boleta
+    SET dni = p_dni,
+        nombre = p_nombre,
+        fecha_emision = p_fecha_emision
+    WHERE idBoleta = p_id;
+END$$
+
+DELIMITER ;
+DELIMITER $$
+
+CREATE PROCEDURE GetComprobantePagoById(IN comprobanteId INT)
+BEGIN
+    SELECT * 
+    FROM ComprobantePago 
+    WHERE idComprobantePago = comprobanteId;
+END $$
+DELIMITER ;
+DELIMITER $$
+
+CREATE PROCEDURE COMPROBANTE_PAGO_ACTUALIZAR(
+    IN p_id_orden INT,
+    IN p_metodo_pago VARCHAR(50),
+    IN p_fecha_pago DATETIME,
+    IN p_monto_total DECIMAL(10,2),
+    IN p_id_comprobante INT
+)
+BEGIN
+    UPDATE ComprobantePago 
+    SET 
+        id_orden = p_id_orden,
+        metodo_pago = p_metodo_pago,
+        fecha_pago = p_fecha_pago,
+        monto_total = p_monto_total
+    WHERE idComprobantePago = p_id_comprobante;
+END$$
+
+DELIMITER ;
+DELIMITER $$
+
+CREATE PROCEDURE FACTURA_INSERTAR (
+    IN p_idFactura INT,
+    IN p_ruc VARCHAR(11),
+    IN p_razon_social VARCHAR(100),
+    IN p_direccion VARCHAR(200),
+    IN p_fecha_emision DATETIME
+)
+BEGIN
+    INSERT INTO Factura (idFactura, RUC, razon_social, direccion, fecha_emision)
+    VALUES (p_idFactura, p_ruc, p_razon_social, p_direccion, p_fecha_emision);
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE FACTURA_ACTUALIZAR (
+    IN p_idFactura INT,
+    IN p_ruc VARCHAR(11),
+    IN p_razon_social VARCHAR(100),
+    IN p_direccion VARCHAR(200),
+    IN p_fecha_emision DATETIME,
+    IN p_id_orden INT,
+    IN p_metodo_pago VARCHAR(50),
+    IN p_fecha_pago DATETIME,
+    IN p_monto_total DECIMAL(10,2)
+)
+BEGIN
+    -- Primero actualiza ComprobantePago (padre)
+    UPDATE ComprobantePago
+    SET id_orden = p_id_orden,
+        metodo_pago = p_metodo_pago,
+        fecha_pago = p_fecha_pago,
+        monto_total = p_monto_total
+    WHERE idComprobantePago = p_idFactura;
+
+    -- Luego actualiza Factura (hija)
+    UPDATE Factura
+    SET RUC = p_ruc,
+        razon_social = p_razon_social,
+        direccion = p_direccion,
+        fecha_emision = p_fecha_emision
+    WHERE idFactura = p_idFactura;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE FACTURA_OBTENER_POR_ID (
+    IN p_idFactura INT
+)
+BEGIN
+    SELECT * 
+    FROM Factura
+    INNER JOIN ComprobantePago 
+        ON Factura.idFactura = ComprobantePago.idComprobantePago
+    WHERE Factura.idFactura = p_idFactura;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE ORDEN_VENTA_LISTAR_POR_USUARIO (
+    IN p_idUsuario INT
+)
+BEGIN
+    SELECT *
+    FROM OrdenVenta
+    WHERE idUsuario = p_idUsuario;
+END$$
+
+DELIMITER ;
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS PRODUCTO_OBTENER$$
+
+CREATE PROCEDURE PRODUCTO_OBTENER (
+    IN p_id_producto INT
+)
+BEGIN
+    SELECT 
+        idProducto,
+        nombre,
+        descripcion,
+        stock,
+        precio,
+        Imagen,
+        activo,
+        idCategoria
+    FROM Producto
+    WHERE idProducto = p_id_producto;
+END$$
+
+DELIMITER ;
