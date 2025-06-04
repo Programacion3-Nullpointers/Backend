@@ -1,7 +1,7 @@
 package com.jmq.inversiones.jmqpersistencia.dao;
 
 import com.jmq.inversiones.jmqpersistencia.BaseDAO;
-import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 
 
 public interface ProductoCotizacionDAO extends BaseDAO<ProductoCotizacion>{

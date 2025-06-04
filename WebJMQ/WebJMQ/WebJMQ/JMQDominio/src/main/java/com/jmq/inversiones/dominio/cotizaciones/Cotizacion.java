@@ -1,4 +1,4 @@
-package com.jmq.inversiones.dominio.contizaciones;
+package com.jmq.inversiones.dominio.cotizaciones;
 
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import java.util.List;

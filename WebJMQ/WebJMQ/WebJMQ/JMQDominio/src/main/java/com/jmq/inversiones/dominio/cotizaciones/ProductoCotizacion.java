@@ -1,4 +1,4 @@
-package com.jmq.inversiones.dominio.contizaciones;
+package com.jmq.inversiones.dominio.cotizaciones;
 
 public class ProductoCotizacion {
     private int id;
