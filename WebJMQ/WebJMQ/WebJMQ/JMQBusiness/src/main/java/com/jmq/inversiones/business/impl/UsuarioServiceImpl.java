@@ -109,5 +109,19 @@ public class UsuarioServiceImpl implements UsuarioService{
             throw new Exception("Error al listar usuarios: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public Usuario buscarUsuarioPorCorreo(String correo) throws Exception {
+        try{
+            if(correo.isEmpty() || correo == null){
+                throw new Exception("");
+            }
+            return usuarioDAO.obtenerPorCorreo(correo);
+        }
+        catch (Exception ex){
+            throw new Exception(""+ex.getMessage());
+        }
+    }
+    
 }
 

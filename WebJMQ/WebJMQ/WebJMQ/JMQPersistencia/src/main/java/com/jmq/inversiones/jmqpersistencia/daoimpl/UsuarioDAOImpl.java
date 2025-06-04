@@ -112,4 +112,22 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         return null;
     }
 
+    @Override
+    public Usuario obtenerPorCorreo(String correo) {
+        String sql ="SELECT * FROM Usuario WHERE correo = ?";
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, correo);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return createFromResultSet(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener entidad", e);
+        }
+        return null;
+    }
+
 }
