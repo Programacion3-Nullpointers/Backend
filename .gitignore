@@ -2,13 +2,12 @@
 /target/
 /bin/
 /out/
-*.class
 *.jar
-
+*.class
 # Archivos de Maven y build
 *.log
 *.lst
-
+*.war
 # Archivos de entorno e IDE
 *.swp
 *.swo
@@ -16,4 +15,5 @@
 .DS_Store
 .idea/
 .vscode/
+*.txt
 /WebJMQ/WebJMQ/WebJMQ/JMQWS/target/
