@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 
 
-public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago> implements ComprobantePagoDAO{
+public class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago> implements ComprobantePagoDAO{
 
     private final OrdenVentaDAOImpl ordenVentaDAO = new OrdenVentaDAOImpl();
 
@@ -40,7 +40,7 @@ public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELCT * FROM ComprobantePago";
+        return "SELECT * FROM ComprobantePago";
     }
 
     @Override
@@ -74,14 +74,15 @@ public abstract class ComprobantePagoDAOImpl extends BaseDAOImpl<ComprobantePago
     @Override
     protected ComprobantePago createFromResultSet(ResultSet rs) throws SQLException {
         ComprobantePago comprobante = new Boleta(); //por el momento crea boleta
-        
         comprobante.setId(rs.getInt("idComprobantePago"));
-        OrdenVenta orden = new OrdenVenta();
-        orden.setId(rs.getInt("id_orden"));
-        comprobante.setOrden(orden);
+//        OrdenVenta orden = new OrdenVenta();
+//        orden.setId(rs.getInt("id_orden"));
+//        comprobante.setOrden(orden);
         comprobante.setMetodoPago(MetodoPago.valueOf(rs.getString("metodo_pago")));
         comprobante.setFecha_pago(rs.getTimestamp("fecha_pago"));
         comprobante.setMonto_total(rs.getDouble("monto_total"));
+        
+        comprobante.setOrden(ordenVentaDAO.obtener(rs.getInt("id_orden")));
         return comprobante;
     }
     

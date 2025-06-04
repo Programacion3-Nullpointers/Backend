@@ -55,12 +55,13 @@ public class BoletaMySQL {
 
     @Test
     public void testActualizar() {
-        Boleta bol = boletaDAO.obtener(51);
-
+        Boleta bol = crearBoletaEjemplo();
+        boletaDAO.agregar(bol);
+        
         bol.setNombre("Cliente Actualizado");
         boletaDAO.actualizar(bol);
 
-        Boleta actualizado = boletaDAO.obtener(51);
+        Boleta actualizado = boletaDAO.obtener(bol.getId());
         assertEquals("Cliente Actualizado", actualizado.getNombre());
     }
 
@@ -79,7 +80,7 @@ public class BoletaMySQL {
         ordenDummy.setFecha_orden(new Date());
         ordenDummy.setActivo(true);
 
-        Usuario u = new Usuario(); // ⚠️ ID debe existir
+        Usuario u = new Usuario(); //  ID debe existir
         u.setId(1);
         ordenDummy.setUsuario(u);
 

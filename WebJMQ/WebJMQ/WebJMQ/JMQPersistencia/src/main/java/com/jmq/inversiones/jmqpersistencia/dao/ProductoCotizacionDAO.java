@@ -6,4 +6,5 @@ import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
 
 public interface ProductoCotizacionDAO extends BaseDAO<ProductoCotizacion>{
     void actualizarPrecioCotizacion(ProductoCotizacion pro, double precio);
+    void listarPorUsuario(int idUsuario);
 }

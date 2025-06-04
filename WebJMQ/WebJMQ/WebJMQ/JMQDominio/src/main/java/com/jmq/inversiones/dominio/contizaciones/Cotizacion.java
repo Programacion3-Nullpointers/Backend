@@ -7,7 +7,9 @@ public class Cotizacion {
     private int id;
     private Usuario usuario;
     private boolean activo;
-
+    private String estadoCotizacion;
+    private List<ProductoCotizacion> productos;
+    
     public boolean isActivo() {
         return activo;
     }
@@ -15,8 +17,6 @@ public class Cotizacion {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-    private String estadoCotizacion;
-    private List<ProductoCotizacion> productos;
     
     public Cotizacion() {
     }

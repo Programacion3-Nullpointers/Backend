@@ -3,6 +3,7 @@ package com.jmq.inversiones.business.impl;
 import com.jmq.inversiones.business.ComprobantePagoService;
 import com.jmq.inversiones.dominio.pagos.ComprobantePago;
 import com.jmq.inversiones.jmqpersistencia.dao.ComprobantePagoDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ComprobantePagoDAOImpl;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +11,8 @@ public class ComprobantePagoServiceImpl implements ComprobantePagoService{
 
     private final ComprobantePagoDAO comprobanteDAO;
 
-    public ComprobantePagoServiceImpl(ComprobantePagoDAO comprobanteDAO) {
-        this.comprobanteDAO = comprobanteDAO;
+    public ComprobantePagoServiceImpl() {
+        this.comprobanteDAO = new ComprobantePagoDAOImpl();
     }
 
     @Override

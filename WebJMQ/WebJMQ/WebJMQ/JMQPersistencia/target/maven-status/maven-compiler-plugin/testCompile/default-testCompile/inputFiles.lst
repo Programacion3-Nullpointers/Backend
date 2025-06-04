@@ -1,13 +1,13 @@
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\BoletaMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\CategoriaMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\ComprobantePagoMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\CotizacionMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\DescuentoMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\DetalleMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\EntregaMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\FacturaMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\NotificacionMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\OrdenVentaMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\ProductoCotizacionMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\ProductoMySQL.java
-C:\Users\omen\OneDrive\Documentos\PROGRA3-PROYECTO\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\UsuarioMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\BoletaMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\CategoriaMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\ComprobantePagoMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\CotizacionMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\DescuentoMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\DetalleMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\EntregaMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\FacturaMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\NotificacionMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\OrdenVentaMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\ProductoCotizacionMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\ProductoMySQL.java
+E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\Github\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\src\test\java\com\jmq\inversiones\jmqpersistencia\test\UsuarioMySQL.java

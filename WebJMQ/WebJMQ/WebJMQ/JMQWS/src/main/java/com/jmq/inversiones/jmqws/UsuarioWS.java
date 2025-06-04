@@ -12,7 +12,7 @@ import java.util.List;
 @WebService(serviceName = "UsuarioWS")
 public class UsuarioWS {
 
-    private final UsuarioService usuarioService = new UsuarioServiceImpl(new UsuarioDAOImpl());
+    private final UsuarioService usuarioService = new UsuarioServiceImpl();
 
     @WebMethod(operationName = "registrarUsuario")
     public void registrarUsuario(@WebParam(name = "usuario") Usuario usuario) throws Exception {
