@@ -4,7 +4,9 @@ package com.jmq.inversiones.jmqws;
 import com.jmq.inversiones.business.CotizacionService;
 import com.jmq.inversiones.business.impl.CotizacionServiceImpl;
 import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
+import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.CotizacionDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoCotizacionDAOImpl;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -19,7 +21,7 @@ public class CotizacionWS {
     private final CotizacionService cotizacionService;
 
     public CotizacionWS() {
-        this.cotizacionService = new CotizacionServiceImpl(new CotizacionDAOImpl());
+        this.cotizacionService = new CotizacionServiceImpl(new CotizacionDAOImpl(), new ProductoCotizacionDAOImpl());
     }
 
     @WebMethod
