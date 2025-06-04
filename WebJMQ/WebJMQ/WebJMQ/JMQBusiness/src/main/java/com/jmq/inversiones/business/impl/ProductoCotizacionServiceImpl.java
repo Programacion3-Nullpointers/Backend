@@ -54,22 +54,57 @@ public class ProductoCotizacionServiceImpl implements ProductoCotizacionService{
 
     @Override
     public void eliminarProductoCotizacion(int id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            
+            if(id < 1){
+                throw new Exception("Debe ingresar un id valido");
+            }
+            
+            producto.eliminar(id);
+            
+        }
+        catch(Exception ex){
+            throw new Exception("Error al eliminar el producto"+ex.getMessage());
+        }
     }
 
     @Override
     public ProductoCotizacion buscarProductoCotizacion(int id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            
+            if(id < 1){
+                throw new Exception("Debe ingresar un id valido");
+            }
+            return producto.obtener(id);
+            
+        }
+        catch(Exception ex){
+            throw new Exception("Error al buscar el producto"+ex.getMessage());
+        }
     }
 
     @Override
     public List<ProductoCotizacion> listarProductoCotizacion() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return producto.listarTodos();
+        } catch (Exception e) {
+            throw new Exception("Error al listar productos: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public List<ProductoCotizacion> listarProductPorCotizacion(int id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            
+            if(id < 1){
+                throw new Exception("Debe ingresar un id valido");
+            }
+            return producto.listarPorCotizacion(id);
+            
+        }
+        catch(Exception ex){
+            throw new Exception("Error al buscar el producto"+ex.getMessage());
+        }
     }
 
     @Override
