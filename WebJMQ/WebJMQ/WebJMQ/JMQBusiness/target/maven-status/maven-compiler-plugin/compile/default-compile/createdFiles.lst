@@ -8,6 +8,7 @@ com\jmq\inversiones\business\impl\ProductoServiceImpl.class
 com\jmq\inversiones\business\impl\ComprobantePagoServiceImpl.class
 com\jmq\inversiones\business\CotizacionService.class
 com\jmq\inversiones\business\UsuarioService.class
+com\jmq\inversiones\business\impl\ProductoCotizacionServiceImpl.class
 com\jmq\inversiones\business\impl\EntregaServiceImpl.class
 com\jmq\inversiones\business\EntregaService.class
 com\jmq\inversiones\business\impl\OrdenVentaServiceImpl.class
@@ -19,6 +20,7 @@ com\jmq\inversiones\business\impl\NotificacionServiceImpl.class
 com\jmq\inversiones\business\ProductoService.class
 com\jmq\inversiones\business\impl\CotizacionServiceImpl.class
 com\jmq\inversiones\business\impl\UsuarioServiceImpl.class
+com\jmq\inversiones\business\ProductoCotizacionService.class
 com\jmq\inversiones\business\DescuentoService.class
 com\jmq\inversiones\business\FacturaService.class
 com\jmq\inversiones\business\impl\CategoriaServiceImpl.class
