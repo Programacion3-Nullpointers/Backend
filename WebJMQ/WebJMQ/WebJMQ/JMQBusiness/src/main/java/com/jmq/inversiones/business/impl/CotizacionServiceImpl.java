@@ -2,36 +2,48 @@ package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.CotizacionService;
 import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
+import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
 import java.util.List;
 
 public class CotizacionServiceImpl implements CotizacionService {
 
     private final CotizacionDAO cotizacionDAO;
-
-    public CotizacionServiceImpl(CotizacionDAO cotizacionDAO) {
+    private final ProductoCotizacionDAO productoCotizacionDAO;
+    public CotizacionServiceImpl(CotizacionDAO cotizacionDAO, ProductoCotizacionDAO productoCotizacionDAO) {
         this.cotizacionDAO = cotizacionDAO;
+        this.productoCotizacionDAO = productoCotizacionDAO;
     }
 
     @Override
     public void registrarCotizacion(Cotizacion cotizacion) throws Exception {
         try {
             validarCotizacion(cotizacion);
-            
+
             if (cotizacion.getProductos() == null || cotizacion.getProductos().isEmpty()) {
                 throw new Exception("La cotización debe tener al menos un producto");
             }
-            
+
+            // Establecer estado por defecto
             if (cotizacion.getEstadoCotizacion() == null || cotizacion.getEstadoCotizacion().isEmpty()) {
                 cotizacion.setEstadoCotizacion("PENDIENTE");
             }
-            
+
+            // Primero registrar la cotización (esto le asigna un ID)
             cotizacionDAO.agregar(cotizacion);
-            
+
+            // Luego registrar cada producto asociado
+            for (ProductoCotizacion producto : cotizacion.getProductos()) {
+                producto.setFid_cotizacion(cotizacion.getId()); // Setear el ID recién generado
+                productoCotizacionDAO.agregar(producto);       // Insertar producto
+            }
+
         } catch (Exception e) {
             throw new Exception("Error al registrar cotización: " + e.getMessage(), e);
         }
     }
+
 
     @Override
     public void actualizarCotizacion(Cotizacion cotizacion) throws Exception {
@@ -137,6 +149,7 @@ public class CotizacionServiceImpl implements CotizacionService {
             }
 
             cotizacionDAO.actualizarEstado(id, estado);
+            //return "BIEN";
         } catch (Exception e) {
             throw new Exception("Error al actualizar estado de cotización: " + e.getMessage(), e);
         }

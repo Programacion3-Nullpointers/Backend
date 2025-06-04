@@ -96,8 +96,8 @@ public class CategoriaServiceImpl implements CategoriaService{
 
     // Método auxiliar para validaciones
     private void validarCategoria(Categoria categoria) throws Exception {
-        if (categoria.getId()< 0) {
-            throw new Exception("La categoria debe estar entre 1 y 100");
+        if (categoria.getId() < 1 || categoria.getId() > 100) {
+            throw new Exception("La categoría debe tener un ID entre 1 y 100");
         }
     }
     
