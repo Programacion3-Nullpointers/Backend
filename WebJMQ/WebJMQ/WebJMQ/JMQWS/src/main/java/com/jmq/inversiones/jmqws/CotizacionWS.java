@@ -63,6 +63,7 @@ public class CotizacionWS {
     ) {
         try {
             cotizacionService.actualizarEstado(id, estado);
+            //return "ESTADO ACTUALIZADO";
         } catch (Exception e) {
             throw new WebServiceException("Error al actualizar estado: " + e.getMessage());
         }

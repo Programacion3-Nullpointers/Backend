@@ -137,6 +137,7 @@ public class CotizacionServiceImpl implements CotizacionService {
             }
 
             cotizacionDAO.actualizarEstado(id, estado);
+            //return "BIEN";
         } catch (Exception e) {
             throw new Exception("Error al actualizar estado de cotización: " + e.getMessage(), e);
         }
