@@ -46,4 +46,13 @@ public class CotizacionWS {
     public List<Cotizacion> listarCotizaciones() throws Exception {
         return cotizacionService.listarCotizaciones();
     }
+    
+    @WebMethod(operationName = "obtenerCotizacionesPorUsuario")
+    public List<Cotizacion> obtenerCotizacionesPorUsuario(@WebParam(name = "idUsuario") int idUsuario) {
+        try {
+            return cotizacionService.obtenerCotizacionesPorUsuario(idUsuario);
+        } catch (Exception e) {
+            throw new WebServiceException("Error al obtener cotizaciones por usuario: " + e.getMessage());
+        }
+    }
 }

@@ -110,4 +110,14 @@ public class CotizacionServiceImpl implements CotizacionService {
         }
     }
     
+    @Override
+    public List<Cotizacion> obtenerCotizacionesPorUsuario(int idUsuario) throws Exception {
+        try {
+            if (idUsuario <= 0) throw new Exception("ID de usuario inválido");
+            return cotizacionDAO.obtenerPorUsuario(idUsuario);
+        } catch (Exception e) {
+            throw new Exception("Error al obtener cotizaciones del usuario: " + e.getMessage(), e);
+        }
+    }
+
 }

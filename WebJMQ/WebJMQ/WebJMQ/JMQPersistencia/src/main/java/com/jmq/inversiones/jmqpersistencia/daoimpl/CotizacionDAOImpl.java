@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CotizacionDAOImpl extends BaseDAOImpl<Cotizacion> implements CotizacionDAO{
@@ -141,4 +143,27 @@ public class CotizacionDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotiza
         return null;
     }
     
+    @Override
+    public List<Cotizacion> obtenerPorUsuario(int idUsuario) {
+        List<Cotizacion> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Cotizacion WHERE idUsuario = ?";
+
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Cotizacion c = createFromResultSet(rs);
+                    lista.add(c);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener cotizaciones por usuario", e);
+        }
+
+        return lista;
+    }
+
 }
