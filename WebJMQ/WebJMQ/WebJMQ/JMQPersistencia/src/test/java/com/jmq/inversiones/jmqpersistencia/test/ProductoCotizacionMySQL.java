@@ -1,6 +1,6 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
-import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoCotizacionDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

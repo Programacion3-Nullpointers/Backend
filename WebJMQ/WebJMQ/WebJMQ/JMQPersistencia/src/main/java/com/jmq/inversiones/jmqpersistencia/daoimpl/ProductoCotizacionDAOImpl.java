@@ -4,7 +4,7 @@ package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 
 import com.jmq.inversiones.dbmanager.DBManager;
-import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
 

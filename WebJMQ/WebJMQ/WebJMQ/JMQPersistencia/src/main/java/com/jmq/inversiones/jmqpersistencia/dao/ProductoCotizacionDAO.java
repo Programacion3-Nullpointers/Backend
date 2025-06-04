@@ -1,7 +1,8 @@
 package com.jmq.inversiones.jmqpersistencia.dao;
 
 import com.jmq.inversiones.jmqpersistencia.BaseDAO;
-import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import java.util.List;
 
 

@@ -2,7 +2,7 @@
 package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.ProductoCotizacionService;
-import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoCotizacionDAOImpl;
 import java.util.List;

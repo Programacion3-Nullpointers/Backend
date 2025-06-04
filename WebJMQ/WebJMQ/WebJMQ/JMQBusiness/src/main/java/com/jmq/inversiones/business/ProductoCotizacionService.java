@@ -1,7 +1,7 @@
 
 package com.jmq.inversiones.business;
 
-import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import java.util.List;
 
 

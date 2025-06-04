@@ -1,7 +1,7 @@
 package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.CotizacionService;
-import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
 import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
 import java.util.List;
 
@@ -117,6 +117,28 @@ public class CotizacionServiceImpl implements CotizacionService {
             return cotizacionDAO.obtenerPorUsuario(idUsuario);
         } catch (Exception e) {
             throw new Exception("Error al obtener cotizaciones del usuario: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void actualizarEstado(int id, String estado) throws Exception {
+        try {
+            if (id <= 0) {
+                throw new Exception("ID de cotización inválido");
+            }
+
+            if (estado == null || estado.trim().isEmpty()) {
+                throw new Exception("Estado de cotización no puede ser vacío");
+            }
+
+            Cotizacion cotizacion = cotizacionDAO.obtener(id);
+            if (cotizacion == null) {
+                throw new Exception("No existe una cotización con el ID especificado");
+            }
+
+            cotizacionDAO.actualizarEstado(id, estado);
+        } catch (Exception e) {
+            throw new Exception("Error al actualizar estado de cotización: " + e.getMessage(), e);
         }
     }
 

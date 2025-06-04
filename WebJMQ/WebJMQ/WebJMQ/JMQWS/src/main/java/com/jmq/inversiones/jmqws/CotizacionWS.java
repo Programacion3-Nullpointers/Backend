@@ -3,7 +3,7 @@ package com.jmq.inversiones.jmqws;
 
 import com.jmq.inversiones.business.CotizacionService;
 import com.jmq.inversiones.business.impl.CotizacionServiceImpl;
-import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.CotizacionDAOImpl;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
@@ -55,4 +55,17 @@ public class CotizacionWS {
             throw new WebServiceException("Error al obtener cotizaciones por usuario: " + e.getMessage());
         }
     }
+    
+    @WebMethod(operationName = "actualizarEstadoCotizacion")
+    public void actualizarEstadoCotizacion(
+        @WebParam(name = "id") int id,
+        @WebParam(name = "estado") String estado
+    ) {
+        try {
+            cotizacionService.actualizarEstado(id, estado);
+        } catch (Exception e) {
+            throw new WebServiceException("Error al actualizar estado: " + e.getMessage());
+        }
+    }
+
 }
