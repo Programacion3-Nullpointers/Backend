@@ -10,5 +10,5 @@ public interface CotizacionService {
     Cotizacion buscarCotizacion(int id) throws Exception;
     List<Cotizacion> listarCotizaciones() throws Exception;
     //List<Cotizacion> listarPorUsuario(int id) throws Exception;
-
+    List<Cotizacion> obtenerCotizacionesPorUsuario(int idUsuario) throws Exception;
 }
