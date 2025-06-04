@@ -53,7 +53,7 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         cs.setString(3, entity.getDescripcion());
         cs.setInt(4, entity.getStock());
         cs.setDouble(5, entity.getPrecio());
-        cs.setString(6, entity.getImagen());
+        cs.setBytes(6, entity.getImagen());
         cs.setBoolean(7, entity.isActivo());
         cs.setInt(8, entity.getCategoria().getId());
     }
@@ -66,7 +66,7 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         cs.setString(3, entity.getDescripcion());
         cs.setInt(4, entity.getStock());
         cs.setDouble(5, entity.getPrecio());
-        cs.setString(6, entity.getImagen());
+        cs.setBytes(6, entity.getImagen());
         cs.setBoolean(7, entity.isActivo());
         cs.setInt(8, entity.getCategoria().getId());
     }
@@ -79,7 +79,7 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         producto.setDescripcion(rs.getString("descripcion"));
         producto.setStock(rs.getInt("stock"));
         producto.setPrecio(rs.getDouble("precio"));
-        producto.setImagen(rs.getString("Imagen"));
+        producto.setImagen(rs.getBytes("Imagen"));
         producto.setActivo(rs.getBoolean("activo"));
         producto.setCategoria(categoriaDAO.obtener(rs.getInt("idCategoria")));
         return producto;

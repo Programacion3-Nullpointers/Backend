@@ -5,6 +5,11 @@ import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.CategoriaDAOImpl;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +29,7 @@ public class ProductoMySQL {
     }
 
     @Test
-    public void testAgregarYObtenerYListar() {
+    public void testAgregarYObtenerYListar()throws URISyntaxException, IOException  {
         Producto prod = crearProductoEjemplo();
         productoDAO.agregar(prod);
 
@@ -38,7 +43,7 @@ public class ProductoMySQL {
     }
 
     @Test
-    public void testActualizar() {
+    public void testActualizar()throws URISyntaxException, IOException  {
         Producto prod = crearProductoEjemplo(); 
         productoDAO.agregar(prod);
 
@@ -53,7 +58,7 @@ public class ProductoMySQL {
     }
 
     @Test
-    public void testEliminar() {
+    public void testEliminar() throws URISyntaxException, IOException {
         Producto prod = crearProductoEjemplo();//crea un nuevo producto y lo elimina a la vez
         productoDAO.agregar(prod);
 
@@ -66,7 +71,7 @@ public class ProductoMySQL {
         assertFalse(lista.stream().anyMatch(p -> p.getId() == prod.getId()));
     }
 
-    private Producto crearProductoEjemplo() {
+    private Producto crearProductoEjemplo() throws IOException, URISyntaxException {
         Categoria cat = categoriaDAO.listarTodos().stream().findFirst().orElse(null);
         assertNotNull(cat, "Debe existir al menos una categoría válida en la BD");
 
@@ -75,7 +80,9 @@ public class ProductoMySQL {
         p.setDescripcion("Descripción prueba");
         p.setStock(20);
         p.setPrecio(50.5);
-        p.setImagen("imagen.jpg");
+        Path imagePath = Paths.get(getClass().getClassLoader().getResource("aysa-ferreteriaindustrial.jpeg").toURI());
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        p.setImagen(imageBytes);
         p.setActivo(true);
         p.setCategoria(cat);
         return p;

@@ -4,6 +4,7 @@ package com.jmq.inversiones.jmqws;
 import com.jmq.inversiones.business.CotizacionService;
 import com.jmq.inversiones.business.impl.CotizacionServiceImpl;
 import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
+
 import com.jmq.inversiones.jmqpersistencia.daoimpl.CotizacionDAOImpl;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
