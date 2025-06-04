@@ -1,5 +1,5 @@
 # Archivos de compilación y binarios
-/target/
+**/target/
 /bin/
 /out/
 *.class
