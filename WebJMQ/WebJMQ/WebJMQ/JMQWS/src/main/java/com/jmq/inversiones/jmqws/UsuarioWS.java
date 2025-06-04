@@ -38,4 +38,9 @@ public class UsuarioWS {
     public List<Usuario> listarUsuarios() throws Exception {
         return usuarioService.listarUsuarios();
     }
+    
+    @WebMethod(operationName = "BuscarUsuarioPorCorreo")
+    public Usuario buscarUsuarioPorCorreo(@WebParam(name = "id") String correo) throws Exception {
+        return usuarioService.buscarUsuarioPorCorreo(correo);
+    }
 }
