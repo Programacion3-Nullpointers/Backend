@@ -1,10 +1,10 @@
 # Archivos de compilación y binarios
-/target/
+**/target/
 /bin/
 /out/
 *.class
 *.jar
-
+*.war
 # Archivos de Maven y build
 *.log
 *.lst
