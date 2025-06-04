@@ -34,8 +34,8 @@ public class ProductoCotizacionWS {
         return "Hello " + txt + " !";
     }
     
-    @WebMethod(operationName = "RegistrarPrecioProdCoti")
-    public void registrarProductoCotizacion(ProductoCotizacion pr, double precio){
+    @WebMethod(operationName = "RegistrarProdCotizacion")
+    public void registrarProductoCotizacion(ProductoCotizacion pr){
         try {
             prod.registrarProductoCotizacion(pr);
         }
