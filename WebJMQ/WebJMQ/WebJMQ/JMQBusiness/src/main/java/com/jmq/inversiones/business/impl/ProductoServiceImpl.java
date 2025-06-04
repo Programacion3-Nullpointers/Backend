@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProductoServiceImpl implements ProductoService{
 
@@ -107,6 +109,24 @@ public class ProductoServiceImpl implements ProductoService{
             return productoDAO.listarTodos();
         } catch (Exception e) {
             throw new Exception("Error al listar productos: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void descontarStock(int id, int stock) {
+        try {
+            if(stock>=1){
+                productoDAO.descontarStock(id, stock);
+            }
+            else{
+                throw new Exception("Error al descontarStock");
+            }
+        } catch (Exception e) {
+            try {
+                throw new Exception();
+            } catch (Exception ex) {
+                Logger.getLogger(ProductoServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

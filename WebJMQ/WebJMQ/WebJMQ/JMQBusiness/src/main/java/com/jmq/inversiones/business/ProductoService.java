@@ -9,5 +9,5 @@ public interface ProductoService {
     void eliminarProducto(int id) throws Exception;
     Producto buscarProducto(int id) throws Exception;
     List<Producto> listarProductos() throws Exception;
-    
+    void descontarStock(int id, int stock);
 }

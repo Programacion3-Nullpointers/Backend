@@ -4,11 +4,8 @@ import com.jmq.inversiones.dbmanager.DBManager;
 import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoDAO;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.CategoriaDAOImpl;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDAO {
 
@@ -30,8 +27,7 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
 
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM productoCotizado"
-                + "WHERE idproductoCotizado = _id_productocotizacion";
+        return  "DELETE FROM Producto WHERE idProducto = ?";
     }
 
     @Override
@@ -42,7 +38,7 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
 
     @Override
     protected String getSelectAllQuery() {
-        return "SELECT * FROM productoCotizado";
+        return "SELECT * FROM Producto";
     }
 
     @Override

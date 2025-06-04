@@ -15,4 +15,10 @@ ref="http://localhost:8080/JMQWS/CategoriaWS?WSDL"/>
 ref="http://localhost:8080/JMQWS/ComprobantePagoWS?WSDL"/>
 <contractRef xmlns="http://schemas.xmlsoap.org/disco/scl/"
 ref="http://localhost:8080/JMQWS/NotificacionWS?WSDL"/>
+<contractRef xmlns="http://schemas.xmlsoap.org/disco/scl/"
+ref="http://localhost:8080/JMQWS/OrdenVentaWS?WSDL"/>
+<contractRef xmlns="http://schemas.xmlsoap.org/disco/scl/"
+ref="http://localhost:8080/JMQWS/ProductoWS?WSDL"/>
+<contractRef xmlns="http://schemas.xmlsoap.org/disco/scl/"
+ref="http://localhost:8080/JMQWS/ProductoCotizacionWS?WSDL"/>
 </discovery>
