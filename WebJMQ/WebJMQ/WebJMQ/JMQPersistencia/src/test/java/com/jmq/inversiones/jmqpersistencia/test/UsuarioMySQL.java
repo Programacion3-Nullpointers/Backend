@@ -29,7 +29,20 @@ public class UsuarioMySQL {
         assertNotNull(usuarios);
         assertTrue(usuarios.stream().anyMatch(u -> u.getId() == nuevo.getId()));
     }
-
+    
+    @Test
+    public void BuscarUsuario(){
+        Usuario usuario = usuarioDAO.obtener(4);
+        
+        if(usuario == null){
+            System.out.println("El usuario es vacio");
+        }
+        else{
+            System.out.println("El usuario esta lleno");
+            System.out.println(usuario);
+        }
+        assertNotNull(usuario);
+    }
     @Test
     public void testActualizar() {
         Usuario usu = crearUsuarioEjemplo();

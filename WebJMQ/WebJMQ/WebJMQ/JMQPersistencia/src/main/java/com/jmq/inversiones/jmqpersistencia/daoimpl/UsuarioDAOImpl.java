@@ -7,8 +7,6 @@ import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.UsuarioDAO;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
 
@@ -29,7 +27,7 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
 
     @Override
     protected String getSelectByIdQuery() {
-        return "SELECT * FROM Usuario WHERE idUsuario = ?";
+        return "{call sp_buscar_usuario_por_id(?)}";
     }
 
     @Override
@@ -57,15 +55,53 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
     protected void setUpdateParameters(PreparedStatement ps, Usuario usuario) throws SQLException {
         CallableStatement cs = (CallableStatement) ps;
         cs.setInt(1, usuario.getId());
-        cs.setString(2, usuario.getNombreUsuario());
+
+        // nombreUsuario puede ser null
+        if (usuario.getNombreUsuario() != null)
+            cs.setString(2, usuario.getNombreUsuario());
+        else
+            cs.setNull(2, Types.VARCHAR);
+
+        // contrasena NO puede ser null
+        if (usuario.getContrasena() == null)
+            throw new SQLException("La contraseña no puede ser null");
         cs.setString(3, usuario.getContrasena());
+
         cs.setBoolean(4, usuario.isActivo());
+
+        // correo NO puede ser null
+        if (usuario.getCorreo() == null)
+            throw new SQLException("El correo no puede ser null");
         cs.setString(5, usuario.getCorreo());
+
+        // tipoUsuario NO puede ser null
+        if (usuario.getTipoUsuario() == null)
+            throw new SQLException("El tipo de usuario no puede ser null");
         cs.setString(6, usuario.getTipoUsuario().name());
-        cs.setString(7, usuario.getDni());
-        cs.setString(8, usuario.getRazonsocial());
-        cs.setString(9, usuario.getDireccion());
-        cs.setString(10, usuario.getRUC());
+
+        // dni puede ser null
+        if (usuario.getDni() != null)
+            cs.setString(7, usuario.getDni());
+        else
+            cs.setNull(7, Types.VARCHAR);
+
+        // razonsocial puede ser null
+        if (usuario.getRazonsocial() != null)
+            cs.setString(8, usuario.getRazonsocial());
+        else
+            cs.setNull(8, Types.VARCHAR);
+
+        // direccion puede ser null
+        if (usuario.getDireccion() != null)
+            cs.setString(9, usuario.getDireccion());
+        else
+            cs.setNull(9, Types.VARCHAR);
+
+        // RUC puede ser null
+        if (usuario.getRUC() != null)
+            cs.setString(10, usuario.getRUC());
+        else
+            cs.setNull(10, Types.VARCHAR);
         
     }
 
@@ -78,13 +114,10 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         usu.setActivo(rs.getBoolean("activo"));
         usu.setCorreo(rs.getString("correo"));
         usu.setTipoUsuario(TipoUsuario.valueOf(rs.getString("tipoUsuario")));
-        if(rs.getString("tipoUsuario").equals("EMPRESA")){
-            usu.setRUC(rs.getString("RUC"));
-            usu.setRazonsocial(rs.getString("razonsocial"));
-        }
-        else{
-            usu.setDni(rs.getString("dni"));
-        }
+        usu.setDni(rs.getString("dni"));
+        usu.setRazonsocial(rs.getString("razonsocial"));
+        usu.setDireccion(rs.getString("direccion"));
+        usu.setRUC(rs.getString("RUC"));
         
         return usu;
     }
@@ -95,22 +128,6 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
     }
 
     // Los métodos agregar, actualizar, eliminar y listarTodos se heredan del BaseDAOImpl
-    @Override
-    public Usuario obtener(Integer id) {
-        try (Connection conn = DBManager.getInstance().obtenerConexion();
-             PreparedStatement ps = conn.prepareStatement(getSelectByIdQuery())) {
-
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return createFromResultSet(rs);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener entidad", e);
-        }
-        return null;
-    }
 
     @Override
     public Usuario obtenerPorCorreo(String correo) {
