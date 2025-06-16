@@ -49,10 +49,10 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
             
             // Llamar al DAO
             ordenVentaDAO.agregar(ordenVenta);
-            
             //Efectuar for para agregar Detalles en la BD
             
             for(Detalle detalle: ordenVenta.getDetalle()){
+                detalle.setOrden(ordenVenta);
                 detallesDAO.agregar(detalle);
             }
             // Actualizar stock de productos (dependiendo de tu lógica de negocio)
