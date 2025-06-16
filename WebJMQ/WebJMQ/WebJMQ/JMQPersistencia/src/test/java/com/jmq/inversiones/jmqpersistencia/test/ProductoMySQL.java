@@ -80,7 +80,7 @@ public class ProductoMySQL {
         p.setDescripcion("Descripción prueba");
         p.setStock(20);
         p.setPrecio(50.5);
-        Path imagePath = Paths.get("C:\\Users\\LUIS\\OneDrive\\Documentos\\Java\\Imagen\\aysa-ferreteriaindustrial.jpg");
+        Path imagePath = Paths.get("pucp.png");
         byte[] imageBytes = Files.readAllBytes(imagePath);
         p.setImagen(imageBytes);
         p.setActivo(true);
