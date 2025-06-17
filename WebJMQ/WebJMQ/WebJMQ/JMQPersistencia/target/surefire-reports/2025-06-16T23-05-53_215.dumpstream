@@ -1,0 +1,5 @@
+# Created at 2025-06-16T23:05:53.505
+Boot Manifest-JAR contains absolute paths in classpath 'E:\Noelia\Documents\PUCP\3er año\6to ciclo\Progra3\TA\GithubP2\Backend\WebJMQ\WebJMQ\WebJMQ\JMQPersistencia\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

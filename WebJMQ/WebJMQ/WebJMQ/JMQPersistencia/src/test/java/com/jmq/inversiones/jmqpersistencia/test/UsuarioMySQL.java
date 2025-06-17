@@ -61,7 +61,7 @@ public class UsuarioMySQL {
 
     private Usuario crearUsuarioEjemplo() {
         Usuario usuario = new Usuario();
-        usuario.setNombreUsuario("clienteTest");
+        usuario.setNombreUsuario("jose");
         usuario.setContrasena("123456");
         usuario.setActivo(true);
         usuario.setCorreo("cliente@test.com");
