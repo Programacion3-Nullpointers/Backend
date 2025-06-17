@@ -1,19 +1,23 @@
 package com.jmq.inversiones.business.impl;
 
+import com.jmq.inversiones.business.EmailService;
 import com.jmq.inversiones.business.UsuarioService;
 import com.jmq.inversiones.dominio.usuario.TipoUsuario;
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.UsuarioDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.UsuarioDAOImpl;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class UsuarioServiceImpl implements UsuarioService{
     
         private final UsuarioDAO usuarioDAO;
-
+        private final EmailService emailService;
     // Constructor que recibe el DAO (Inyección de dependencias)
     public UsuarioServiceImpl() {
         this.usuarioDAO = new UsuarioDAOImpl();
+        this.emailService = new EmailServiceImpl();
     }
 
     @Override
@@ -123,6 +127,44 @@ public class UsuarioServiceImpl implements UsuarioService{
             throw new Exception(""+ex.getMessage());
         }
     }
+
+    @Override
+    public void iniciarRecuperacionPassword(String correo) throws Exception {
+        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
+        if (usuario == null) throw new Exception("Correo no registrado");
+
+        String token = UUID.randomUUID().toString();
+        Date expiracion = new Date(System.currentTimeMillis() + 15 * 60 * 1000); // 15 min
+
+        usuario.setToken_reset(token);
+        usuario.setFecha_expiracion_token(expiracion);
+        usuarioDAO.actualizar(usuario);
+
+        String link = "http://localhost:4200/reset-password?token=" + token;
+        String asunto = "Recuperación de contraseña";
+        String mensaje = "Haz clic en el siguiente enlace para recuperar tu contraseña:\n" + link;
+
+        emailService.enviarEmail(correo, asunto, mensaje);
+    }
+
+    @Override
+    public Usuario obtenerPorToken(String token) throws Exception {
+        Usuario usuario = usuarioDAO.obtenerPorToken(token);
+        if (usuario == null || usuario.getFecha_expiracion_token().before(new Date())) {
+            throw new Exception("Token inválido o expirado");
+        }
+        return usuario;
+    }
+
+    @Override
+    public void cambiarPasswordConToken(String token, String nuevaPassword) throws Exception {
+        Usuario usuario = obtenerPorToken(token);
+        usuario.setContrasena(nuevaPassword);
+        usuario.setToken_reset(null);
+        usuario.setFecha_expiracion_token(null);
+        usuarioDAO.actualizar(usuario);
+    }
+
     
 }
 

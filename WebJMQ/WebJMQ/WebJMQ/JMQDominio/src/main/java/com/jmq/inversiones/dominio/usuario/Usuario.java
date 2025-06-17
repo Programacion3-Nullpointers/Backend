@@ -1,5 +1,7 @@
 package com.jmq.inversiones.dominio.usuario;
 
+import java.util.Date;
+
 public class Usuario {
     private int id;
     private String nombreUsuario;
@@ -11,6 +13,8 @@ public class Usuario {
     private String razonsocial;
     private String direccion;
     private String RUC;
+    private String token_reset;
+    private Date fecha_expiracion_token;
     
     public Usuario(){
         
@@ -99,10 +103,39 @@ public class Usuario {
     public void setRUC(String RUC) {
         this.RUC = RUC;
     }
+    
+    public String getToken_reset() {
+        return token_reset;
+    }
+
+    public void setToken_reset(String token_reset) {
+        this.token_reset = token_reset;
+    }
+
+    public Date getFecha_expiracion_token() {
+        return fecha_expiracion_token;
+    }
+
+    public void setFecha_expiracion_token(Date fecha_expiracion_token) {
+        this.fecha_expiracion_token = fecha_expiracion_token;
+    }
 
     @Override
     public String toString() {
-        return "Usuario{" + "id=" + id + ", nombreUsuario=" + nombreUsuario + ", contrasena=" + contrasena + ", activo=" + activo + ", correo=" + correo + ", tipoUsuario=" + tipoUsuario + ", razonsocial=" + razonsocial + ", direccion=" + direccion + ", RUC=" + RUC + '}';
+        return "Usuario{" +
+                "id=" + id +
+                ", nombreUsuario='" + nombreUsuario + '\'' +
+                ", contrasena='" + contrasena + '\'' +
+                ", activo=" + activo +
+                ", correo='" + correo + '\'' +
+                ", tipoUsuario=" + tipoUsuario +
+                ", dni='" + dni + '\'' +
+                ", razonsocial='" + razonsocial + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", RUC='" + RUC + '\'' +
+                ", token_reset='" + token_reset + '\'' +
+                ", fecha_expiracion_token=" + fecha_expiracion_token +
+                '}';
     }
 
     /**

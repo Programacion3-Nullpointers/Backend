@@ -10,4 +10,7 @@ public interface UsuarioService {
     Usuario buscarUsuario(int id) throws Exception;
     List<Usuario> listarUsuarios() throws Exception;
     Usuario buscarUsuarioPorCorreo(String correo) throws Exception;
+    void iniciarRecuperacionPassword(String correo) throws Exception;
+    void cambiarPasswordConToken(String token, String nuevaPassword) throws Exception;
+    Usuario obtenerPorToken(String token) throws Exception;
 }
