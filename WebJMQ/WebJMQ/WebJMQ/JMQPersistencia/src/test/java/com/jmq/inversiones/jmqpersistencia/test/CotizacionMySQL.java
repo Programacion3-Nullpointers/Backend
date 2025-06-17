@@ -1,15 +1,13 @@
 package com.jmq.inversiones.jmqpersistencia.test;
 
-import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
-import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+
+import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.CotizacionDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

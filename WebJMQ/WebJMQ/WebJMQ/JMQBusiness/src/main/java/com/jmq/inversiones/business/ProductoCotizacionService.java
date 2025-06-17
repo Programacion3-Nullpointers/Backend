@@ -1,13 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.jmq.inversiones.business;
 
-/**
- *
- * @author omen
- */
-public class ProductoCotizacionService {
-    
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
+import java.util.List;
+
+
+public interface ProductoCotizacionService {
+    void registrarProductoCotizacion(ProductoCotizacion prod) throws Exception;
+    void actualizarProductoCotizacion(ProductoCotizacion prod) throws Exception;
+    void eliminarProductoCotizacion(int id) throws Exception;
+    ProductoCotizacion buscarProductoCotizacion(int id) throws Exception;
+    List<ProductoCotizacion> listarProductoCotizacion() throws Exception;
+    List<ProductoCotizacion> listarProductPorCotizacion(int id) throws Exception;
+    void actualizarPrecioCotizacion(ProductoCotizacion prod,double precio) throws Exception;
 }

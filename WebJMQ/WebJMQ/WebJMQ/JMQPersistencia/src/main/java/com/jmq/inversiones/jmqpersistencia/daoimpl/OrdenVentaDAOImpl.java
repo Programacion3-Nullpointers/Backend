@@ -48,7 +48,10 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
     protected String getSelectAllQuery() {
         return "{CALL ORDENVENTA_LISTAR()}";
     }
-
+    
+    protected String getOrdenByIdUsuario(){
+        return "{CALL ORDEN_VENTA_LISTAR_POR_USUARIO(?)}";
+    }
     @Override
     protected void setInsertParameters(PreparedStatement ps, OrdenVenta orden) throws SQLException {
         CallableStatement cs= (CallableStatement) ps;
@@ -165,5 +168,29 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
         }
         return ordenes;
     }
-    
+    @Override
+    public List<OrdenVenta> listarPorUsuario(int idUsuario) {
+        List<OrdenVenta> lista = new ArrayList<>();
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(getOrdenByIdUsuario())) {
+            cs.setInt(1, idUsuario);
+            try (ResultSet rs = cs.executeQuery()) {
+                while (rs.next()) {
+                    OrdenVenta orden = new OrdenVenta();
+                    orden.setId(rs.getInt("idOrdenVenta"));
+                    orden.setEstado_compra(EstadoCompra.valueOf(rs.getString("estado_compra")));
+                    orden.setFecha_orden(rs.getTimestamp("fecha_orden"));
+                    orden.setActivo(rs.getBoolean("activo"));
+                    // Puedes setear también el usuario si tienes un DAO o DTO relacionado
+                    // orden.setUsuario(usuarioDAO.obtener(rs.getInt("idUsuario")));
+                    lista.add(orden);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar órdenes por usuario", e);
+        }
+
+        return lista;
+    }
 }

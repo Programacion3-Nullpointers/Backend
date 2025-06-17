@@ -1,7 +1,9 @@
 com\jmq\inversiones\business\CategoriaService.class
 com\jmq\inversiones\business\BoletaService.class
+com\jmq\inversiones\business\impl\EmailServiceImpl$1.class
 com\jmq\inversiones\business\impl\DescuentoServiceImpl.class
 com\jmq\inversiones\business\EmailService.class
+com\jmq\inversiones\business\DetalleService.class
 com\jmq\inversiones\business\impl\BoletaServiceImpl.class
 com\jmq\inversiones\business\impl\ProductoServiceImpl.class
 com\jmq\inversiones\business\impl\ComprobantePagoServiceImpl.class
@@ -13,6 +15,7 @@ com\jmq\inversiones\business\EntregaService.class
 com\jmq\inversiones\business\impl\OrdenVentaServiceImpl.class
 com\jmq\inversiones\business\NotificacionService.class
 com\jmq\inversiones\business\impl\EmailServiceImpl.class
+com\jmq\inversiones\business\impl\DetalleServiceImpl.class
 com\jmq\inversiones\business\OrdenVentaService.class
 com\jmq\inversiones\business\impl\FacturaServiceImpl.class
 com\jmq\inversiones\business\impl\NotificacionServiceImpl.class

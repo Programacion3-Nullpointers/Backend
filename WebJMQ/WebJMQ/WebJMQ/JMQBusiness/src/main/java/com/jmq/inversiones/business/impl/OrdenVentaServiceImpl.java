@@ -6,18 +6,23 @@ import com.jmq.inversiones.dominio.ventas.Detalle;
 import com.jmq.inversiones.dominio.ventas.EstadoCompra;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.dominio.ventas.Producto;
+import com.jmq.inversiones.jmqpersistencia.dao.DetalleDAO;
 import com.jmq.inversiones.jmqpersistencia.dao.OrdenVentaDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoDAOImpl;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class OrdenVentaServiceImpl implements OrdenVentaService{
 
     private final OrdenVentaDAO ordenVentaDAO;
+    private final DetalleDAO detallesDAO;
     private final ProductoService productoService;
-
-    public OrdenVentaServiceImpl(OrdenVentaDAO ordenVentaDAO, ProductoService productoService) {
+    public OrdenVentaServiceImpl(OrdenVentaDAO ordenVentaDAO, DetalleDAO detalleDao) {
         this.ordenVentaDAO = ordenVentaDAO;
-        this.productoService = productoService;
+        this.detallesDAO = detalleDao;
+        this.productoService = new ProductoServiceImpl(new ProductoDAOImpl());
     }
 
     @Override
@@ -44,7 +49,12 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
             
             // Llamar al DAO
             ordenVentaDAO.agregar(ordenVenta);
+            //Efectuar for para agregar Detalles en la BD
             
+            for(Detalle detalle: ordenVenta.getDetalle()){
+                detalle.setOrden(ordenVenta);
+                detallesDAO.agregar(detalle);
+            }
             // Actualizar stock de productos (dependiendo de tu lógica de negocio)
             actualizarStockProductos(ordenVenta.getDetalle(), false);
             
@@ -168,8 +178,50 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
         }
     }
     
-    // Métodos auxiliares privados
+    @Override
+    public void agregarDetalle(OrdenVenta ordenVenta,Detalle detalle) throws Exception{
+        try {
+            if (ordenVenta.getDetalle() == null) {
+                ordenVenta.setDetalle(new ArrayList<>());
+            }
+            if(detalle.getCantidad() < 1 ){
+                throw new Exception("La cantidad debe ser mayor 1");
+            }
+            ordenVenta.getDetalle().add(detalle);
+        } catch (Exception e) {
+            throw new Exception("Error al agregar detalle a orden: " + e.getMessage(), e);
+        }
+    }
+    @Override
+    public void eliminarDetalle(OrdenVenta ordenVenta, Detalle detalle) throws Exception{
+         try {
+            Iterator<Detalle> iterator = ordenVenta.getDetalle().iterator();
+            while (iterator.hasNext()) {
+                Detalle aux = iterator.next();
+                if (aux.getProducto().getId() == detalle.getProducto().getId()) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Error al elimnar detalle a orden: " + e.getMessage(), e);
+        }
+    }
     
+    @Override
+    public List<OrdenVenta> listarOrdenVentaByUsuario(int id_usuario) throws Exception{
+         try {
+             List<OrdenVenta> lista = ordenVentaDAO.listarPorUsuario(id_usuario);
+            if(lista == null){
+                 throw new Exception("El usuario no cuenta con ninguna OrdenVenta");
+            }
+            return lista;
+        } catch (Exception e) {
+            throw new Exception("Error al elimnar detalle a orden: " + e.getMessage(), e);
+        }
+    }
+    // Métodos auxiliares privados
+
     private void validarStockProductos(List<Detalle> detalles) throws Exception {
         //  validar que hay suficiente stock para cada producto en los detalles de la orden
         for (Detalle detalle : detalles) {
@@ -179,7 +231,7 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
             }
         }
     }
-    
+
     private void actualizarStockProductos(List<Detalle> detalles, boolean revertir) throws Exception {
         // actualizar el stock de productos
         // Si revertir es true, se suma el stock (para cancelaciones)
@@ -197,7 +249,7 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
             productoService.actualizarProducto(producto);
         }
     }
-    
+
     private void validarTransicionEstado(EstadoCompra estadoActual, EstadoCompra nuevoEstado) throws Exception {
         if (estadoActual == EstadoCompra.entregado && nuevoEstado != EstadoCompra.entregado) {
             throw new Exception("No se puede modificar una orden completada");

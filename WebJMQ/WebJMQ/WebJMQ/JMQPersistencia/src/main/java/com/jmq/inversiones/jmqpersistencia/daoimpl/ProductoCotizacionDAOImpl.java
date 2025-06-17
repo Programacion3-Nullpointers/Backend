@@ -4,7 +4,8 @@ package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 
 import com.jmq.inversiones.dbmanager.DBManager;
-import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
+
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
 
@@ -80,74 +81,9 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
     protected void setId(ProductoCotizacion entity, Integer id) {
         entity.setId(id);
     }
-    
-//    public void actualizarPrecioCotizacion(Integer id, Integer fid,double precio) {
-//        ProductoCotizacion existente = obtenerPorIdYCotizacion(id,fid); // Trae el actual de la BD
-//        if (existente != null) {
-//            existente.setPrecioCotizado(precio);
-//            actualizar(existente); 
-//        } else if (existente.getDescripcion()== null || existente.getDescripcion().isBlank()) {
-//            throw new IllegalStateException("La descripción no puede ser nula al actualizar");
-//        }else {
-//            throw new RuntimeException("ProductoCotizacion no encontrado para ID: " + id+ " y Cotización: " + fid);
-//        }
-//    }
-//    public void agregar(ProductoCotizacion pc, int idCotizacion) {
-//        pc.setFid_cotizacion(idCotizacion);
-//        super.agregar(pc);
-//    }
-
-//    public List<ProductoCotizacion> obtenerPorCotizacion(int idCotizacion) {
-//        List<ProductoCotizacion> lista = new ArrayList<>();
-//        String sql = "SELECT * FROM productoCotizado WHERE idCotizacion = ?";
-//
-//        try (Connection conn = DBManager.getInstance().obtenerConexion();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, idCotizacion);
-//            try (ResultSet rs = ps.executeQuery()) {
-//                while (rs.next()) {
-//                    lista.add(createFromResultSet(rs));
-//                }
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Error al obtener productos por cotización", e);
-//        }
-//        return lista;
-//    }
-//
-//    public ProductoCotizacion obtenerPorIdYCotizacion(int idProducto, int idCotizacion) {
-//        String sql = "SELECT * FROM productoCotizado WHERE idproductoCotizado = ? AND idCotizacion = ?";
-//
-//        try (Connection conn = DBManager.getInstance().obtenerConexion();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, idProducto);
-//            ps.setInt(2, idCotizacion);
-//
-//            try (ResultSet rs = ps.executeQuery()) {
-//                if (rs.next()) {
-//                    return createFromResultSet(rs);
-//                }
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Error al obtener producto por ID y cotización", e);
-//        }
-//
-//        return null;
-//    }
 
     
-//    public void eliminar(int idCotizacion) {
-//        try (Connection conn = DBManager.getInstance().obtenerConexion();
-//             PreparedStatement ps = conn.prepareStatement(getDeleteQuery())) {
-//
-//            ps.setInt(1, idCotizacion);
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Error al eliminar productos cotizados", e);
-//        }
-//    }
+    
 
     @Override
     public void actualizarPrecioCotizacion(ProductoCotizacion pro, double precio) {
@@ -156,8 +92,22 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
     }
 
     @Override
-    public void listarPorUsuario(int idUsuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<ProductoCotizacion> listarPorCotizacion(int idCotizacion) {
+        List<ProductoCotizacion> entities = new ArrayList<>();
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement("SELECT * FROM productoCotizado "
+                     + "WHERE idCotizacion = ? ")) {
+             
+             ps.setInt(1, idCotizacion);
+             ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                entities.add(createFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar entidades", e);
+        }
+        return entities;
     }
 
 }

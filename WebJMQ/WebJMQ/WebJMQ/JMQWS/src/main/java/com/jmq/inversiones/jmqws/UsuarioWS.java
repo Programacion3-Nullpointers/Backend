@@ -3,7 +3,6 @@ package com.jmq.inversiones.jmqws;
 import com.jmq.inversiones.business.UsuarioService;
 import com.jmq.inversiones.business.impl.UsuarioServiceImpl;
 import com.jmq.inversiones.dominio.usuario.Usuario;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.UsuarioDAOImpl;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -12,7 +11,11 @@ import java.util.List;
 @WebService(serviceName = "UsuarioWS")
 public class UsuarioWS {
 
-    private final UsuarioService usuarioService = new UsuarioServiceImpl();
+    private final UsuarioService usuarioService;
+    
+    public UsuarioWS(){
+        this.usuarioService = new UsuarioServiceImpl();
+    }
 
     @WebMethod(operationName = "registrarUsuario")
     public void registrarUsuario(@WebParam(name = "usuario") Usuario usuario) throws Exception {
@@ -37,5 +40,10 @@ public class UsuarioWS {
     @WebMethod(operationName = "listarUsuarios")
     public List<Usuario> listarUsuarios() throws Exception {
         return usuarioService.listarUsuarios();
+    }
+    
+    @WebMethod(operationName = "BuscarUsuarioPorCorreo")
+    public Usuario buscarUsuarioPorCorreo(@WebParam(name = "id") String correo) throws Exception {
+        return usuarioService.buscarUsuarioPorCorreo(correo);
     }
 }

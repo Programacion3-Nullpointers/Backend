@@ -1,15 +1,15 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 import com.jmq.inversiones.dbmanager.DBManager;
+import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
-import com.jmq.inversiones.dominio.contizaciones.Cotizacion;
-import com.jmq.inversiones.dominio.contizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 
 public class CotizacionDAOImpl extends BaseDAOImpl<Cotizacion> implements CotizacionDAO{
@@ -139,6 +139,11 @@ public class CotizacionDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotiza
             throw new RuntimeException("Error al obtener entidad", e);
         }
         return null;
+    }
+
+    @Override
+    public List<Cotizacion> obtenerPorUsuario(int idUsuario) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

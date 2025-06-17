@@ -9,5 +9,5 @@ public interface UsuarioService {
     void eliminarUsuario(int id) throws Exception;
     Usuario buscarUsuario(int id) throws Exception;
     List<Usuario> listarUsuarios() throws Exception;
-    
+    Usuario buscarUsuarioPorCorreo(String correo) throws Exception;
 }
