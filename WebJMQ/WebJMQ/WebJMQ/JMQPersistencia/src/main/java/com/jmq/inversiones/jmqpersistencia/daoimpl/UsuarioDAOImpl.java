@@ -42,7 +42,7 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         cs.registerOutParameter(1, Types.INTEGER); // OUT id
         cs.setString(2, usuario.getNombreUsuario());
         cs.setString(3, usuario.getContrasena());
-        cs.setBoolean(4, usuario.isActivo());
+        cs.setBoolean(4, usuario.isActivo() == true);
         cs.setString(5, usuario.getCorreo());
         cs.setString(6, usuario.getTipoUsuario().name());
         cs.setString(7, usuario.getDni());
