@@ -123,6 +123,13 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         else
             cs.setNull(10, Types.VARCHAR);
         
+        cs.setString(11, usuario.getToken_reset());
+        if (usuario.getFecha_expiracion_token() != null) {
+            cs.setTimestamp(12, new Timestamp(usuario.getFecha_expiracion_token().getTime()));
+        } else {
+            cs.setNull(12, Types.TIMESTAMP);
+        }
+
     }
 
    @Override
