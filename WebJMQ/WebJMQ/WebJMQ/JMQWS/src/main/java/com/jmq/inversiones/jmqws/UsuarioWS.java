@@ -24,7 +24,7 @@ public class UsuarioWS {
 
     @WebMethod(operationName = "actualizarUsuario")
     public void actualizarUsuario(@WebParam(name = "usuario") Usuario usuario) throws Exception {
-        usuarioService.actualiarUsuario(usuario);
+        usuarioService.actualizarUsuario(usuario);
     }
 
     @WebMethod(operationName = "eliminarUsuario")
@@ -43,7 +43,7 @@ public class UsuarioWS {
     }
     
     @WebMethod(operationName = "BuscarUsuarioPorCorreo")
-    public Usuario buscarUsuarioPorCorreo(@WebParam(name = "id") String correo) throws Exception {
+    public Usuario buscarUsuarioPorCorreo(@WebParam(name = "correo") String correo) throws Exception {
         return usuarioService.buscarUsuarioPorCorreo(correo);
     }
     

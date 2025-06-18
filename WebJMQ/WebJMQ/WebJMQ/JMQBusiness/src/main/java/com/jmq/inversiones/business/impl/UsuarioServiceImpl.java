@@ -63,7 +63,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public void actualiarUsuario(Usuario usuario) throws Exception {
+    public void actualizarUsuario(Usuario usuario) throws Exception {
         try {
             if (usuario.getId() <= 0) {
                 throw new Exception("ID de usuario inválido");
@@ -133,6 +133,9 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     public void iniciarRecuperacionPassword(String correo) throws Exception {
+        if (correo == null || correo.trim().isEmpty()) {
+            throw new Exception("Debe ingresar un correo.");
+        }
          Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
         if (usuario == null) throw new RuntimeException("El correo ingresado no está registrado"); //mensaje que se mostrará en el frontend
         //genera token
@@ -165,8 +168,7 @@ public class UsuarioServiceImpl implements UsuarioService{
                 .isBefore(LocalDateTime.now())) {
             return false;
         }
-
-        usuarioDAO.actualizarTokenRecuperacion(usuario.getId(),nuevaPassword);
+        usuarioDAO.actualizar(usuario);
         return true;
         }
 }

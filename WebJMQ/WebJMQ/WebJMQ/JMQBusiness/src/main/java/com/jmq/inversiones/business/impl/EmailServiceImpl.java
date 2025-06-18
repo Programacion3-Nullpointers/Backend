@@ -24,6 +24,7 @@ public class EmailServiceImpl implements EmailService {
         props.put("mail.smtp.connectiontimeout", "10000");
         props.put("mail.smtp.timeout", "10000");
         props.put("mail.smtp.writetimeout", "10000");
+        props.put("mail.debug", "true");  // Agrega esto para ver los logs del correo
 
         return Session.getInstance(props, new Authenticator() {
             @Override
@@ -55,45 +56,20 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    @Override
+   @Override
     public void enviarRecuperacionPassword(Usuario usuario) {
-         // Configuración de SMTP
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-
-        // Autenticación
-        Session session = Session.getInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(remitente, contrasena);
-            }
-        });
-
         try {
-            // Construir mensaje
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(remitente));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(usuario.getCorreo()));
-            message.setSubject("Recuperación de contraseña");
-
-            String link = "http://localhost:50463/Restablecer.aspx?token=" + usuario.getToken_reset(); // Adaptar a tu frontend
+            String link = "http://localhost:50463/Restablecer.aspx?token=" + usuario.getToken_reset();
             String contenido = "Hola " + usuario.getNombreUsuario() + ",\n\n"
                     + "Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace:\n"
                     + link + "\n\n"
                     + "Este enlace expirará en 1 hora.\n\n"
                     + "Saludos,\nTu equipo JMQ";
 
-            message.setText(contenido);
-
-            // Enviar
-            Transport.send(message);
-            System.out.println("Correo de recuperación enviado a " + usuario.getCorreo());
-
-        } catch (MessagingException e) {
+            enviarEmail(usuario.getCorreo(), "Recuperación de contraseña", contenido);
+        } catch (Exception e) {
             throw new RuntimeException("Error al enviar correo: " + e.getMessage(), e);
         }
     }
-}
+
+}   
