@@ -42,3 +42,4 @@ Thumbs.db
 # === Carpetas específicas ===
 /WebJMQ/WebJMQ/WebJMQ/JMQWS/target/
 /WebJMQ/WebJMQ/WebJMQ/JMQBusiness/nbproject/
+/WebJMQ/WebJMQ/WebJMQ/JMQPersistencia/target
