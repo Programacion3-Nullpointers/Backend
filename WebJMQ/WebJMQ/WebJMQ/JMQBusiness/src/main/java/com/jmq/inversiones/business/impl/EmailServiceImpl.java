@@ -1,6 +1,7 @@
 package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.EmailService;
+import com.jmq.inversiones.dominio.usuario.Usuario;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 
@@ -46,6 +47,47 @@ public class EmailServiceImpl implements EmailService {
     public void enviarEmailMasivo(List<String> destinatarios, String asunto, String contenido) throws Exception {
         for (String destinatario : destinatarios) {
             enviarEmail(destinatario, asunto, contenido);
+        }
+    }
+
+    @Override
+    public void enviarRecuperacionPassword(Usuario usuario) {
+         // Configuración de SMTP
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        // Autenticación
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(remitente, contrasena);
+            }
+        });
+
+        try {
+            // Construir mensaje
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(remitente));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(usuario.getCorreo()));
+            message.setSubject("Recuperación de contraseña");
+
+            String link = "http://localhost:50463/Restablecer.aspx?token=" + usuario.getToken_reset(); // Adaptar a tu frontend
+            String contenido = "Hola " + usuario.getNombreUsuario() + ",\n\n"
+                    + "Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace:\n"
+                    + link + "\n\n"
+                    + "Este enlace expirará en 1 hora.\n\n"
+                    + "Saludos,\nTu equipo JMQ";
+
+            message.setText(contenido);
+
+            // Enviar
+            Transport.send(message);
+            System.out.println("Correo de recuperación enviado a " + usuario.getCorreo());
+
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error al enviar correo: " + e.getMessage(), e);
         }
     }
 }

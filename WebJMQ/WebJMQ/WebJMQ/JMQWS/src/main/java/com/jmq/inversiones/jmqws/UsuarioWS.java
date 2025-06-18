@@ -46,4 +46,19 @@ public class UsuarioWS {
     public Usuario buscarUsuarioPorCorreo(@WebParam(name = "id") String correo) throws Exception {
         return usuarioService.buscarUsuarioPorCorreo(correo);
     }
+    
+     @WebMethod
+    public void iniciarRecuperacionPassword(String email) throws Exception {
+        usuarioService.iniciarRecuperacionPassword(email);
+    }
+
+    @WebMethod
+    public boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception {
+        return usuarioService.cambiarPasswordConToken(token, nuevaPassword);
+    }
+
+    @WebMethod
+    public Usuario obtenerPorToken(String token) throws Exception {
+        return usuarioService.obtenerPorToken(token);
+    }
 }
