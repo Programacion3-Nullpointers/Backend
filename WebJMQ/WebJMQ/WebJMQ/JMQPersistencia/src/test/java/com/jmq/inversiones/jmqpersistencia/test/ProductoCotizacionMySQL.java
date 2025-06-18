@@ -4,6 +4,7 @@ package com.jmq.inversiones.jmqpersistencia.test;
 
 import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoCotizacionDAOImpl;
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +38,16 @@ public class ProductoCotizacionMySQL {
         //assertTrue(encontrado, "El producto cotizado no se encontró luego de agregar");
     }
 
+    @Test
+    public void testListarPorCotizacion(){
+        List<ProductoCotizacion> prods = new ArrayList<>();
+        int inicio = prods.size();
+        prods = dao.listarPorCotizacion(1);
+        
+        int fin =prods.size();
+        assertNotEquals(inicio,fin);
+    }
+    
    @Test
     public void testActualizarPrecioCotizado() {
         // Primero agregamos un producto para asegurarnos de que existe

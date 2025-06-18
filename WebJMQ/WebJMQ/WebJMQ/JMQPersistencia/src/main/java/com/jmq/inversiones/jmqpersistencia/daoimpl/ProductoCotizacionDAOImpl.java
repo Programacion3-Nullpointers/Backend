@@ -95,8 +95,8 @@ public class ProductoCotizacionDAOImpl extends BaseDAOImpl<ProductoCotizacion> i
     public List<ProductoCotizacion> listarPorCotizacion(int idCotizacion) {
         List<ProductoCotizacion> entities = new ArrayList<>();
         try (Connection conn = DBManager.getInstance().obtenerConexion();
-             PreparedStatement ps = conn.prepareStatement("SELECT * FROM productoCotizado"
-                     + "WHERE idCotizacion = ?")) {
+             PreparedStatement ps = conn.prepareStatement("SELECT * FROM productoCotizado "
+                     + "WHERE idCotizacion = ? ")) {
              
              ps.setInt(1, idCotizacion);
              ResultSet rs = ps.executeQuery();

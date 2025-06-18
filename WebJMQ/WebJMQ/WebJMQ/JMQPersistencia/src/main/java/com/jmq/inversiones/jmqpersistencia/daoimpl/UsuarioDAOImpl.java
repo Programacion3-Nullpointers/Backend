@@ -42,13 +42,33 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         cs.registerOutParameter(1, Types.INTEGER); // OUT id
         cs.setString(2, usuario.getNombreUsuario());
         cs.setString(3, usuario.getContrasena());
-        cs.setBoolean(4, usuario.isActivo());
+        cs.setBoolean(4, usuario.isActivo() == true);
         cs.setString(5, usuario.getCorreo());
         cs.setString(6, usuario.getTipoUsuario().name());
         cs.setString(7, usuario.getDni());
         cs.setString(8, usuario.getRazonsocial());
         cs.setString(9, usuario.getDireccion());
         cs.setString(10, usuario.getRUC());
+        
+        if (usuario.getDni() != null) {
+            cs.setString(7, usuario.getDni());
+        } else {
+            cs.setNull(7, java.sql.Types.VARCHAR);
+        }
+
+        if (usuario.getRazonsocial() != null) {
+            cs.setString(8, usuario.getRazonsocial());
+        } else {
+            cs.setNull(8, java.sql.Types.VARCHAR);
+        }
+
+        cs.setString(9, usuario.getDireccion());
+
+        if (usuario.getRUC() != null) {
+            cs.setString(10, usuario.getRUC());
+        } else {
+            cs.setNull(10, java.sql.Types.VARCHAR);
+        }
     }
 
     @Override
@@ -105,7 +125,7 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         
     }
 
-    @Override
+   @Override
     protected Usuario createFromResultSet(ResultSet rs) throws SQLException {
         Usuario usu = new Usuario();
         usu.setId(rs.getInt("idUsuario"));
@@ -113,14 +133,47 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         usu.setContrasena(rs.getString("contrasena"));
         usu.setActivo(rs.getBoolean("activo"));
         usu.setCorreo(rs.getString("correo"));
-        usu.setTipoUsuario(TipoUsuario.valueOf(rs.getString("tipoUsuario")));
-        usu.setDni(rs.getString("dni"));
-        usu.setRazonsocial(rs.getString("razonsocial"));
-        usu.setDireccion(rs.getString("direccion"));
-        usu.setRUC(rs.getString("RUC"));
-        
+
+        // 1. Obtenemos el tipo de usuario UNA SOLA VEZ para más eficiencia.
+        String tipoUsuarioStr = rs.getString("tipoUsuario");
+
+        // Si el valor de la base de datos es nulo o está vacío, no podemos continuar.
+        if (tipoUsuarioStr == null || tipoUsuarioStr.trim().isEmpty()) {
+            // Puedes lanzar una excepción o simplemente no devolver el usuario.
+            throw new SQLException("El tipo de usuario es nulo o vacío para el id: " + usu.getId());
+        }
+
+        // 2. Convertimos el String a Enum.
+        TipoUsuario tipo = TipoUsuario.valueOf(tipoUsuarioStr.toUpperCase());
+        usu.setTipoUsuario(tipo);
+
+        // 3. Usamos un 'switch' para manejar cada caso de forma explícita y segura.
+        //    Es mucho más limpio y fácil de mantener que un if-else.
+        switch (tipo) {
+            case EMPRESA:
+                usu.setRUC(rs.getString("RUC"));
+                usu.setRazonsocial(rs.getString("razonsocial"));
+                // Nos aseguramos de que los otros campos queden nulos.
+                usu.setDni(null);
+                break;
+
+            case CLIENTE:
+                usu.setDni(rs.getString("dni"));
+                // Nos aseguramos de que los otros campos queden nulos.
+                usu.setRUC(null);
+                usu.setRazonsocial(null);
+                break;
+
+             case ADMIN:
+                 usu.setDni(null);
+            //     usu.setRUC(null);
+            //     usu.setRazonsocial(null);
+                 break;
+
+        }
         return usu;
     }
+
 
     @Override
     protected void setId(Usuario entity, Integer id) {
