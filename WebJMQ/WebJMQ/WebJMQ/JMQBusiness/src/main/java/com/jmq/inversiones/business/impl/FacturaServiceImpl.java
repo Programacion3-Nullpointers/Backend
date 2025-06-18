@@ -2,8 +2,10 @@ package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.FacturaService;
 import com.jmq.inversiones.dominio.pagos.Factura;
+import com.jmq.inversiones.dominio.pagos.MetodoPago;
 import com.jmq.inversiones.jmqpersistencia.dao.FacturaDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.FacturaDAOImpl;
+import java.util.Date;
 import java.util.List;
 
 public class FacturaServiceImpl implements FacturaService{
@@ -26,7 +28,13 @@ public class FacturaServiceImpl implements FacturaService{
             if (factura.getRazon_social() == null || factura.getRazon_social().isEmpty()) {
                 throw new Exception("La razón social es obligatoria");
             }
-            
+            if (factura.getMetodoPago() == null) {
+                factura.setMetodoPago(MetodoPago.tarjeta);
+            }
+            if (factura.getFecha_emision() == null)
+                factura.setFecha_emision(new Date());
+            if (factura.getFecha_pago() == null)
+                factura.setFecha_pago(new Date());
             facturaDAO.agregar(factura);
         } catch (Exception e) {
             throw new Exception("Error al registrar factura: " + e.getMessage(), e);

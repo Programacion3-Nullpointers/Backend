@@ -2,6 +2,7 @@ package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.BoletaService;
 import com.jmq.inversiones.dominio.pagos.Boleta;
+import com.jmq.inversiones.dominio.pagos.MetodoPago;
 import com.jmq.inversiones.jmqpersistencia.dao.BoletaDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.BoletaDAOImpl;
 import java.util.Date;
@@ -97,17 +98,19 @@ public class BoletaServiceImpl implements BoletaService{
         }
         
         if (boleta.getMetodoPago() == null) {
-            throw new Exception("El método de pago es requerido");
+            boleta.setMetodoPago(MetodoPago.tarjeta);
         }
         
         if (boleta.getMonto_total() <= 0) {
             throw new Exception("El monto total debe ser mayor a cero");
         }
-        
+        if (boleta.getFecha_emision() == null)
+            boleta.setFecha_emision(new Date());
+        if (boleta.getFecha_pago() == null)
+            boleta.setFecha_pago(new Date());
         if (boleta.getDni() == null || boleta.getDni().trim().isEmpty()) {
             throw new Exception("El DNI es requerido");
         }
-        
         if (boleta.getNombre() == null || boleta.getNombre().trim().isEmpty()) {
             throw new Exception("El nombre es requerido");
         }
