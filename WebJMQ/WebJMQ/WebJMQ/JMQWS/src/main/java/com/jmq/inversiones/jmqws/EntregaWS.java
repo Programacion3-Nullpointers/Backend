@@ -35,7 +35,7 @@ public class EntregaWS {
     @WebMethod(operationName = "ActualizarEntrega")
     public void ActualizarEntrega(Entrega ent){
         try {
-            entregaWS.registrarEntrega(ent);
+            entregaWS.actualizarEntrega(ent);
         }
         catch (Exception ex){
             throw new WebServiceException("Error al actualizar Entrega"+ex.getMessage());

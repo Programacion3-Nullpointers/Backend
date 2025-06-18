@@ -35,7 +35,7 @@ public class DetalleWS {
     @WebMethod(operationName = "ActualizarDetalle")
     public void ActualizarDetalle(Detalle det){
         try {
-            detalleWS.registrarDetalle(det);
+            detalleWS.actualizarDetalle(det);
         }
         catch (Exception ex){
             throw new WebServiceException("Error al actualizar Detalle"+ex.getMessage());
