@@ -18,8 +18,9 @@ public class UsuarioWS {
     }
 
     @WebMethod(operationName = "registrarUsuario")
-    public void registrarUsuario(@WebParam(name = "usuario") Usuario usuario) throws Exception {
+    public Usuario registrarUsuario(@WebParam(name = "usuario") Usuario usuario) throws Exception {
         usuarioService.registrarUsuario(usuario);
+        return usuarioService.buscarUsuario(usuario.getId());
     }
 
     @WebMethod(operationName = "actualizarUsuario")
