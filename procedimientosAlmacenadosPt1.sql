@@ -454,6 +454,8 @@ BEGIN
 END$
 DELIMITER $$
 
+
+
 CREATE PROCEDURE BOLETA_INSERTAR (
     IN _id_boleta INT,
     IN _dni VARCHAR(15),
@@ -524,6 +526,13 @@ END$$
 
 DELIMITER ;
 DELIMITER $$
+
+CREATE DEFINER=`admin`@`%` PROCEDURE `COMPROBANTE_OBTENER`(IN comprobanteId INT)
+BEGIN
+    SELECT * 
+    FROM ComprobantePago 
+    WHERE idComprobantePago = comprobanteId;
+END $$
 
 CREATE PROCEDURE GetComprobantePagoById(IN comprobanteId INT)
 BEGIN
@@ -629,6 +638,24 @@ END$$
 
 DELIMITER ;
 DELIMITER $$
+CREATE DEFINER=`admin`@`%` PROCEDURE `sp_buscar_usuario_por_id`(
+    IN p_idUsuario INT
+)
+BEGIN
+    SELECT 
+        idUsuario,
+        nombreUsuario,
+        contrasena,
+        activo,
+        correo,
+        tipoUsuario,
+        dni,
+        razonsocial,
+        direccion,
+        RUC
+    FROM Usuario
+    WHERE idUsuario = p_idUsuario;
+END $$
 
 DROP PROCEDURE IF EXISTS PRODUCTO_OBTENER$$
 
