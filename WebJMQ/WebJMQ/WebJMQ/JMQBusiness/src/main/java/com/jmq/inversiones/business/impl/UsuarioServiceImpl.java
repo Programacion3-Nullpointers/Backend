@@ -75,7 +75,7 @@ public class UsuarioServiceImpl implements UsuarioService{
                 throw new Exception("La contraseña es requerida");
             }
             if (usuario.getCorreo()== null || usuario.getCorreo().isEmpty()) {
-                throw new Exception("La contraseña es requerida");
+                throw new Exception("El correo es requerido");
             }
             usuarioDAO.actualizar(usuario);
         } catch (Exception e) {
@@ -134,8 +134,8 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public void iniciarRecuperacionPassword(String correo) throws Exception {
          Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
-        if (usuario == null) throw new RuntimeException("Usuario no encontrado");
-
+        if (usuario == null) throw new RuntimeException("El correo ingresado no está registrado"); //mensaje que se mostrará en el frontend
+        //genera token
         String token = UUID.randomUUID().toString();
         usuario.setToken_reset(token);
         LocalDateTime expira = LocalDateTime.now().plusHours(1);
@@ -166,10 +166,7 @@ public class UsuarioServiceImpl implements UsuarioService{
             return false;
         }
 
-        usuario.setContrasena(nuevaPassword); // temporal: usar hash si tenés
-        usuario.setToken_reset(null);
-        usuario.setFecha_expiracion_token(null);
-        usuarioDAO.actualizar(usuario);
+        usuarioDAO.actualizarTokenRecuperacion(usuario.getId(),nuevaPassword);
         return true;
         }
 }

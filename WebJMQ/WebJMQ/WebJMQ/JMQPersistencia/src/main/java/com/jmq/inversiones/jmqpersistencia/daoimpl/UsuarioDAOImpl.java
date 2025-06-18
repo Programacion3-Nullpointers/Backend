@@ -234,5 +234,18 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         return null;
     }
 
+    @Override
+    public void actualizarTokenRecuperacion(int idUsuario, String nuevaPassword) throws Exception {
+        String sql = "UPDATE Usuario SET token_reset = ?, fecha_expiracion_token = ? WHERE idUsuario = ?";
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, nuevaPassword);
+        ps.setInt(2, idUsuario);
+        ps.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("Error al actualizar la contraseña: " + e.getMessage(), e);
+        }
+    }
+
 
 }

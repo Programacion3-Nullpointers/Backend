@@ -18,8 +18,12 @@ public class EmailServiceImpl implements EmailService {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.connectiontimeout", "10000");
+        props.put("mail.smtp.timeout", "10000");
+        props.put("mail.smtp.writetimeout", "10000");
 
         return Session.getInstance(props, new Authenticator() {
             @Override
@@ -28,6 +32,7 @@ public class EmailServiceImpl implements EmailService {
             }
         });
     }
+
 
     @Override
     public void enviarEmail(String destinatario, String asunto, String contenido) throws Exception {
@@ -56,6 +61,7 @@ public class EmailServiceImpl implements EmailService {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
 
