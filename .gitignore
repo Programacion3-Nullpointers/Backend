@@ -1,20 +1,44 @@
-# Archivos de compilación y binarios
+# === Java / Maven / Compilación ===
 **/target/
-/bin/
-/out/
-*.jar
+**/bin/
+**/out/
 *.class
+*.jar
 *.war
-# Archivos de Maven y build
+*.ear
 *.log
 *.lst
-# Archivos de entorno e IDE
+
+# === IDEs ===
+# IntelliJ / WebStorm / Android Studio
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# NetBeans
+nbproject/private/
+**/nbproject/private/
+
+# Eclipse
 *.swp
 *.swo
-*.iml
+*.bak
+*.tmp
+.settings/
+.project
+.classpath
+
+# === Sistema operativo ===
 .DS_Store
-.idea/
-.vscode/
+Thumbs.db
+
+# === Otros archivos temporales ===
 *.txt
+*.db
+*.pdb
+
+# === Carpetas específicas ===
 /WebJMQ/WebJMQ/WebJMQ/JMQWS/target/
 /WebJMQ/WebJMQ/WebJMQ/JMQBusiness/nbproject/
