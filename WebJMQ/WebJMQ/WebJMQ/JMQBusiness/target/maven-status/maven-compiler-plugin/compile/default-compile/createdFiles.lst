@@ -17,6 +17,7 @@ com\jmq\inversiones\business\NotificacionService.class
 com\jmq\inversiones\business\impl\EmailServiceImpl.class
 com\jmq\inversiones\business\impl\DetalleServiceImpl.class
 com\jmq\inversiones\business\OrdenVentaService.class
+com\jmq\inversiones\business\impl\EmailServiceImpl$2.class
 com\jmq\inversiones\business\impl\FacturaServiceImpl.class
 com\jmq\inversiones\business\impl\NotificacionServiceImpl.class
 com\jmq\inversiones\business\ProductoService.class

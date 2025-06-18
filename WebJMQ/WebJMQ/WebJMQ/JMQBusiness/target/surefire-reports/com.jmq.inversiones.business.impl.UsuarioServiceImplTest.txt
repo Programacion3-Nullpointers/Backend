@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.jmq.inversiones.business.impl.UsuarioServiceImplTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.990 s -- in com.jmq.inversiones.business.impl.UsuarioServiceImplTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.866 s -- in com.jmq.inversiones.business.impl.UsuarioServiceImplTest
