@@ -2,6 +2,7 @@ package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 import com.jmq.inversiones.dbmanager.DBManager;
 import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
 import java.sql.Connection;
@@ -9,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -143,7 +145,21 @@ public class CotizacionDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotiza
 
     @Override
     public List<Cotizacion> obtenerPorUsuario(int idUsuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<Cotizacion> entities = new ArrayList<>();
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Cotizacion "
+                     + "WHERE idUsuario = ? ")) {
+             
+             ps.setInt(1, idUsuario);
+             ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                entities.add(createFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar cotizaciones", e);
+        }
+        return entities;
     }
     
 }

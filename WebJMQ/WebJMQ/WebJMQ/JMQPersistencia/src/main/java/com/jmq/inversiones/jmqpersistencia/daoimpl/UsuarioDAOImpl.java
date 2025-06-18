@@ -17,7 +17,7 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
 
     @Override
     protected String getUpdateQuery() {
-        return "{CALL USUARIO_MODIFICAR(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        return "{CALL USUARIO_MODIFICAR(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)}";
     }
 
     @Override
@@ -123,6 +123,13 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         else
             cs.setNull(10, Types.VARCHAR);
         
+        cs.setString(11, usuario.getToken_reset());
+        if (usuario.getFecha_expiracion_token() != null) {
+            cs.setTimestamp(12, new Timestamp(usuario.getFecha_expiracion_token().getTime()));
+        } else {
+            cs.setNull(12, Types.TIMESTAMP);
+        }
+
     }
 
    @Override
@@ -199,5 +206,33 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         }
         return null;
     }
+
+    @Override
+    public Usuario obtenerPorToken(String token) {
+        String sql = "SELECT * FROM Usuario WHERE token_reset = ?";
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, token);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Usuario usuario = createFromResultSet(rs);
+
+                    // Si manejas expiración en BD, agrégalo aquí
+                    Timestamp fechaExp = rs.getTimestamp("fecha_expiracion_token");
+                    if (fechaExp != null) {
+                        usuario.setFecha_expiracion_token(new java.util.Date(fechaExp.getTime()));
+                    }
+
+                    usuario.setToken_reset(token);
+                    return usuario;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener usuario por token", e);
+        }
+        return null;
+    }
+
 
 }
