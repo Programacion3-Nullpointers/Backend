@@ -6,8 +6,11 @@ import com.jmq.inversiones.dominio.usuario.TipoUsuario;
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.UsuarioDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.UsuarioDAOImpl;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import static java.util.Objects.hash;
 import java.util.UUID;
 
 public class UsuarioServiceImpl implements UsuarioService{
@@ -130,21 +133,17 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     public void iniciarRecuperacionPassword(String correo) throws Exception {
-        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
-        if (usuario == null) throw new Exception("Correo no registrado");
+         Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
+        if (usuario == null) throw new RuntimeException("Usuario no encontrado");
 
         String token = UUID.randomUUID().toString();
-        Date expiracion = new Date(System.currentTimeMillis() + 15 * 60 * 1000); // 15 min
-
         usuario.setToken_reset(token);
-        usuario.setFecha_expiracion_token(expiracion);
+        LocalDateTime expira = LocalDateTime.now().plusHours(1);
+        Date fechaExp = Date.from(expira.atZone(ZoneId.systemDefault()).toInstant());
+        usuario.setFecha_expiracion_token(fechaExp);
         usuarioDAO.actualizar(usuario);
 
-        String link = "http://localhost:4200/reset-password?token=" + token;
-        String asunto = "Recuperación de contraseña";
-        String mensaje = "Haz clic en el siguiente enlace para recuperar tu contraseña:\n" + link;
-
-        emailService.enviarEmail(correo, asunto, mensaje);
+        emailService.enviarRecuperacionPassword(usuario); // Debe enviar email con enlace
     }
 
     @Override
@@ -157,14 +156,21 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public void cambiarPasswordConToken(String token, String nuevaPassword) throws Exception {
-        Usuario usuario = obtenerPorToken(token);
-        usuario.setContrasena(nuevaPassword);
+    public boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception {
+        Usuario usuario = usuarioDAO.obtenerPorToken(token);
+        if (usuario == null || 
+            usuario.getFecha_expiracion_token().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime()
+                .isBefore(LocalDateTime.now())) {
+            return false;
+        }
+
+        usuario.setContrasena(nuevaPassword); // temporal: usar hash si tenés
         usuario.setToken_reset(null);
         usuario.setFecha_expiracion_token(null);
         usuarioDAO.actualizar(usuario);
-    }
-
-    
+        return true;
+        }
 }
 

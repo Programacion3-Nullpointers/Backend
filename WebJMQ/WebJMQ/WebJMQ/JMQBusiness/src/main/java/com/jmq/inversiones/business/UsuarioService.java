@@ -11,6 +11,6 @@ public interface UsuarioService {
     List<Usuario> listarUsuarios() throws Exception;
     Usuario buscarUsuarioPorCorreo(String correo) throws Exception;
     void iniciarRecuperacionPassword(String correo) throws Exception;
-    void cambiarPasswordConToken(String token, String nuevaPassword) throws Exception;
+    boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception;
     Usuario obtenerPorToken(String token) throws Exception;
 }
