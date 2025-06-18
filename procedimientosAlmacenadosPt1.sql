@@ -525,6 +525,13 @@ END$$
 DELIMITER ;
 DELIMITER $$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `COMPROBANTE_OBTENER`(IN comprobanteId INT)
+BEGIN
+    SELECT * 
+    FROM ComprobantePago 
+    WHERE idComprobantePago = comprobanteId;
+END $$
+
 CREATE PROCEDURE GetComprobantePagoById(IN comprobanteId INT)
 BEGIN
     SELECT * 
