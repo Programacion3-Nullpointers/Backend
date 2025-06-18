@@ -166,7 +166,7 @@ public class UsuarioServiceImpl implements UsuarioService{
             return false;
         }
 
-        usuario.setContrasena(nuevaPassword); // temporal: usar hash si tenés
+        usuario.setContrasena(nuevaPassword); 
         usuario.setToken_reset(null);
         usuario.setFecha_expiracion_token(null);
         usuarioDAO.actualizar(usuario);
