@@ -50,7 +50,7 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
         cs.registerOutParameter(1, Types.INTEGER);
         cs.setDouble(2, entity.getNumDescuento());
         cs.setBoolean(3, entity.isActivo());
-        cs.execute();
+//        cs.execute();
         //setId(entity, cs.getInt(1));
     }
 

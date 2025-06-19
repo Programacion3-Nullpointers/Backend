@@ -97,16 +97,17 @@ BEGIN
     SELECT * FROM Producto WHERE activo = 1;
 END $
 
+DELIMITER $$
 CREATE PROCEDURE DESCUENTO_INSERTAR(
     OUT _id_descuento INT,
     IN _num_descuento INT,
     IN _activo TINYINT
 )
 BEGIN
-    INSERT INTO Descuento(idDescuento, numDescuento, activo)
-    VALUES (_id_descuento, _num_descuento, _activo);
+    INSERT INTO Descuento( numDescuento, activo)
+    VALUES ( _num_descuento, _activo);
     SET _id_descuento = LAST_INSERT_ID();
-END $
+END $$
 
 CREATE PROCEDURE DESCUENTO_MODIFICAR(
     IN _id_descuento INT,
@@ -130,6 +131,7 @@ BEGIN
     SELECT * FROM Descuento;
 END $
 
+DELIMITER $$
 CREATE PROCEDURE CATEGORIA_INSERTAR(
     OUT _id_categoria INT,
     IN _descripcion VARCHAR(45),
@@ -137,10 +139,10 @@ CREATE PROCEDURE CATEGORIA_INSERTAR(
     IN _id_descuento INT
 )
 BEGIN
-    INSERT INTO Categoria(idCategoria, descripcion, nombre, idDescuento)
-    VALUES (_id_categoria, _descripcion, _nombre, _id_descuento);
+    INSERT INTO Categoria( descripcion, nombre, idDescuento)
+    VALUES ( _descripcion, _nombre, _id_descuento);
     SET _id_categoria = LAST_INSERT_ID();
-END $
+END $$
 
 CREATE PROCEDURE CATEGORIA_MODIFICAR(
     IN _id_categoria INT,
@@ -401,37 +403,42 @@ BEGIN
     WHERE idproductoCotizado = _id_productocotizacion;
 END $
 
+DROP PROCEDURE IF EXISTS NOTIFICACION_INSERTAR
+DELIMITER $$
 CREATE PROCEDURE NOTIFICACION_INSERTAR(
     OUT _id_notificacion INT,
     IN _titulo VARCHAR(100),
     IN _mensaje VARCHAR(255),
-    IN _fecha_hora DATETIME,
-    IN _estado ENUM('ENVIADO', 'RECIBIDO'),
-    IN _id_usuario INT
+    IN _fecha_envio DATETIME,
+    IN _estado VARCHAR(45),
+    IN _asunto VARCHAR(45)
 )
 BEGIN
-    INSERT INTO Notificacion(titulo, mensaje, fecha_hora, estado, idUsuario)
-    VALUES (_titulo, _mensaje, _fecha_hora, _estado, _id_usuario);
+    INSERT INTO Notificacion(tipo, mensaje, fecha_envio, estado, asunto)
+    VALUES (_titulo, _mensaje, _fecha_envio, _estado, _asunto);
     SET _id_notificacion = LAST_INSERT_ID();
-END $
+END $$
 
+DROP PROCEDURE IF EXISTS NOTIFICACION_MODIFICAR
+
+DELIMITER $$
 CREATE PROCEDURE NOTIFICACION_MODIFICAR(
     IN _id_notificacion INT,
     IN _titulo VARCHAR(100),
     IN _mensaje VARCHAR(255),
-    IN _fecha_hora DATETIME,
-    IN _estado ENUM('ENVIADO', 'RECIBIDO'),
-    IN _id_usuario INT
+    IN _fecha_envio DATETIME,
+    IN _estado VARCHAR(45),
+    IN _asunto VARCHAR(45)
 )
 BEGIN
     UPDATE Notificacion
-    SET titulo = _titulo,
+    SET tipo= _titulo,
         mensaje = _mensaje,
-        fecha_hora = _fecha_hora,
+        fecha_envio = _fecha_envio,
         estado = _estado,
-        idUsuario = _id_usuario
+        asunto = _asunto
     WHERE idNotificacion = _id_notificacion;
-END $
+END $$
 
 CREATE PROCEDURE NOTIFICACION_ELIMINAR(
     IN _id_notificacion INT
@@ -566,29 +573,32 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS FACTURA_INSERTAR
 DELIMITER $$
 
 CREATE PROCEDURE FACTURA_INSERTAR (
     IN p_idFactura INT,
     IN p_ruc VARCHAR(11),
     IN p_razon_social VARCHAR(100),
-    IN p_direccion VARCHAR(200),
+    IN p_direccion_fiscal VARCHAR(200),
     IN p_fecha_emision DATETIME
 )
 BEGIN
-    INSERT INTO Factura (idFactura, RUC, razon_social, direccion, fecha_emision)
-    VALUES (p_idFactura, p_ruc, p_razon_social, p_direccion, p_fecha_emision);
+    INSERT INTO Factura (idFactura, RUC, razon_social, direccion_fiscal, fecha_emision)
+    VALUES (p_idFactura, p_ruc, p_razon_social, p_direccion_fiscal, p_fecha_emision);
 END $$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS FACTURA_ACTUALIZAR
 DELIMITER $$
 
 CREATE PROCEDURE FACTURA_ACTUALIZAR (
     IN p_idFactura INT,
     IN p_ruc VARCHAR(11),
     IN p_razon_social VARCHAR(100),
-    IN p_direccion VARCHAR(200),
+    IN p_direccion_fiscal VARCHAR(200),
     IN p_fecha_emision DATETIME,
     IN p_id_orden INT,
     IN p_metodo_pago VARCHAR(50),
@@ -608,7 +618,7 @@ BEGIN
     UPDATE Factura
     SET RUC = p_ruc,
         razon_social = p_razon_social,
-        direccion = p_direccion,
+        direccion_fiscal = p_direccion_fiscal,
         fecha_emision = p_fecha_emision
     WHERE idFactura = p_idFactura;
 END $$
