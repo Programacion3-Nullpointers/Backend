@@ -37,7 +37,7 @@ DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_ELIMINAR
 DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_LISTAR
 DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_OBTENER
 DROP PROCEDURE IF EXISTS BOLETA_ELIMINAR
-
+DROP PROCEDURE IF EXISTS sp_buscar_usuario_por_id
 DELIMITER $
 CREATE PROCEDURE PRODUCTO_INSERTAR(
     OUT _id_producto INT,
@@ -45,7 +45,7 @@ CREATE PROCEDURE PRODUCTO_INSERTAR(
     IN _descripcion VARCHAR(100),
     IN _stock INT,
     IN _precio DOUBLE,
-    IN _imagen VARCHAR(255),
+    IN _imagen LONGBLOB,
     IN _activo TINYINT,
     IN _id_categoria INT
 )
@@ -61,7 +61,7 @@ CREATE PROCEDURE PRODUCTO_MODIFICAR(
     IN _descripcion VARCHAR(100),
     IN _stock INT,
     IN _precio DOUBLE,
-    IN _imagen VARCHAR(255),
+    IN _imagen LONGBLOB,
     IN _activo TINYINT,
     IN _id_categoria INT
 )
@@ -167,14 +167,14 @@ CREATE PROCEDURE CATEGORIA_LISTAR()
 BEGIN
     SELECT * FROM Categoria;
 END $
-
+DELIMITER $
 CREATE PROCEDURE USUARIO_INSERTAR(
     OUT _id_usuario INT,
     IN _nombre_usuario VARCHAR(45),
     IN _contrasena VARCHAR(45),
     IN _activo TINYINT,
     IN _correo VARCHAR(45),
-    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
+    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE','ADMIN'),
     IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
     IN _direccion VARCHAR(45),
@@ -182,7 +182,7 @@ CREATE PROCEDURE USUARIO_INSERTAR(
 )
 BEGIN
     INSERT INTO Usuario(nombreUsuario, contrasena, activo, correo, tipoUsuario, dni, razonsocial, direccion, RUC)
-    VALUES (_nombre_usuario, _contrasena, _activo, _correo, _tipo_usuario, dni, _razon_social, _direccion, _ruc);
+    VALUES (_nombre_usuario, _contrasena, _activo, _correo, _tipo_usuario, _dni, _razon_social, _direccion, _ruc);
     SET _id_usuario = LAST_INSERT_ID();
 END $
 
@@ -192,11 +192,13 @@ CREATE PROCEDURE USUARIO_MODIFICAR(
     IN _contrasena VARCHAR(45),
     IN _activo TINYINT,
     IN _correo VARCHAR(45),
-    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
+    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE','ADMIN'),
     IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
     IN _direccion VARCHAR(45),
-    IN _ruc VARCHAR(45)
+    IN _ruc VARCHAR(45),
+    IN _token_reset VARCHAR(45),
+    IN _fecha_expiracion_token DATE
 )
 BEGIN
     UPDATE Usuario
@@ -208,7 +210,9 @@ BEGIN
         dni = _dni,
         razonsocial = _razon_social,
         direccion = _direccion,
-        RUC = _ruc
+        RUC = _ruc,
+        token_reset = _token_reset,
+        fecha_expiracion_token = _fecha_expiracion_token
     WHERE idUsuario = _id_usuario;
 END $
 
@@ -354,7 +358,7 @@ CREATE PROCEDURE PRODUCTOCOTIZACION_INSERTAR(
     IN _idCotizacion INT
 )
 BEGIN
-	INSERT INTO Cotizacion (descripcion,cantidad, precioCotizado,
+	INSERT INTO productoCotizado (descripcion,cantidad, precioCotizado,
     idCotizacion) VALUES ( _descripcion, _cantidad, 
     _precioCotizado, _idCotizacion );
     SET _id_productocotizacion = LAST_INSERT_ID();
@@ -448,10 +452,11 @@ CREATE PROCEDURE BOLETA_ELIMINAR(
 BEGIN
 	DELETE FROM Boleta WHERE idBoleta = _id_boleta;
 END $
+DELIMITER $$
 CREATE PROCEDURE BOLETA_LISTAR()
 BEGIN
 	SELECT * FROM Boleta;
-END$
+END $$
 DELIMITER $$
 
 
