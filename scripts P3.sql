@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Usuario` (
   `direccion` VARCHAR(45) NULL,
   `RUC` VARCHAR(45) NULL,
   `token_reset` VARCHAR(45) NULL,
-  `fecha_expiracion_token` DATE NULL
+  `fecha_expiracion_token` DATE NULL,
   PRIMARY KEY (`idUsuario`))
 ENGINE = InnoDB;
 
