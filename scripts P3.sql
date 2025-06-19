@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Usuario` (
   `contrasena` VARCHAR(45) NOT NULL,
   `activo` INT NOT NULL,
   `correo` VARCHAR(45) NOT NULL,
-  `tipoUsuario` ENUM("EMPRESA", "CLIENTE") NULL,
+  `tipoUsuario` ENUM("EMPRESA", "CLIENTE","ADMIN") NULL,
   `razonsocial` VARCHAR(45) NULL,
   `direccion` VARCHAR(45) NULL,
   `RUC` VARCHAR(45) NULL,
