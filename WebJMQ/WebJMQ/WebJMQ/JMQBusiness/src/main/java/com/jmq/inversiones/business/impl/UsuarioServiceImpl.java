@@ -119,22 +119,22 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     public Usuario buscarUsuarioPorCorreo(String correo) throws Exception {
-        try{
-            if(!correo.isEmpty()){
-            } else {
-                throw new Exception("");
-            }
-            return usuarioDAO.obtenerPorCorreo(correo);
+        if (correo == null || correo.trim().isEmpty()) {
+            throw new Exception("Debe ingresar un correo válido");
         }
-        catch (Exception ex){
-            throw new Exception(""+ex.getMessage());
+
+        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo.trim());
+        if (usuario == null) {
+            throw new Exception("El correo ingresado no está registrado");
         }
+
+        return usuario;
     }
 
 
     @Override
     public void iniciarRecuperacionPassword(String correo) throws Exception {
-        if (correo == null || correo.trim().isEmpty()) {
+        if (correo == null || correo.isEmpty()) {
             throw new Exception("Debe ingresar un correo.");
         }
          Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);

@@ -62,3 +62,4 @@ public class UsuarioWS {
         return usuarioService.obtenerPorToken(token);
     }
 }
+ 

@@ -191,11 +191,11 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
 
     @Override
     public Usuario obtenerPorCorreo(String correo) {
-        String sql ="SELECT * FROM Usuario WHERE correo = ?";
+        String sql ="SELECT * FROM Usuario WHERE LOWER(TRIM(correo)) = LOWER(?)";
         try (Connection conn = DBManager.getInstance().obtenerConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, correo);
+            ps.setString(1, correo.trim().toLowerCase());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return createFromResultSet(rs);
