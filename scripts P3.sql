@@ -45,7 +45,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Descuento` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Descuento` (
-  `idDescuento` INT NOT NULL COMMENT '0: descuento nulo\n1: descuento 0.10',
+  `idDescuento` INT NOT NULL AUTO_INCREMENT COMMENT '0: descuento nulo\n1: descuento 0.10',
   `numDescuento` INT NOT NULL COMMENT 'Porcentaje:\n\n10\n20',
   `activo` INT NULL,
   PRIMARY KEY (`idDescuento`))
@@ -58,7 +58,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Categoria` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Categoria` (
-  `idCategoria` INT NOT NULL,
+  `idCategoria` INT NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NULL,
   `nombre` VARCHAR(45) NOT NULL,
   `idDescuento` INT NOT NULL,
@@ -235,7 +235,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Cotizacion` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Cotizacion` (
-  `idCotizacion` INT NOT NULL,
+  `idCotizacion` INT NOT NULL AUTO_INCREMENT,
   `idUsuario` INT NOT NULL,
   `estadoCotizacion` VARCHAR(45) NOT NULL COMMENT 'estado de la cotización:\nEn proceso\nRevisado',
   PRIMARY KEY (`idCotizacion`),
@@ -254,7 +254,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`productoCotizado` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`productoCotizado` (
-  `idproductoCotizado` INT NOT NULL,
+  `idproductoCotizado` INT NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NOT NULL,
   `cantidad` INT NOT NULL,
   `precioCotizado` DOUBLE NULL,
@@ -275,11 +275,12 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Notificacion` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Notificacion` (
-  `idNotificacion` INT NOT NULL,
+  `idNotificacion` INT NOT NULL AUTO_INCREMENT,
   `tipo` VARCHAR(45) NOT NULL,
   `mensaje` VARCHAR(45) NOT NULL,
   `fecha_envio` DATETIME NOT NULL,
   `estado` VARCHAR(45) NOT NULL,
+  `asunto` varchar(45) NULL,
   PRIMARY KEY (`idNotificacion`))
 ENGINE = InnoDB;
 
