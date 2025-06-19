@@ -2,6 +2,7 @@ package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.EntregaService;
 import com.jmq.inversiones.dominio.logistica.Entrega;
+import com.jmq.inversiones.dominio.logistica.TipoEntrega;
 import com.jmq.inversiones.jmqpersistencia.dao.EntregaDAO;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public class EntregaServiceImpl implements EntregaService{
             entregaDAO.agregar(entrega);
             
         } catch (Exception e) {
-            throw new Exception("Error al registrar entrega: " + e.getMessage(), e);
+            throw new Exception("Error al registrar entrega: " + entrega.toString(), e);
         }
     }
 
@@ -105,14 +106,15 @@ public class EntregaServiceImpl implements EntregaService{
         if (entrega.getOrden() == null) {
             throw new Exception("La orden de venta es requerida");
         }
-        if (entrega.getDireccion() == null || entrega.getDireccion().trim().isEmpty()) {
-            throw new Exception("La dirección de entrega es requerida");
+        if (entrega.getTipoEntrega() == null) {
+            if (entrega.getDniRecibo() != null) entrega.setTipoEntrega(TipoEntrega.RECOJO);
+            else entrega.setTipoEntrega(TipoEntrega.DELIVERY);
         }
-        if (entrega.getDniRecibo() == null || entrega.getDniRecibo().length()<8 || entrega.getDniRecibo().length()>8){
+        if (entrega.getTipoEntrega() == TipoEntrega.RECOJO && (entrega.getDniRecibo() == null || entrega.getDniRecibo().length()!=8)){
             throw new Exception("El DNI del receptor es inválido");
         }
-        if (entrega.getTipoEntrega() == null) {
-            throw new Exception("El tipo de entrega es requerido");
+        if (entrega.getTipoEntrega() == TipoEntrega.DELIVERY && (entrega.getDireccion() == null || entrega.getDireccion().trim().isEmpty())) {
+            throw new Exception("La dirección de entrega es requerida");
         }
     }
 }
