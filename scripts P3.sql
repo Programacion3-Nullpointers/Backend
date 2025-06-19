@@ -28,10 +28,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Usuario` (
   `contrasena` VARCHAR(45) NOT NULL,
   `activo` INT NOT NULL,
   `correo` VARCHAR(45) NOT NULL,
-  `tipoUsuario` ENUM("EMPRESA", "CLIENTE") NULL,
+  `tipoUsuario` ENUM("EMPRESA", "CLIENTE","ADMIN") NULL,
+  `dni` VARCHAR(45) NULL,
   `razonsocial` VARCHAR(45) NULL,
   `direccion` VARCHAR(45) NULL,
   `RUC` VARCHAR(45) NULL,
+  `token_reset` VARCHAR(45) NULL,
+  `fecha_expiracion_token` DATE NULL,
   PRIMARY KEY (`idUsuario`))
 ENGINE = InnoDB;
 
@@ -42,7 +45,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Descuento` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Descuento` (
-  `idDescuento` INT NOT NULL COMMENT '0: descuento nulo\n1: descuento 0.10',
+  `idDescuento` INT NOT NULL AUTO_INCREMENT COMMENT '0: descuento nulo\n1: descuento 0.10',
   `numDescuento` INT NOT NULL COMMENT 'Porcentaje:\n\n10\n20',
   `activo` INT NULL,
   PRIMARY KEY (`idDescuento`))
@@ -55,7 +58,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Categoria` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Categoria` (
-  `idCategoria` INT NOT NULL,
+  `idCategoria` INT NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NULL,
   `nombre` VARCHAR(45) NOT NULL,
   `idDescuento` INT NOT NULL,
@@ -64,8 +67,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Categoria` (
   CONSTRAINT `fk_Categoria_Descuento1`
     FOREIGN KEY (`idDescuento`)
     REFERENCES `mydb`.`Descuento` (`idDescuento`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -80,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Producto` (
   `descripcion` VARCHAR(100) NULL,
   `stock` INT NOT NULL,
   `precio` DOUBLE NOT NULL,
-  `Imagen` VARCHAR(255) NULL,
+  `Imagen` LONGBLOB NULL,
   `activo` INT NOT NULL,
   `idCategoria` INT NOT NULL,
   PRIMARY KEY (`idProducto`),
@@ -88,8 +91,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Producto` (
   CONSTRAINT `fk_Producto_Categoria1`
     FOREIGN KEY (`idCategoria`)
     REFERENCES `mydb`.`Categoria` (`idCategoria`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -109,8 +112,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`OrdenVenta` (
   CONSTRAINT `fk_OrdenVenta_Usuario1`
     FOREIGN KEY (`idUsuario`)
     REFERENCES `mydb`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -130,13 +133,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Detalle` (
   CONSTRAINT `FK_orden_item`
     FOREIGN KEY (`id_orden`)
     REFERENCES `mydb`.`OrdenVenta` (`idOrdenVenta`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `FK_producto_item`
     FOREIGN KEY (`id_producto`)
     REFERENCES `mydb`.`Producto` (`idProducto`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -157,8 +160,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`ComprobantePago` (
   CONSTRAINT `FK_orden_Comprobante`
     FOREIGN KEY (`id_orden`)
     REFERENCES `mydb`.`OrdenVenta` (`idOrdenVenta`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -180,8 +183,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Entrega` (
   CONSTRAINT `FK_ordenVenta_TipoEntrega`
     FOREIGN KEY (`id_orden`)
     REFERENCES `mydb`.`OrdenVenta` (`idOrdenVenta`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -200,8 +203,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Boleta` (
   CONSTRAINT `fk_Comprobante_Boleta`
     FOREIGN KEY (`idBoleta`)
     REFERENCES `mydb`.`ComprobantePago` (`idComprobantePago`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -221,8 +224,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Factura` (
   CONSTRAINT `fk_comprobante_factura`
     FOREIGN KEY (`idFactura`)
     REFERENCES `mydb`.`ComprobantePago` (`idComprobantePago`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE cascade
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -232,7 +235,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Cotizacion` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Cotizacion` (
-  `idCotizacion` INT NOT NULL,
+  `idCotizacion` INT NOT NULL AUTO_INCREMENT,
   `idUsuario` INT NOT NULL,
   `estadoCotizacion` VARCHAR(45) NOT NULL COMMENT 'estado de la cotización:\nEn proceso\nRevisado',
   PRIMARY KEY (`idCotizacion`),
@@ -240,8 +243,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Cotizacion` (
   CONSTRAINT `fk_Cotización_Usuario1`
     FOREIGN KEY (`idUsuario`)
     REFERENCES `mydb`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -251,7 +254,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`productoCotizado` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`productoCotizado` (
-  `idproductoCotizado` INT NOT NULL,
+  `idproductoCotizado` INT NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NOT NULL,
   `cantidad` INT NOT NULL,
   `precioCotizado` DOUBLE NULL,
@@ -261,8 +264,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`productoCotizado` (
   CONSTRAINT `fk_productoCotizado_Cotizacion1`
     FOREIGN KEY (`idCotizacion`)
     REFERENCES `mydb`.`Cotizacion` (`idCotizacion`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -272,11 +275,12 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Notificacion` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Notificacion` (
-  `idNotificacion` INT NOT NULL,
+  `idNotificacion` INT NOT NULL AUTO_INCREMENT,
   `tipo` VARCHAR(45) NOT NULL,
   `mensaje` VARCHAR(45) NOT NULL,
   `fecha_envio` DATETIME NOT NULL,
   `estado` VARCHAR(45) NOT NULL,
+  `asunto` varchar(45) NULL,
   PRIMARY KEY (`idNotificacion`))
 ENGINE = InnoDB;
 
