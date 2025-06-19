@@ -167,14 +167,14 @@ CREATE PROCEDURE CATEGORIA_LISTAR()
 BEGIN
     SELECT * FROM Categoria;
 END $
-
+DELIMITER $
 CREATE PROCEDURE USUARIO_INSERTAR(
     OUT _id_usuario INT,
     IN _nombre_usuario VARCHAR(45),
     IN _contrasena VARCHAR(45),
     IN _activo TINYINT,
     IN _correo VARCHAR(45),
-    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
+    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE','ADMIN'),
     IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
     IN _direccion VARCHAR(45),
@@ -192,7 +192,7 @@ CREATE PROCEDURE USUARIO_MODIFICAR(
     IN _contrasena VARCHAR(45),
     IN _activo TINYINT,
     IN _correo VARCHAR(45),
-    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
+    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE','ADMIN'),
     IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
     IN _direccion VARCHAR(45),
