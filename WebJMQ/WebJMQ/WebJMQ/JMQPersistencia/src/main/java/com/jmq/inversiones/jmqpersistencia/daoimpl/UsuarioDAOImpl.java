@@ -234,5 +234,20 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         return null;
     }
 
+    @Override
+    public void actualizarTokenRecuperacion(int idUsuario, String token, java.util.Date fechaExpiracion) throws Exception {
+        String sql = "UPDATE Usuario SET token_reset = ?, fecha_expiracion_token = ? WHERE idUsuario = ?";
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, token);
+            ps.setTimestamp(2, new Timestamp(fechaExpiracion.getTime()));
+            ps.setInt(3, idUsuario);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("Error al actualizar token de recuperación: " + e.getMessage(), e);
+        }
+    }
+
+   
 
 }
