@@ -358,7 +358,7 @@ CREATE PROCEDURE PRODUCTOCOTIZACION_INSERTAR(
     IN _idCotizacion INT
 )
 BEGIN
-	INSERT INTO Cotizacion (descripcion,cantidad, precioCotizado,
+	INSERT INTO productoCotizado (descripcion,cantidad, precioCotizado,
     idCotizacion) VALUES ( _descripcion, _cantidad, 
     _precioCotizado, _idCotizacion );
     SET _id_productocotizacion = LAST_INSERT_ID();
@@ -452,10 +452,11 @@ CREATE PROCEDURE BOLETA_ELIMINAR(
 BEGIN
 	DELETE FROM Boleta WHERE idBoleta = _id_boleta;
 END $
+DELIMITER $$
 CREATE PROCEDURE BOLETA_LISTAR()
 BEGIN
 	SELECT * FROM Boleta;
-END$
+END $$
 DELIMITER $$
 
 
