@@ -26,8 +26,9 @@ public class OrdenVentaWS {
         this.ordenVentaService = new OrdenVentaServiceImpl(new OrdenVentaDAOImpl(),new DetalleDAOImpl());   
     }
     @WebMethod
-    public void registrarOrdenVentaService(@WebParam(name = "ordenVenta") OrdenVenta ordenVenta) throws Exception{
+    public OrdenVenta registrarOrdenVentaService(@WebParam(name = "ordenVenta") OrdenVenta ordenVenta) throws Exception{
         ordenVentaService.registrarOrdenVenta(ordenVenta);
+        return ordenVentaService.buscarOrdenVenta(ordenVenta.getId());
     }
     @WebMethod
     public void actualizarOrdenVentaService(@WebParam(name = "ordenVenta") OrdenVenta ordenVenta) throws Exception{

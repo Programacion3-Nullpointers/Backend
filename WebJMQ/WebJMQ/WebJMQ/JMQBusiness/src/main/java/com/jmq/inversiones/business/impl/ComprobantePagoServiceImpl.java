@@ -2,6 +2,7 @@ package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.ComprobantePagoService;
 import com.jmq.inversiones.dominio.pagos.ComprobantePago;
+import com.jmq.inversiones.dominio.pagos.MetodoPago;
 import com.jmq.inversiones.jmqpersistencia.dao.ComprobantePagoDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.ComprobantePagoDAOImpl;
 import java.util.Date;
@@ -94,7 +95,7 @@ public class ComprobantePagoServiceImpl implements ComprobantePagoService{
         }
         
         if (comprobante.getMetodoPago() == null) {
-            throw new Exception("El método de pago es requerido");
+            comprobante.setMetodoPago(MetodoPago.tarjeta);
         }
         
         if (comprobante.getMonto_total() <= 0) {

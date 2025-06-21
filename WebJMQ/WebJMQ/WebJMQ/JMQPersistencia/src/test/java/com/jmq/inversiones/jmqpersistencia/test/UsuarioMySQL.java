@@ -32,7 +32,7 @@ public class UsuarioMySQL {
     
     @Test
     public void BuscarUsuario(){
-        Usuario usuario = usuarioDAO.obtener(4);
+        Usuario usuario = usuarioDAO.obtener(1);
         
         if(usuario == null){
             System.out.println("El usuario es vacio");
