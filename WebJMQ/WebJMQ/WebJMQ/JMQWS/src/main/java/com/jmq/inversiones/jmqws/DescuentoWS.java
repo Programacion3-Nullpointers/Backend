@@ -69,8 +69,8 @@ public class DescuentoWS {
         }
     }
     
-    @WebMethod(operationName = "ListarCategorias")
-    public List<Descuento> listarCategorias(){
+    @WebMethod(operationName = "ListarDescuentos")
+    public List<Descuento> listarDescuentos(){
         try {
             return descuentoWS.listarDescuentos();
         }
