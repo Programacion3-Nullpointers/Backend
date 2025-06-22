@@ -1,11 +1,14 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 import com.jmq.inversiones.dbmanager.DBManager;
+import com.jmq.inversiones.dominio.ventas.Categoria;
 import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.ProductoDAO;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDAO {
 
@@ -97,5 +100,80 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         } catch (SQLException e) {
             throw new RuntimeException("Error al descontar stock", e);
         }
+    }
+
+    @Override
+    public List<Producto> filtrarProductos(String nombreCategoria, Boolean activo, 
+            Double precioMin, Double precioMax, 
+            Integer stockMin, Integer stockMax,Boolean conDescuento) throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+
+        String sql = "SELECT p.*, c.nombre AS nombre_categoria, c.descripcion AS descripcion_categoria " +
+                 "FROM Producto p " +
+                 "JOIN Categoria c ON p.idCategoria = c.idCategoria " +
+                 "LEFT JOIN Descuento d ON c.idDescuento = d.idDescuento " +
+                 "WHERE 1 = 1";
+
+        List<Object> params = new ArrayList<>();
+
+        if (nombreCategoria != null && !nombreCategoria.isEmpty()) {
+            sql += " AND c.nombre = ?";
+            params.add(nombreCategoria);
+        }
+        if (activo != null) {
+            sql += " AND p.activo = ?";
+            params.add(activo ? 1 : 0);
+        }
+        if (precioMin != null) {
+            sql += " AND p.precio >= ?";
+            params.add(precioMin);
+        }
+        if (precioMax != null) {
+            sql += " AND p.precio <= ?";
+            params.add(precioMax);
+        }
+        if (stockMin != null) {
+            sql += " AND p.stock >= ?";
+            params.add(stockMin);
+        }
+        if (stockMax != null) {
+            sql += " AND p.stock <= ?";
+            params.add(stockMax);
+        }
+        if (conDescuento != null) {
+            if (conDescuento) {
+                sql += " AND c.idDescuento IS NOT NULL AND d.activo = 1";
+            } else {
+                sql += " AND (c.idDescuento IS NULL OR d.activo = 0)";
+            }
+        }
+         
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Producto p = new Producto();
+                p.setId(rs.getInt("idProducto"));
+                p.setNombre(rs.getString("nombre"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setStock(rs.getInt("stock"));
+                p.setPrecio(rs.getDouble("precio"));
+                p.setActivo(rs.getBoolean("activo"));
+                p.setImagen(rs.getBytes("imagen"));
+
+                Categoria c = new Categoria();
+                c.setId(rs.getInt("idCategoria"));
+                c.setNombre(rs.getString("nombre_categoria"));
+                p.setCategoria(c);
+
+                productos.add(p);
+            }
+        }
+         return productos;
     }
 }

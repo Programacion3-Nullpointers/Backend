@@ -70,7 +70,63 @@ public class ProductoMySQL {
         List<Producto> lista = productoDAO.listarTodos();
         assertFalse(lista.stream().anyMatch(p -> p.getId() == prod.getId()));
     }
+     @Test
+    public void testFiltrarPorCategoria() throws Exception {
+        String categoria = "Electrohogar Test";
+        List<Producto> resultados = productoDAO.filtrarProductos(categoria, null, null, null,null,null,null);
 
+        assertNotNull(resultados);
+        for (Producto p : resultados) {
+            assertEquals(categoria, p.getCategoria().getNombre());
+        }
+    }
+
+    @Test
+    public void testFiltrarPorActivo() throws Exception {
+        List<Producto> resultados = productoDAO.filtrarProductos(null, true, null, null,null,null,null);
+
+        assertNotNull(resultados);
+        for (Producto p : resultados){
+            
+            assertTrue(p.isActivo());
+        }
+    }
+
+    @Test
+    public void testFiltrarPorRangoPrecio() throws Exception {
+        double min = 30.0;
+        double max = 100.0;
+        List<Producto> resultados = productoDAO.filtrarProductos(null, null, min, max,null,null,null);
+
+        assertNotNull(resultados);
+        for (Producto p : resultados) {
+            System.out.println(p);
+            assertTrue(p.getPrecio() >= min && p.getPrecio() <= max);
+        }
+    }
+
+    @Test
+    public void testFiltrarTodoCombinado() throws Exception {
+        List<Producto> resultados = productoDAO.filtrarProductos("Electrohogar Test", true, 30.0, 60.0,null,null,null);
+
+        assertNotNull(resultados);
+        for (Producto p : resultados) {
+            System.out.println(p);
+            assertEquals("Electrohogar Test", p.getCategoria().getNombre());
+            assertTrue(p.isActivo());
+            assertTrue(p.getPrecio() >= 30.0 && p.getPrecio() <= 100.0);
+        }
+    }
+
+    @Test
+    public void testSinFiltros() throws Exception {
+        List<Producto> resultados = productoDAO.filtrarProductos(null, null, null, null,null,null,null);
+         for (Producto p : resultados) {
+            System.out.println(p);
+        }
+        assertNotNull(resultados);
+        assertFalse(resultados.isEmpty()); // Espera al menos un producto
+    }
     private Producto crearProductoEjemplo() throws IOException, URISyntaxException {
         Categoria cat = categoriaDAO.listarTodos().stream().findFirst().orElse(null);
         assertNotNull(cat, "Debe existir al menos una categoría válida en la BD");

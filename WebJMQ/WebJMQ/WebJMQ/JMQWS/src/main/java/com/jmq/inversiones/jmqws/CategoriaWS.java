@@ -4,6 +4,7 @@ package com.jmq.inversiones.jmqws;
 import com.jmq.inversiones.business.CategoriaService;
 import com.jmq.inversiones.business.impl.CategoriaServiceImpl;
 import com.jmq.inversiones.dominio.ventas.Categoria;
+import com.jmq.inversiones.dominio.pagos.Descuento;
 import jakarta.jws.WebService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
@@ -14,7 +15,7 @@ import java.util.List;
 @WebService(serviceName = "CategoriaWS")
 public class CategoriaWS {
 
-    private CategoriaService categoriaWS;
+    private final CategoriaService categoriaWS;
     
     public CategoriaWS(){
         categoriaWS = new CategoriaServiceImpl();

@@ -48,4 +48,16 @@ public class ProductoWS {
             @WebParam(name ="stock") int stock) throws Exception{
         productoService.descontarStock(id, stock);
     }
+    @WebMethod
+    public List<Producto> filtrarProductos(
+            @WebParam(name = "nombreCategoria") String nombreCategoria,
+            @WebParam(name = "activo") Boolean activo,
+            @WebParam(name = "precioMin") Double precioMin,
+            @WebParam(name = "precioMax") Double precioMax,
+            @WebParam(name = "stockMin") Integer stockMin,
+            @WebParam(name = "stockMax") Integer stockMax,
+            @WebParam(name = "conDescuento") Boolean conDescuento
+    ) throws Exception{
+        return productoService.filtrarProductos(nombreCategoria, activo, precioMin, precioMax, stockMin, stockMax,conDescuento);
+    }
 }

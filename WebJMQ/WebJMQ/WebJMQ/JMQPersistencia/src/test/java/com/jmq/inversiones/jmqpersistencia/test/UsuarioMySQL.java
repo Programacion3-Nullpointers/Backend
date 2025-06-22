@@ -71,7 +71,18 @@ public class UsuarioMySQL {
         List<Usuario> usuarios = usuarioDAO.listarTodos();
         assertFalse(usuarios.stream().anyMatch(u -> u.getId() == usu.getId()));
     }
-
+    @Test
+    public void testBuscarCorreo(){
+        Usuario usuario = usuarioDAO.obtenerPorCorreo("admin@admin.com");
+         if(usuario == null){
+            System.out.println("El usuario es vacio");
+        }
+        else{
+            System.out.println("El usuario esta lleno");
+            System.out.println(usuario);
+        }
+        assertNotNull(usuario);
+    }
     private Usuario crearUsuarioEjemplo() {
         Usuario usuario = new Usuario();
         usuario.setNombreUsuario("jose");
