@@ -6,6 +6,7 @@ import com.jmq.inversiones.jmqpersistencia.dao.ProductoDAO;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -127,6 +128,17 @@ public class ProductoServiceImpl implements ProductoService{
             } catch (Exception ex) {
                 Logger.getLogger(ProductoServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+
+    @Override
+    public List<Producto> filtrarProductos(String nombreCategoria, Boolean activo, 
+            Double precioMin, Double precioMax, Integer stockMin, 
+            Integer stockMax,Boolean conDescuento) throws SQLException {
+        try {
+            return productoDAO.filtrarProductos(nombreCategoria, activo, precioMin, precioMax, stockMin, stockMax, conDescuento);
+        } catch (SQLException e){
+            throw e;
         }
     }
 }
