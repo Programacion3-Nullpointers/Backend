@@ -94,7 +94,7 @@ public class ProductoWS {
         try{
             Map<String, Object> params = new HashMap<>();  
             params.put("logo",ImageIO.read(new File(getFileResource("logo1.png"))));
-            String fileXML = getFileResource("ReporteStock.jrxml");            
+            String fileXML = getFileResource("Stock.jrxml");            
             return generarBufferFromJP(fileXML, params);
         }catch(Exception ex){
             throw new WebServiceException("Error al generar report: " + ex.getMessage());

@@ -2,6 +2,7 @@
 <jasperReport name="Productos" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49cee09e-be4b-4a3c-bfd4-7877d8ab70df">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TA"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="logo" forPrompting="false" class="java.awt.Image"/>
 	<query language="sql"><![CDATA[SELECT 
     u.idUsuario,
     u.nombreUsuario,
@@ -22,6 +23,7 @@ GROUP BY
     u.idUsuario, u.nombreUsuario, u.dni, u.RUC, u.razonsocial
 ORDER BY 
     total_ordenes DESC
+ LIMIT 10
 
 ]]></query>
 	<field name="idUsuario" class="java.lang.Integer">
