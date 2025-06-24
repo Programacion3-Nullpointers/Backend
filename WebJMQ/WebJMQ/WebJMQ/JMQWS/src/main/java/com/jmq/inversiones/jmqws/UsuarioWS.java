@@ -75,10 +75,16 @@ public class UsuarioWS {
     ) throws Exception {
         return usuarioService.cambiarPasswordConToken(token, nuevaPassword);
     }
+    
+    @WebMethod
+    public boolean validarTokenPassword(String token) {
+        return usuarioService.validarTokenPassword(token);
+    }
+
 
 //    @WebMethod
 //    public Usuario obtenerPorToken(String token) throws Exception {
-//        return usuarioService.g(token);
+//        return usuarioService.obtenerPorToken(token);
 //    }
     
     @WebMethod(operationName = "reporteClientes")

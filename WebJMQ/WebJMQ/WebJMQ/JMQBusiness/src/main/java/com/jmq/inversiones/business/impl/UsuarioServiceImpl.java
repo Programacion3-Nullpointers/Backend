@@ -142,7 +142,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         }
 
         String token = generarToken(usuario.getCorreo());
-        String link = "/ruta/a/logo.png"; // actualiza con ruta real
+        String link = "https://localhost:44356/Login/Restablecer.aspx?token="+token; // actualiza con ruta real
         
         emailService.enviarRecuperacionPassword(usuario.getCorreo(), usuario.getNombreUsuario(), link);
     }
@@ -182,6 +182,16 @@ public class UsuarioServiceImpl implements UsuarioService{
         usuario.setContrasena(nuevaPassword);
         usuarioDAO.actualizar(usuario);
         return true;
+    }
+    
+    @Override
+    public boolean validarTokenPassword(String token) {
+        try {
+            validarToken(token); // ya tenés este método privado implementado
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
 
