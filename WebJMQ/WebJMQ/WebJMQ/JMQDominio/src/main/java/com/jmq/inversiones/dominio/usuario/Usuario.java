@@ -13,8 +13,6 @@ public class Usuario {
     private String razonsocial;
     private String direccion;
     private String RUC;
-    private String token_reset;
-    private Date fecha_expiracion_token;
     
     public Usuario(){
         
@@ -104,21 +102,6 @@ public class Usuario {
         this.RUC = RUC;
     }
     
-    public String getToken_reset() {
-        return token_reset;
-    }
-
-    public void setToken_reset(String token_reset) {
-        this.token_reset = token_reset;
-    }
-
-    public Date getFecha_expiracion_token() {
-        return fecha_expiracion_token;
-    }
-
-    public void setFecha_expiracion_token(Date fecha_expiracion_token) {
-        this.fecha_expiracion_token = fecha_expiracion_token;
-    }
 
     @Override
     public String toString() {
@@ -133,8 +116,6 @@ public class Usuario {
                 ", razonsocial='" + razonsocial + '\'' +
                 ", direccion='" + direccion + '\'' +
                 ", RUC='" + RUC + '\'' +
-                ", token_reset='" + token_reset + '\'' +
-                ", fecha_expiracion_token=" + fecha_expiracion_token +
                 '}';
     }
 
