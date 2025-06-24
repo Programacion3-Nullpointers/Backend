@@ -83,7 +83,7 @@ public class UsuarioWS {
         try{
             Map<String, Object> params = new HashMap<>();  
             params.put("logo",ImageIO.read(new File(getFileResource("logo1.png"))));
-            String fileXML = getFileResource("ReporteClientes.jrxml");            
+            String fileXML = getFileResource("RClientes.jrxml");            
             return generarBufferFromJP(fileXML, params);
         }catch(Exception ex){
             throw new WebServiceException("Error al generar report: " + ex.getMessage());
