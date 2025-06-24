@@ -179,6 +179,9 @@ public class UsuarioServiceImpl implements UsuarioService{
         Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
         if (usuario == null) throw new Exception("Usuario no encontrado");
 
+        if (usuario.getContrasena().equals(nuevaPassword)) {
+            throw new Exception("No puede utilizar su misma contraseña.");
+        }
         usuario.setContrasena(nuevaPassword);
         usuarioDAO.actualizar(usuario);
         return true;
