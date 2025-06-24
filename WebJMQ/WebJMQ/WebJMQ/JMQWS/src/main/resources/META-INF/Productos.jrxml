@@ -1,0 +1,122 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="Productos" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49cee09e-be4b-4a3c-bfd4-7877d8ab70df">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TA"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="logo" forPrompting="false" class="java.awt.Image"/>
+	<query language="sql"><![CDATA[SELECT 
+  p.idProducto,
+  p.nombre,
+  p.precio,
+  p.stock,
+  SUM(d.cantidad) AS total_vendido
+FROM Detalle d
+JOIN OrdenVenta o ON d.id_orden = o.idOrdenVenta
+JOIN Producto p ON d.id_producto = p.idProducto
+WHERE o.estado_compra = 'entregado'
+AND MONTH(o.fecha_orden) = MONTH(CURDATE())
+AND YEAR(o.fecha_orden) = YEAR(CURDATE())
+GROUP BY d.id_producto
+ORDER BY total_vendido DESC
+LIMIT 10
+]]></query>
+	<field name="idProducto" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="idProducto"/>
+		<property name="com.jaspersoft.studio.field.label" value="idProducto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="Producto"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="Producto"/>
+	</field>
+	<field name="precio" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="precio"/>
+		<property name="com.jaspersoft.studio.field.label" value="precio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="Producto"/>
+	</field>
+	<field name="stock" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="stock"/>
+		<property name="com.jaspersoft.studio.field.label" value="stock"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="Producto"/>
+	</field>
+	<field name="total_vendido" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="total_vendido"/>
+		<property name="com.jaspersoft.studio.field.label" value="total_vendido"/>
+	</field>
+	<background splitType="Stretch"/>
+	<title height="88" splitType="Stretch">
+		<element kind="staticText" uuid="457a4c6d-7643-4c15-b3f9-7f6f7191c436" x="150" y="40" width="260" height="20" fontName="Constantia" fontSize="14.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[ARTÍCULOS MÁS VENDIDOS DEL MES]]></text>
+		</element>
+		<element kind="image" uuid="e903c853-1335-4e1c-8b76-743be379d644" x="470" y="30" width="90" height="35">
+			<expression><![CDATA[$P{logo}]]></expression>
+		</element>
+	</title>
+	<pageHeader height="50" splitType="Stretch">
+		<element kind="textField" uuid="b152205a-6ec2-4c9c-847d-89f8a824c96b" x="470" y="10" width="100" height="30" pattern="MMMMM dd, yyyy">
+			<expression><![CDATA[new java.util.Date()]]></expression>
+		</element>
+	</pageHeader>
+	<columnHeader height="31" splitType="Stretch">
+		<element kind="staticText" uuid="76630490-68a3-4c8d-a0bd-e7505ce1e0d2" mode="Opaque" x="0" y="0" width="40" height="30" forecolor="#FFFFFF" backcolor="#95ADF5">
+			<text><![CDATA[ID]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="30b26851-8617-4238-b139-675eb6cc32a8"/>
+		</element>
+		<element kind="staticText" uuid="8c309fd9-502e-44de-98ad-90ed4b8fe9b5" mode="Opaque" x="40" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#95ADF5">
+			<text><![CDATA[Nombre]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ffdc951b-8358-4c06-abfe-feeda2c2b99d"/>
+		</element>
+		<element kind="staticText" uuid="b3b450d3-cc83-4010-ad2d-909a1d8ccc6f" mode="Opaque" x="140" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#95ADF5">
+			<text><![CDATA[Precio]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8403b1d7-01e6-48fe-9f0e-0c9591a8edb5"/>
+		</element>
+		<element kind="staticText" uuid="509f9bcb-98ee-4923-8cf1-9ebd2d863823" mode="Opaque" x="240" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#95ADF5">
+			<text><![CDATA[Stock]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="34509064-7a3d-4f18-880b-910af9ff8e72"/>
+		</element>
+		<element kind="staticText" uuid="3d4f0c78-1e69-4b8c-b1a8-1131ea7e040e" mode="Opaque" x="340" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#95ADF5">
+			<text><![CDATA[Total vendido]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cad381a6-33d4-404c-bd16-6b2a1c2d49ef"/>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="38" splitType="Stretch">
+			<element kind="textField" uuid="482b231e-61a0-4a38-b903-22444ac5161e" x="0" y="8" width="40" height="30">
+				<expression><![CDATA[$F{idProducto}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="30b26851-8617-4238-b139-675eb6cc32a8"/>
+			</element>
+			<element kind="textField" uuid="6c41d590-2ce5-403c-89af-c989f68f1026" x="40" y="8" width="100" height="30">
+				<expression><![CDATA[$F{nombre}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ffdc951b-8358-4c06-abfe-feeda2c2b99d"/>
+			</element>
+			<element kind="textField" uuid="e5c18f56-4d62-44d7-b004-832f5ee94da3" x="140" y="8" width="100" height="30">
+				<expression><![CDATA[$F{precio}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8403b1d7-01e6-48fe-9f0e-0c9591a8edb5"/>
+			</element>
+			<element kind="textField" uuid="833dbc27-637b-4759-a5c7-fa4cc46ac906" x="240" y="8" width="100" height="30">
+				<expression><![CDATA[$F{stock}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="34509064-7a3d-4f18-880b-910af9ff8e72"/>
+			</element>
+			<element kind="textField" uuid="3ed8875c-b3b7-443c-87d3-fea1d49d4652" x="340" y="8" width="100" height="30">
+				<expression><![CDATA[$F{total_vendido}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cad381a6-33d4-404c-bd16-6b2a1c2d49ef"/>
+			</element>
+		</band>
+	</detail>
+	<columnFooter height="45" splitType="Stretch"/>
+	<pageFooter height="54" splitType="Stretch"/>
+	<summary height="215" splitType="Stretch">
+		<element kind="chart" chartType="bar" uuid="10bcd9cf-f106-4eac-ac17-52153a51ca90" x="180" y="15" width="200" height="200" evaluationTime="Report">
+			<dataset kind="category">
+				<series>
+					<seriesExpression><![CDATA["PRODUCTOS MÁS VENDIDOS"]]></seriesExpression>
+					<categoryExpression><![CDATA[$F{nombre}]]></categoryExpression>
+					<valueExpression><![CDATA[$F{total_vendido}]]></valueExpression>
+				</series>
+			</dataset>
+			<plot categoryAxisLabelColor="#000000" categoryAxisTickLabelColor="#000000" categoryAxisLineColor="#000000" valueAxisLabelColor="#000000" valueAxisTickLabelColor="#000000" valueAxisLineColor="#000000">
+				<itemLabel/>
+			</plot>
+		</element>
+	</summary>
+</jasperReport>
