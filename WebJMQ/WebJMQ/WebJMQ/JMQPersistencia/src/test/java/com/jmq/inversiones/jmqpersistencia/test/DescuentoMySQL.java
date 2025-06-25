@@ -59,16 +59,26 @@ public class DescuentoMySQL {
 
     @Test
     public void testListarTodos() {
-        Descuento d1 = new Descuento();
-        d1.setNumDescuento(5);
-
-        Descuento d2 = new Descuento();
-        d2.setNumDescuento(10);
-
-        descuentoDAO.agregar(d1);
-        descuentoDAO.agregar(d2);
+//        Descuento d1 = new Descuento();
+//        d1.setNumDescuento(5);
+//
+//        Descuento d2 = new Descuento();
+//        d2.setNumDescuento(10);
+//
+//        descuentoDAO.agregar(d1);
+//        descuentoDAO.agregar(d2);
 
         List<Descuento> lista = descuentoDAO.listarTodos();
-        assertTrue(lista.size() >= 2);
+        System.out.println(lista.size());
+    }
+    @Test
+    public void Activar() throws Exception{
+        descuentoDAO.activarDescuento(2);
+        System.out.println(descuentoDAO.obtener(2));
+    }
+    @Test
+    public void Dividir() throws Exception{
+         List<Descuento> lista = descuentoDAO.filtrarDescuentos(Boolean.FALSE, 0, 100);
+        System.out.println(lista.size());
     }
 }

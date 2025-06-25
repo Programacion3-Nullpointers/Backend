@@ -3,7 +3,10 @@ package com.jmq.inversiones.business.impl;
 import com.jmq.inversiones.business.DescuentoService;
 import com.jmq.inversiones.dominio.pagos.Descuento;
 import com.jmq.inversiones.jmqpersistencia.dao.DescuentoDAO;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DescuentoServiceImpl implements DescuentoService{
 
@@ -87,4 +90,37 @@ public class DescuentoServiceImpl implements DescuentoService{
             throw new Exception("El porcentaje de descuento debe estar entre 1 y 100");
         }
     }
+    
+    @Override
+    public void activarDescuento(int idDescuento) throws Exception{
+        try {
+            descuentoDAO.activarDescuento(idDescuento);
+            
+        } catch (Exception e) {
+            throw new Exception("Error al Activar descuento: " + e.getMessage(), e);
+        }
+    }
+    @Override
+    public void desactivarDescuento(int idDescuento) throws Exception{
+        try {
+            descuentoDAO.desactivarDescuento(idDescuento);
+            
+        } catch (Exception e) {
+            throw new Exception("Error al Activar descuento: " + e.getMessage(), e);
+        }
+    }
+   @Override
+   public List<Descuento> filtrarDescuentos(Boolean activo, Integer porcentajeMin, Integer porcentajeMax) throws SQLException{
+       try {
+            return descuentoDAO.filtrarDescuentos(activo, porcentajeMin, porcentajeMax);
+            
+        } catch (SQLException e) {
+           try {
+               throw new Exception("Error al filtrar descuentos: " + e.getMessage(), e);
+           } catch (Exception ex) {
+               Logger.getLogger(DescuentoServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        }
+        return null;
+   }
 }

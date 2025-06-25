@@ -7,6 +7,8 @@ import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.UsuarioDAO;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
 
@@ -247,7 +249,45 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
             throw new Exception("Error al actualizar token de recuperación: " + e.getMessage(), e);
         }
     }
+    
+    @Override
+    public List<Usuario> filtrarUsuarios(String tipoEntidad, Boolean activo) throws SQLException {
+        List<Usuario> usuarios = new ArrayList<>();
 
-   
+        String sql = "SELECT * FROM Usuario WHERE 1=1";
+        List<Object> params = new ArrayList<>();
+
+        // Filtro por tipo de entidad: empresa (RUC no nulo/vacío) o persona (RUC nulo o vacío)
+        if (tipoEntidad != null) {
+            if (tipoEntidad.equalsIgnoreCase("empresa")) {
+                sql += " AND RUC IS NOT NULL AND RUC <> ''";
+            } else if (tipoEntidad.equalsIgnoreCase("persona")) {
+                sql += " AND (RUC IS NULL OR RUC = '')";
+            }
+            // No agregamos 'tipoEntidad' a params porque no se usa como parámetro en el SQL
+        }
+
+        // Filtro por estado activo/inactivo
+        if (activo != null) {
+            sql += " AND activo = ?";
+            params.add(activo ? 1 : 0);
+        }
+
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Usuario u = createFromResultSet(rs);
+                usuarios.add(u);
+            }
+        }
+
+        return usuarios;
+    }
 
 }

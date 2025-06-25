@@ -64,6 +64,7 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
         Descuento des = new Descuento();
         des.setId(rs.getInt("idDescuento"));
         des.setNumDescuento(rs.getInt("numDescuento"));
+        des.setActivo(rs.getBoolean("activo"));
         return des;
     }
 
@@ -127,7 +128,28 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
             throw new RuntimeException("Error al actualizar descuento", e);
         }
     }
-    
+     @Override
+    public void activarDescuento(int idDescuento) throws Exception{
+        String sql="UPDATE Descuento SET activo = 1 WHERE idDescuento = ?";
+        try(Connection conn = DBManager.getInstance().obtenerConexion();
+                PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, idDescuento);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("Eror al activar decuento: " + e.getMessage(), e);
+        }
+    }
+    @Override
+    public void desactivarDescuento(int idDescuento) throws Exception{
+         String sql="UPDATE Descuento SET activo = 0 WHERE idDescuento = ?";
+        try(Connection conn = DBManager.getInstance().obtenerConexion();
+                PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, idDescuento);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("Eror al activar decuento: " + e.getMessage(), e);
+        }
+    }
 //    @Override
 //    public List<Descuento> listarTodos() {
 //        List<Descuento> descuentos = new ArrayList<>();
@@ -143,5 +165,46 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
 //        }
 //        return descuentos;
 //    }
-    
+    @Override
+    public List<Descuento> filtrarDescuentos(Boolean activo, Integer porcentajeMin, Integer porcentajeMax) throws SQLException {
+        List<Descuento> descuentos = new ArrayList<>();
+
+        String sql = "SELECT * FROM Descuento WHERE 1=1";
+        List<Object> params = new ArrayList<>();
+
+        // Filtro por activo/inactivo
+        if (activo != null) {
+            sql += " AND activo = ?";
+            params.add(activo); // o simplemente `params.add(activo)`
+        }
+
+        // Filtro por porcentaje mínimo
+        if (porcentajeMin != null) {
+            sql += " AND numDescuento >= ?";
+            params.add(porcentajeMin);
+        }
+
+        // Filtro por porcentaje máximo
+        if (porcentajeMax != null) {
+            sql += " AND numDescuento <= ?";
+            params.add(porcentajeMax);
+        }
+
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Descuento d = createFromResultSet(rs);
+                descuentos.add(d);
+            }
+        }
+
+        return descuentos;
+    }
+
 }

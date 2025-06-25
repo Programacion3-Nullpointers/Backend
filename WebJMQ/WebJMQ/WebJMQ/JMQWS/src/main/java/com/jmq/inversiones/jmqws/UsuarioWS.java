@@ -62,4 +62,9 @@ public class UsuarioWS {
     public Usuario obtenerPorToken(String token) throws Exception {
         return usuarioService.obtenerPorToken(token);
     }
+    @WebMethod
+    public List<Usuario> filtrarUsuarios(@WebParam(name = "tipoEntidad") String tipoEntidad, 
+                                     @WebParam(name = "activo") Boolean activo)  throws Exception{
+        return usuarioService.filtrarUsuarios(tipoEntidad, activo);
+    }
 }
