@@ -1,6 +1,7 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 import com.jmq.inversiones.dbmanager.DBManager;
+import com.jmq.inversiones.dominio.pagos.Descuento;
 import com.jmq.inversiones.dominio.ventas.Categoria;
 import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
@@ -81,6 +82,15 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         producto.setImagen(rs.getBytes("Imagen"));
         producto.setActivo(rs.getBoolean("activo"));
         producto.setCategoria(categoriaDAO.obtener(rs.getInt("idCategoria")));
+        int idDescuento = rs.getInt("idDescuento");
+        if (!rs.wasNull()) {
+            Descuento d = new Descuento();
+            d.setId(idDescuento);
+            d.setNumDescuento(rs.getInt("numDescuento")); // Asegúrate de incluirlo en el SELECT
+            d.setActivo(rs.getBoolean("activoDescuento")); // Usa alias si hay colisión
+            producto.setDescuento(d);
+        }
+
         return producto;
     }
 
@@ -176,4 +186,5 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         }
          return productos;
     }
+
 }

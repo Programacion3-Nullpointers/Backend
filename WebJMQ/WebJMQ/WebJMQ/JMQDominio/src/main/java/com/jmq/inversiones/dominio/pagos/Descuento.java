@@ -3,7 +3,8 @@ package com.jmq.inversiones.dominio.pagos;
 public class Descuento {
     private int id;
     private int numDescuento;
-
+    private boolean activo;
+    
     public int getNumDescuento() {
         return numDescuento;
     }
@@ -11,7 +12,7 @@ public class Descuento {
     public void setNumDescuento(int numDescuento) {
         this.numDescuento = numDescuento;
     }
-    private boolean activo;
+
 
     public boolean isActivo() {
         return activo;
