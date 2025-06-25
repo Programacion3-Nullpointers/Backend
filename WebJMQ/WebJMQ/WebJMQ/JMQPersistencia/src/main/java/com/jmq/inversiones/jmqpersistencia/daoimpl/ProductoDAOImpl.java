@@ -86,7 +86,7 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         if (!rs.wasNull()) {
             Descuento d = new Descuento();
             d.setId(idDescuento);
-            d.setNumDescuento(rs.getInt("porcentaje")); // Asegúrate de incluirlo en el SELECT
+            d.setNumDescuento(rs.getInt("numDescuento")); // Asegúrate de incluirlo en el SELECT
             d.setActivo(rs.getBoolean("activoDescuento")); // Usa alias si hay colisión
             producto.setDescuento(d);
         }
