@@ -2,10 +2,17 @@ package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.EmailService;
 import com.jmq.inversiones.business.NotificacionService;
+import com.jmq.inversiones.jmqpersistencia.dao.NotificacionDAO;
 
 public class NotificacionServiceImpl implements NotificacionService {
 
-    private final EmailService emailService = new EmailServiceImpl();
+    private final EmailService emailService;
+    private final NotificacionDAO notificacionDAO;
+    public NotificacionServiceImpl(NotificacionDAO notificacionDAO, EmailService emailService) {
+        this.notificacionDAO = notificacionDAO;
+        this.emailService = emailService;
+    }
+
 
     @Override
     public void notificarEstadoPedido(String correo, String nombreCliente, String estado) {

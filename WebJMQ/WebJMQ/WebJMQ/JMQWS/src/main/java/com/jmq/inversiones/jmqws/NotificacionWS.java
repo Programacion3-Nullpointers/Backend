@@ -15,11 +15,12 @@ import java.util.List;
 @WebService(serviceName = "NotificacionWS")
 public class NotificacionWS {
 
-//    private final NotificacionService servicio;
+    private final NotificacionService servicio;
 
     public NotificacionWS() {
-//        this.servicio = new NotificacionServiceImpl(new NotificacionDAOImpl(), new EmailServiceImpl());
+        servicio = new NotificacionServiceImpl(new NotificacionDAOImpl(), new EmailServiceImpl());
     }
 
     
+
 }

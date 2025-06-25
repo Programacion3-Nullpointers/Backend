@@ -10,6 +10,7 @@ import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.dao.DetalleDAO;
 import com.jmq.inversiones.jmqpersistencia.dao.OrdenVentaDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.NotificacionDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoDAOImpl;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,11 +22,17 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
     private final OrdenVentaDAO ordenVentaDAO;
     private final DetalleDAO detallesDAO;
     private final ProductoService productoService;
-    private final NotificacionService notificacionService = new NotificacionServiceImpl();
+    private final NotificacionService notificacionService;
     public OrdenVentaServiceImpl(OrdenVentaDAO ordenVentaDAO, DetalleDAO detalleDao) {
         this.ordenVentaDAO = ordenVentaDAO;
         this.detallesDAO = detalleDao;
         this.productoService = new ProductoServiceImpl(new ProductoDAOImpl());
+        
+        // Instancia correcta con dependencias
+        this.notificacionService = new NotificacionServiceImpl(
+            new NotificacionDAOImpl(), 
+            new EmailServiceImpl()
+        );
     }
 
     @Override

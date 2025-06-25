@@ -6,15 +6,21 @@ import com.jmq.inversiones.dominio.logistica.Entrega;
 import com.jmq.inversiones.dominio.logistica.TipoEntrega;
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.EntregaDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.NotificacionDAOImpl;
 import java.util.Date;
 import java.util.List;
 
 public class EntregaServiceImpl implements EntregaService{
 
     private final EntregaDAO entregaDAO;
-
+    private final NotificacionService notificacionService;
+    
     public EntregaServiceImpl(EntregaDAO entregaDAO) {
         this.entregaDAO = entregaDAO;
+        this.notificacionService = new NotificacionServiceImpl(
+            new NotificacionDAOImpl(),
+            new EmailServiceImpl()
+        );
     }
 
     @Override
@@ -53,7 +59,6 @@ public class EntregaServiceImpl implements EntregaService{
             
             // Llamar al DAO para actualizar
             entregaDAO.actualizar(entrega);
-            NotificacionService notificacionService = new NotificacionServiceImpl();
             Usuario usuario = entrega.getOrden() != null ? entrega.getOrden().getUsuario() : null;
             if (usuario != null) {
                 notificacionService.notificarEntrega(usuario.getCorreo(), usuario.getNombreUsuario());
