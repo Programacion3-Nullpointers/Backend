@@ -13,4 +13,5 @@ public interface UsuarioService {
     void iniciarRecuperacionPassword(String correo) throws Exception;
     boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception;
     boolean validarTokenPassword(String token);
+    void enviarNotificacion(String correo, String mensaje);
 }

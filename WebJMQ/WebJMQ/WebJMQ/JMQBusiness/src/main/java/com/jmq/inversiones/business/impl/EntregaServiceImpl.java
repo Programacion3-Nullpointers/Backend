@@ -1,8 +1,10 @@
 package com.jmq.inversiones.business.impl;
 
 import com.jmq.inversiones.business.EntregaService;
+import com.jmq.inversiones.business.NotificacionService;
 import com.jmq.inversiones.dominio.logistica.Entrega;
 import com.jmq.inversiones.dominio.logistica.TipoEntrega;
+import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.EntregaDAO;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +53,12 @@ public class EntregaServiceImpl implements EntregaService{
             
             // Llamar al DAO para actualizar
             entregaDAO.actualizar(entrega);
-            
+            NotificacionService notificacionService = new NotificacionServiceImpl();
+            Usuario usuario = entrega.getOrden() != null ? entrega.getOrden().getUsuario() : null;
+            if (usuario != null) {
+                notificacionService.notificarEntrega(usuario.getCorreo(), usuario.getNombreUsuario());
+            }
+
         } catch (Exception e) {
             throw new Exception("Error al actualizar entrega: " + e.getMessage(), e);
         }

@@ -81,11 +81,6 @@ public class UsuarioWS {
         return usuarioService.validarTokenPassword(token);
     }
 
-
-//    @WebMethod
-//    public Usuario obtenerPorToken(String token) throws Exception {
-//        return usuarioService.obtenerPorToken(token);
-//    }
     
     @WebMethod(operationName = "reporteClientes")
     public byte[] reporteClientes(){
