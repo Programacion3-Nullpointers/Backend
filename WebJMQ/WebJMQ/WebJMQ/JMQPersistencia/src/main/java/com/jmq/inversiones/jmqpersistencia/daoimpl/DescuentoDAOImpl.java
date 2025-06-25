@@ -51,7 +51,7 @@ public class DescuentoDAOImpl extends BaseDAOImpl<Descuento> implements Descuent
     protected Descuento createFromResultSet(ResultSet rs) throws SQLException {
         Descuento d = new Descuento();
         d.setId(rs.getInt("id"));
-        d.setNumDescuento(rs.getDouble("porcentaje"));
+        d.setNumDescuento(rs.getInt("porcentaje"));
         d.setActivo(rs.getBoolean("activo"));
         return d;
     }
