@@ -9,6 +9,7 @@ import jakarta.jws.WebService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.xml.ws.WebServiceException;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -79,5 +80,33 @@ public class DescuentoWS {
         }
     }
     
+    @WebMethod(operationName = "activarDescuento")
+    public void activarDescuento(int idDescuento){
+        try {
+           descuentoWS.activarDescuento(idDescuento);
+        }
+        catch (Exception ex){
+            throw new WebServiceException("Error al activar Descuento "+ex.getMessage());
+        }
+    }
     
+    @WebMethod(operationName = "desactivarDescuento")
+    public void desactivarDescuento(int idDescuento){
+        try {
+           descuentoWS.desactivarDescuento(idDescuento);
+        }
+        catch (Exception ex){
+            throw new WebServiceException("Error al activar Descuento "+ex.getMessage());
+        }
+    }
+    @WebMethod(operationName = "filtrarDescuentos")
+    public List<Descuento> filtrarDescuentos(Boolean activo, Integer porcentajeMin, Integer porcentajeMax){
+        try {
+           return descuentoWS.filtrarDescuentos(activo, porcentajeMin, porcentajeMax);
+        }
+        catch (SQLException ex){
+            throw new WebServiceException("Error al filtrar Descuentos "+ex.getMessage());
+        }
+        
+    }
 }

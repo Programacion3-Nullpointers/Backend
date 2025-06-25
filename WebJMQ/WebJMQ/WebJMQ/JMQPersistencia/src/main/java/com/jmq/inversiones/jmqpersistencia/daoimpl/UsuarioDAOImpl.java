@@ -7,6 +7,8 @@ import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.UsuarioDAO;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
 
@@ -199,4 +201,86 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         }
         return null;
     }
+
+    @Override
+    public Usuario obtenerPorToken(String token) {
+        String sql = "SELECT * FROM Usuario WHERE token_reset = ?";
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, token);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Usuario usuario = createFromResultSet(rs);
+
+                    // Si manejas expiración en BD, agrégalo aquí
+                    Timestamp fechaExp = rs.getTimestamp("fecha_expiracion_token");
+                    if (fechaExp != null) {
+                        usuario.setFecha_expiracion_token(new java.util.Date(fechaExp.getTime()));
+                    }
+
+                    usuario.setToken_reset(token);
+                    return usuario;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener usuario por token", e);
+        }
+        return null;
+    }
+
+    @Override
+    public void actualizarTokenRecuperacion(int idUsuario, String token, java.util.Date fechaExpiracion) throws Exception {
+        String sql = "UPDATE Usuario SET token_reset = ?, fecha_expiracion_token = ? WHERE idUsuario = ?";
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, token);
+            ps.setTimestamp(2, new Timestamp(fechaExpiracion.getTime()));
+            ps.setInt(3, idUsuario);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("Error al actualizar token de recuperación: " + e.getMessage(), e);
+        }
+    }
+    
+    @Override
+    public List<Usuario> filtrarUsuarios(String tipoEntidad, Boolean activo) throws SQLException {
+        List<Usuario> usuarios = new ArrayList<>();
+
+        String sql = "SELECT * FROM Usuario WHERE 1=1";
+        List<Object> params = new ArrayList<>();
+
+        // Filtro por tipo de entidad: empresa (RUC no nulo/vacío) o persona (RUC nulo o vacío)
+        if (tipoEntidad != null) {
+            if (tipoEntidad.equalsIgnoreCase("empresa")) {
+                sql += " AND RUC IS NOT NULL AND RUC <> ''";
+            } else if (tipoEntidad.equalsIgnoreCase("persona")) {
+                sql += " AND (RUC IS NULL OR RUC = '')";
+            }
+            // No agregamos 'tipoEntidad' a params porque no se usa como parámetro en el SQL
+        }
+
+        // Filtro por estado activo/inactivo
+        if (activo != null) {
+            sql += " AND activo = ?";
+            params.add(activo ? 1 : 0);
+        }
+
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Usuario u = createFromResultSet(rs);
+                usuarios.add(u);
+            }
+        }
+
+        return usuarios;
+    }
+
 }

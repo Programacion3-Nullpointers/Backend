@@ -147,6 +147,7 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
                 sql += " AND (c.idDescuento IS NULL OR d.activo = 0)";
             }
         }
+
          
         try (Connection conn = DBManager.getInstance().obtenerConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -1,6 +1,7 @@
 package com.jmq.inversiones.business;
 
 import com.jmq.inversiones.dominio.pagos.Descuento;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface DescuentoService {
@@ -9,5 +10,7 @@ public interface DescuentoService {
     void eliminarDescuento(int id) throws Exception;
     Descuento buscarDescuento(int id) throws Exception;
     List<Descuento> listarDescuentos() throws Exception;
- 
+    void activarDescuento(int idDescuento) throws Exception;
+    void desactivarDescuento(int idDescuento) throws Exception;
+    List<Descuento> filtrarDescuentos(Boolean activo, Integer porcentajeMin, Integer porcentajeMax) throws SQLException;
 }

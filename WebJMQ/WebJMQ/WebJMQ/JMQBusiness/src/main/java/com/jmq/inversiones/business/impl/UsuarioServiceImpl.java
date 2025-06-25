@@ -6,6 +6,9 @@ import com.jmq.inversiones.dominio.usuario.TipoUsuario;
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.UsuarioDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.UsuarioDAOImpl;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import io.jsonwebtoken.*;
@@ -194,6 +197,14 @@ public class UsuarioServiceImpl implements UsuarioService{
             return true;
         } catch (Exception e) {
             return false;
+        }
+
+    @Override
+    public List<Usuario> filtrarUsuarios(String tipoEntidad, Boolean activo) throws SQLException {
+        try {
+            return usuarioDAO.filtrarUsuarios(tipoEntidad, activo);
+        } catch (SQLException e){
+            throw e;
         }
     }
 }
