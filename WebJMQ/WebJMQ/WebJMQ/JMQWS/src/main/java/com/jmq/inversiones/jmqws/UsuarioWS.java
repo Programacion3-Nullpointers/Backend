@@ -69,14 +69,23 @@ public class UsuarioWS {
     }
 
     @WebMethod
-    public boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception {
+    public boolean cambiarPasswordConToken(
+        @WebParam(name = "token") String token,
+        @WebParam(name = "nuevaPassword") String nuevaPassword
+    ) throws Exception {
         return usuarioService.cambiarPasswordConToken(token, nuevaPassword);
     }
-
+    
     @WebMethod
-    public Usuario obtenerPorToken(String token) throws Exception {
-        return usuarioService.obtenerPorToken(token);
+    public boolean validarTokenPassword(String token) {
+        return usuarioService.validarTokenPassword(token);
     }
+
+
+//    @WebMethod
+//    public Usuario obtenerPorToken(String token) throws Exception {
+//        return usuarioService.obtenerPorToken(token);
+//    }
     
     @WebMethod(operationName = "reporteClientes")
     public byte[] reporteClientes(){
@@ -114,3 +123,4 @@ public class UsuarioWS {
         }
     }
 }
+ 

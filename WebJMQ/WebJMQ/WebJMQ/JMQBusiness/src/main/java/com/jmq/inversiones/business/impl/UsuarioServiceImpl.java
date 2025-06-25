@@ -6,17 +6,15 @@ import com.jmq.inversiones.dominio.usuario.TipoUsuario;
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.UsuarioDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.UsuarioDAOImpl;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import static java.util.Objects.hash;
-import java.util.UUID;
+import io.jsonwebtoken.*;
 
 public class UsuarioServiceImpl implements UsuarioService{
     
         private final UsuarioDAO usuarioDAO;
         private final EmailService emailService;
+        private static final String SECRET_KEY = "U3Jucj5rM2pQaUtmZ1BzR1pLQXp4YW5VNjg0MjM0NTY=";
     // Constructor que recibe el DAO (Inyección de dependencias)
     public UsuarioServiceImpl() {
         this.usuarioDAO = new UsuarioDAOImpl();
@@ -119,60 +117,84 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     public Usuario buscarUsuarioPorCorreo(String correo) throws Exception {
-        try{
-            if(!correo.isEmpty()){
-            } else {
-                throw new Exception("");
-            }
-            return usuarioDAO.obtenerPorCorreo(correo);
-        }
-        catch (Exception ex){
-            throw new Exception(""+ex.getMessage());
-        }
-    }
-
-    @Override
-    public void iniciarRecuperacionPassword(String correo) throws Exception {
         if (correo == null || correo.trim().isEmpty()) {
-            throw new Exception("Debe ingresar un correo.");
+            throw new Exception("Debe ingresar un correo válido");
         }
-         Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
-        if (usuario == null) throw new RuntimeException("El correo ingresado no está registrado"); //mensaje que se mostrará en el frontend
-        //genera token
-        String token = UUID.randomUUID().toString();
-        usuario.setToken_reset(token);
-        LocalDateTime expira = LocalDateTime.now().plusHours(1);
-        Date fechaExp = Date.from(expira.atZone(ZoneId.systemDefault()).toInstant());
-        usuario.setFecha_expiracion_token(fechaExp);
-        usuarioDAO.actualizar(usuario);
 
-        emailService.enviarRecuperacionPassword(usuario); // Debe enviar email con enlace
-    }
-
-    @Override
-    public Usuario obtenerPorToken(String token) throws Exception {
-        Usuario usuario = usuarioDAO.obtenerPorToken(token);
-        if (usuario == null || usuario.getFecha_expiracion_token().before(new Date())) {
-            throw new Exception("Token inválido o expirado");
+        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo.trim());
+        if (usuario == null) {
+            throw new Exception("El correo ingresado no está registrado");
         }
+
         return usuario;
     }
 
+
+    @Override
+    public void iniciarRecuperacionPassword(String correo) throws Exception {
+        if (correo == null || correo.isEmpty()) {
+            throw new Exception("Debe ingresar un correo.");
+        }
+
+        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
+        if (usuario == null) {
+            throw new Exception("El correo ingresado no está registrado");
+        }
+
+        String token = generarToken(usuario.getCorreo());
+        String link = "https://localhost:44356/Login/Restablecer.aspx?token="+token; // actualiza con ruta real
+        
+        emailService.enviarRecuperacionPassword(usuario.getCorreo(), usuario.getNombreUsuario(), link);
+    }
+    
+    private String generarToken(String email) {
+        Date ahora = new Date();
+        Date expiracion = new Date(ahora.getTime() + 15 * 60 * 1000); // 15 minutos
+
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(ahora)
+                .setExpiration(expiracion)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes())
+                .compact();
+    }
+    
+    private String validarToken(String token) throws Exception {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY.getBytes())
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject(); // correo
+        } catch (ExpiredJwtException e) {
+            throw new Exception("Token expirado");
+        } catch (JwtException e) {
+            throw new Exception("Token inválido");
+        }
+    }
+    
     @Override
     public boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception {
-        Usuario usuario = usuarioDAO.obtenerPorToken(token);
-        if (usuario == null || 
-            usuario.getFecha_expiracion_token().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime()
-                .isBefore(LocalDateTime.now())) {
-            return false;
+        String correo = validarToken(token);
+        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
+        if (usuario == null) throw new Exception("Usuario no encontrado");
+
+        if (usuario.getContrasena().equals(nuevaPassword)) {
+            throw new Exception("No puede utilizar su misma contraseña.");
         }
-        usuario.setContrasena(nuevaPassword); 
-        usuario.setToken_reset(null);
-        usuario.setFecha_expiracion_token(null);
+        usuario.setContrasena(nuevaPassword);
         usuarioDAO.actualizar(usuario);
         return true;
+    }
+    
+    @Override
+    public boolean validarTokenPassword(String token) {
+        try {
+            validarToken(token); // ya tenés este método privado implementado
+            return true;
+        } catch (Exception e) {
+            return false;
         }
+    }
 }
 

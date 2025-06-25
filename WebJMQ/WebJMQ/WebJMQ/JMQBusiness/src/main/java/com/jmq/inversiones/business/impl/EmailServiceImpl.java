@@ -8,24 +8,21 @@ import jakarta.mail.internet.*;
 import java.util.List;
 import java.util.Properties;
 
-
 public class EmailServiceImpl implements EmailService {
 
     private final String remitente = "daylicamfer123@gmail.com";
-    private final String contrasena = "ljubmddhvmntxnhb"; // NO tu contraseña de Google normal
+    private final String contrasena = "ljubmddhvmntxnhb"; // Contraseña de aplicación
 
     private Session crearSesion() {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.connectiontimeout", "10000");
-        props.put("mail.smtp.timeout", "10000");
-        props.put("mail.smtp.writetimeout", "10000");
-        props.put("mail.debug", "true");  // Agrega esto para ver los logs del correo
-
+        props.put("mail.debug", "true");
+        
         return Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -33,7 +30,6 @@ public class EmailServiceImpl implements EmailService {
             }
         });
     }
-
 
     @Override
     public void enviarEmail(String destinatario, String asunto, String contenido) throws Exception {
@@ -56,20 +52,40 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-   @Override
-    public void enviarRecuperacionPassword(Usuario usuario) {
+    @Override
+    public void enviarRecuperacionPassword(String correo, String nombre, String enlaceRecuperacion) {
         try {
-            String link = "http://localhost:50463/Restablecer.aspx?token=" + usuario.getToken_reset();
-            String contenido = "Hola " + usuario.getNombreUsuario() + ",\n\n"
-                    + "Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace:\n"
-                    + link + "\n\n"
-                    + "Este enlace expirará en 1 hora.\n\n"
-                    + "Saludos,\nTu equipo JMQ";
+            String contenido = "<html><body>"
+                    + "<h3>Hola " + nombre + ",</h3>"
+                    + "<p>Has solicitado restablecer tu contraseña.</p>"
+                    + "<p><a href='" + enlaceRecuperacion + "'>Haz clic aquí para restablecerla</a></p>"
+                    + "<p>Este enlace expirará en 15 minutos.</p>"
+                    + "<br><p>Saludos,<br>Equipo JMQ</p>"
+                    + "</body></html>";
 
-            enviarEmail(usuario.getCorreo(), "Recuperación de contraseña", contenido);
+            enviarEmailHtml(correo, "Recuperación de contraseña", contenido);
         } catch (Exception e) {
             throw new RuntimeException("Error al enviar correo: " + e.getMessage(), e);
         }
     }
 
-}   
+    private void enviarEmailHtml(String destinatario, String asunto, String contenidoHtml) throws Exception {
+        Session session = crearSesion();
+
+        MimeMessage mensaje = new MimeMessage(session);
+        mensaje.setFrom(new InternetAddress(remitente));
+        mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+        mensaje.setSubject(asunto);
+
+        MimeBodyPart cuerpoHtml = new MimeBodyPart();
+        cuerpoHtml.setContent(contenidoHtml, "text/html");
+
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(cuerpoHtml);
+
+        mensaje.setContent(multipart);
+
+        Transport.send(mensaje);
+        System.out.println("Correo HTML enviado a: " + destinatario);
+    }
+}

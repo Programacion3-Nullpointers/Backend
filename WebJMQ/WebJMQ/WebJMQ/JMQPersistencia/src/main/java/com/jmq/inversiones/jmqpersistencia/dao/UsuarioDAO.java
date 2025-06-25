@@ -7,7 +7,5 @@ import java.util.Date;
 
 public interface UsuarioDAO extends BaseDAO<Usuario>{
     Usuario obtenerPorCorreo(String correo);
-    void actualizarTokenRecuperacion(int idUsuario, String token, Date fechaExpiracion) throws Exception;
-
-    Usuario obtenerPorToken(String token);
+    
 }

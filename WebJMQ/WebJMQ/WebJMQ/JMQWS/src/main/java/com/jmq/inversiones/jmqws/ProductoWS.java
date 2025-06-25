@@ -76,6 +76,7 @@ public class ProductoWS {
     ) throws Exception{
         return productoService.filtrarProductos(nombreCategoria, activo, precioMin, precioMax, stockMin, stockMax,conDescuento);
     }
+
     
     @WebMethod(operationName = "reporteMasVendidos")
     public byte[] reporteMasVendidos(){
