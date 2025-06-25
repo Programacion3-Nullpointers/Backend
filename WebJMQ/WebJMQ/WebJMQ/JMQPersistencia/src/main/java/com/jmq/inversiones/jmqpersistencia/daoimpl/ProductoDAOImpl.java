@@ -1,6 +1,7 @@
 package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 import com.jmq.inversiones.dbmanager.DBManager;
+import com.jmq.inversiones.dominio.pagos.Descuento;
 import com.jmq.inversiones.dominio.ventas.Categoria;
 import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
@@ -81,6 +82,15 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         producto.setImagen(rs.getBytes("Imagen"));
         producto.setActivo(rs.getBoolean("activo"));
         producto.setCategoria(categoriaDAO.obtener(rs.getInt("idCategoria")));
+        int idDescuento = rs.getInt("idDescuento");
+        if (!rs.wasNull()) {
+            Descuento d = new Descuento();
+            d.setId(idDescuento);
+            d.setNumDescuento(rs.getDouble("porcentaje")); // Asegúrate de incluirlo en el SELECT
+            d.setActivo(rs.getBoolean("activoDescuento")); // Usa alias si hay colisión
+            producto.setDescuento(d);
+        }
+
         return producto;
     }
 
@@ -105,14 +115,17 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
     @Override
     public List<Producto> filtrarProductos(String nombreCategoria, Boolean activo, 
             Double precioMin, Double precioMax, 
-            Integer stockMin, Integer stockMax,Boolean conDescuento) throws SQLException {
+            Integer stockMin, Integer stockMax, Boolean conDescuento) throws SQLException {
+
         List<Producto> productos = new ArrayList<>();
 
-        String sql = "SELECT p.*, c.nombre AS nombre_categoria, c.descripcion AS descripcion_categoria " +
-                 "FROM Producto p " +
-                 "JOIN Categoria c ON p.idCategoria = c.idCategoria " +
-                 "LEFT JOIN Descuento d ON c.idDescuento = d.idDescuento " +
-                 "WHERE 1 = 1";
+        String sql = "SELECT p.*, " +
+                     "c.nombre AS nombre_categoria, c.descripcion AS descripcion_categoria, " +
+                     "d.idDescuento, d.porcentaje, d.activo AS activoDescuento " +
+                     "FROM Producto p " +
+                     "JOIN Categoria c ON p.idCategoria = c.idCategoria " +
+                     "LEFT JOIN Descuento d ON p.idDescuento = d.idDescuento " +  // <- cambio importante
+                     "WHERE 1 = 1";
 
         List<Object> params = new ArrayList<>();
 
@@ -142,12 +155,12 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
         }
         if (conDescuento != null) {
             if (conDescuento) {
-                sql += " AND c.idDescuento IS NOT NULL AND d.activo = 1";
+                sql += " AND p.idDescuento IS NOT NULL AND d.activo = 1";
             } else {
-                sql += " AND (c.idDescuento IS NULL OR d.activo = 0)";
+                sql += " AND (p.idDescuento IS NULL OR d.activo = 0)";
             }
         }
-         
+
         try (Connection conn = DBManager.getInstance().obtenerConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -169,11 +182,24 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
                 Categoria c = new Categoria();
                 c.setId(rs.getInt("idCategoria"));
                 c.setNombre(rs.getString("nombre_categoria"));
+                c.setDescripcion(rs.getString("descripcion_categoria"));
                 p.setCategoria(c);
+
+                // Agregar el descuento si está presente
+                int idDescuento = rs.getInt("idDescuento");
+                if (!rs.wasNull()) {
+                    Descuento d = new Descuento();
+                    d.setId(idDescuento);
+                    d.setNumDescuento(rs.getDouble("porcentaje"));
+                    d.setActivo(rs.getBoolean("activoDescuento"));
+                    p.setDescuento(d);
+                }
 
                 productos.add(p);
             }
         }
-         return productos;
+        return productos;
     }
+
+
 }

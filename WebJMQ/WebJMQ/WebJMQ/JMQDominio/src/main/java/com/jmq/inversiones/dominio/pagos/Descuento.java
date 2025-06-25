@@ -2,16 +2,17 @@ package com.jmq.inversiones.dominio.pagos;
 
 public class Descuento {
     private int id;
-    private int numDescuento;
-
-    public int getNumDescuento() {
+    private double numDescuento;
+    private boolean activo;
+    
+    public double getNumDescuento() {
         return numDescuento;
     }
 
-    public void setNumDescuento(int numDescuento) {
+    public void setNumDescuento(double numDescuento) {
         this.numDescuento = numDescuento;
     }
-    private boolean activo;
+
 
     public boolean isActivo() {
         return activo;

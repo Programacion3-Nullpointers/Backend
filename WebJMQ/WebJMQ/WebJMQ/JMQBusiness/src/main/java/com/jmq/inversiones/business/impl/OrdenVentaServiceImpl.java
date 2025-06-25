@@ -1,7 +1,9 @@
 package com.jmq.inversiones.business.impl;
 
+import com.jmq.inversiones.business.NotificacionService;
 import com.jmq.inversiones.business.OrdenVentaService;
 import com.jmq.inversiones.business.ProductoService;
+import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.dominio.ventas.Detalle;
 import com.jmq.inversiones.dominio.ventas.EstadoCompra;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
@@ -19,6 +21,7 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
     private final OrdenVentaDAO ordenVentaDAO;
     private final DetalleDAO detallesDAO;
     private final ProductoService productoService;
+    private final NotificacionService notificacionService = new NotificacionServiceImpl();
     public OrdenVentaServiceImpl(OrdenVentaDAO ordenVentaDAO, DetalleDAO detalleDao) {
         this.ordenVentaDAO = ordenVentaDAO;
         this.detallesDAO = detalleDao;
@@ -258,4 +261,31 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
             throw new Exception("No se puede modificar una orden cancelada");
         }
     }
+
+    @Override
+    public void actualizarEstadoOrden(int idOrden, EstadoCompra nuevoEstado) throws Exception {
+        OrdenVenta orden = ordenVentaDAO.obtener(idOrden);
+        if (orden == null) throw new Exception("La orden no existe.");
+
+        orden.setEstado_compra(nuevoEstado);
+        ordenVentaDAO.actualizar(orden); // O método que actualice solo el estado
+
+        Usuario cliente = orden.getUsuario();
+
+        // Notificación genérica de estado
+        notificacionService.notificarEstadoPedido(
+            cliente.getCorreo(),
+            cliente.getNombreUsuario(),
+            nuevoEstado.name()
+        );
+
+        // Si fue entregado, también se envía una confirmación especial
+        if (nuevoEstado == EstadoCompra.entregado) {
+            notificacionService.notificarEntrega(
+                cliente.getCorreo(),
+                cliente.getNombreUsuario()
+            );
+        }
+    }
+
 }
