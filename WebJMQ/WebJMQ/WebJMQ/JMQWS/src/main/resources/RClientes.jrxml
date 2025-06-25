@@ -15,8 +15,7 @@ FROM
 JOIN 
     OrdenVenta ov ON u.idUsuario = ov.idUsuario
 WHERE 
-    ov.estado_compra != 'pendiente'
-    AND ov.activo = 1
+    ov.activo = 1
     AND MONTH(ov.fecha_orden) = MONTH(CURDATE())
 	AND YEAR(ov.fecha_orden) = YEAR(CURDATE())
 GROUP BY 
