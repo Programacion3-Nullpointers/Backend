@@ -127,5 +127,10 @@ public class UsuarioWS {
                                      @WebParam(name = "activo") Boolean activo)  throws Exception{
         return usuarioService.filtrarUsuarios(tipoEntidad, activo);
     }
+    @WebMethod
+    public List<Usuario> filtrarUsuarios(@WebParam(name = "tipoEntidad") String tipoEntidad, 
+                                     @WebParam(name = "activo") Boolean activo)  throws Exception{
+        return usuarioService.filtrarUsuarios(tipoEntidad, activo);
+    }
 }
  
