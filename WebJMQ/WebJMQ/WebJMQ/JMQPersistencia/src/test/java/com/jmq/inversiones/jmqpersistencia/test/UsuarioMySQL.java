@@ -32,7 +32,7 @@ public class UsuarioMySQL {
     
     @Test
     public void BuscarUsuario(){
-        Usuario usuario = usuarioDAO.obtener(4);
+        Usuario usuario = usuarioDAO.obtener(1);
         
         if(usuario == null){
             System.out.println("El usuario es vacio");
@@ -71,10 +71,21 @@ public class UsuarioMySQL {
         List<Usuario> usuarios = usuarioDAO.listarTodos();
         assertFalse(usuarios.stream().anyMatch(u -> u.getId() == usu.getId()));
     }
-
+    @Test
+    public void testBuscarCorreo(){
+        Usuario usuario = usuarioDAO.obtenerPorCorreo("admin@admin.com");
+         if(usuario == null){
+            System.out.println("El usuario es vacio");
+        }
+        else{
+            System.out.println("El usuario esta lleno");
+            System.out.println(usuario);
+        }
+        assertNotNull(usuario);
+    }
     private Usuario crearUsuarioEjemplo() {
         Usuario usuario = new Usuario();
-        usuario.setNombreUsuario("clienteTest");
+        usuario.setNombreUsuario("jose");
         usuario.setContrasena("123456");
         usuario.setActivo(true);
         usuario.setCorreo("cliente@test.com");

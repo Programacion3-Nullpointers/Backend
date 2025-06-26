@@ -37,7 +37,7 @@ DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_ELIMINAR
 DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_LISTAR
 DROP PROCEDURE IF EXISTS PRODUCTOCOTIZACION_OBTENER
 DROP PROCEDURE IF EXISTS BOLETA_ELIMINAR
-
+DROP PROCEDURE IF EXISTS sp_buscar_usuario_por_id
 DELIMITER $
 CREATE PROCEDURE PRODUCTO_INSERTAR(
     OUT _id_producto INT,
@@ -45,7 +45,7 @@ CREATE PROCEDURE PRODUCTO_INSERTAR(
     IN _descripcion VARCHAR(100),
     IN _stock INT,
     IN _precio DOUBLE,
-    IN _imagen VARCHAR(255),
+    IN _imagen LONGBLOB,
     IN _activo TINYINT,
     IN _id_categoria INT
 )
@@ -61,7 +61,7 @@ CREATE PROCEDURE PRODUCTO_MODIFICAR(
     IN _descripcion VARCHAR(100),
     IN _stock INT,
     IN _precio DOUBLE,
-    IN _imagen VARCHAR(255),
+    IN _imagen LONGBLOB,
     IN _activo TINYINT,
     IN _id_categoria INT
 )
@@ -97,16 +97,17 @@ BEGIN
     SELECT * FROM Producto WHERE activo = 1;
 END $
 
+DELIMITER $$
 CREATE PROCEDURE DESCUENTO_INSERTAR(
     OUT _id_descuento INT,
     IN _num_descuento INT,
     IN _activo TINYINT
 )
 BEGIN
-    INSERT INTO Descuento(idDescuento, numDescuento, activo)
-    VALUES (_id_descuento, _num_descuento, _activo);
+    INSERT INTO Descuento( numDescuento, activo)
+    VALUES ( _num_descuento, _activo);
     SET _id_descuento = LAST_INSERT_ID();
-END $
+END $$
 
 CREATE PROCEDURE DESCUENTO_MODIFICAR(
     IN _id_descuento INT,
@@ -130,6 +131,7 @@ BEGIN
     SELECT * FROM Descuento;
 END $
 
+DELIMITER $$
 CREATE PROCEDURE CATEGORIA_INSERTAR(
     OUT _id_categoria INT,
     IN _descripcion VARCHAR(45),
@@ -137,10 +139,10 @@ CREATE PROCEDURE CATEGORIA_INSERTAR(
     IN _id_descuento INT
 )
 BEGIN
-    INSERT INTO Categoria(idCategoria, descripcion, nombre, idDescuento)
-    VALUES (_id_categoria, _descripcion, _nombre, _id_descuento);
+    INSERT INTO Categoria( descripcion, nombre, idDescuento)
+    VALUES ( _descripcion, _nombre, _id_descuento);
     SET _id_categoria = LAST_INSERT_ID();
-END $
+END $$
 
 CREATE PROCEDURE CATEGORIA_MODIFICAR(
     IN _id_categoria INT,
@@ -167,14 +169,14 @@ CREATE PROCEDURE CATEGORIA_LISTAR()
 BEGIN
     SELECT * FROM Categoria;
 END $
-
+DELIMITER $
 CREATE PROCEDURE USUARIO_INSERTAR(
     OUT _id_usuario INT,
     IN _nombre_usuario VARCHAR(45),
     IN _contrasena VARCHAR(45),
     IN _activo TINYINT,
     IN _correo VARCHAR(45),
-    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
+    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE','ADMIN'),
     IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
     IN _direccion VARCHAR(45),
@@ -182,7 +184,7 @@ CREATE PROCEDURE USUARIO_INSERTAR(
 )
 BEGIN
     INSERT INTO Usuario(nombreUsuario, contrasena, activo, correo, tipoUsuario, dni, razonsocial, direccion, RUC)
-    VALUES (_nombre_usuario, _contrasena, _activo, _correo, _tipo_usuario, dni, _razon_social, _direccion, _ruc);
+    VALUES (_nombre_usuario, _contrasena, _activo, _correo, _tipo_usuario, _dni, _razon_social, _direccion, _ruc);
     SET _id_usuario = LAST_INSERT_ID();
 END $
 
@@ -192,11 +194,13 @@ CREATE PROCEDURE USUARIO_MODIFICAR(
     IN _contrasena VARCHAR(45),
     IN _activo TINYINT,
     IN _correo VARCHAR(45),
-    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE'),
+    IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE','ADMIN'),
     IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
     IN _direccion VARCHAR(45),
-    IN _ruc VARCHAR(45)
+    IN _ruc VARCHAR(45),
+    IN _token_reset VARCHAR(45),
+    IN _fecha_expiracion_token DATE
 )
 BEGIN
     UPDATE Usuario
@@ -208,7 +212,9 @@ BEGIN
         dni = _dni,
         razonsocial = _razon_social,
         direccion = _direccion,
-        RUC = _ruc
+        RUC = _ruc,
+        token_reset = _token_reset,
+        fecha_expiracion_token = _fecha_expiracion_token
     WHERE idUsuario = _id_usuario;
 END $
 
@@ -354,7 +360,7 @@ CREATE PROCEDURE PRODUCTOCOTIZACION_INSERTAR(
     IN _idCotizacion INT
 )
 BEGIN
-	INSERT INTO Cotizacion (descripcion,cantidad, precioCotizado,
+	INSERT INTO productoCotizado (descripcion,cantidad, precioCotizado,
     idCotizacion) VALUES ( _descripcion, _cantidad, 
     _precioCotizado, _idCotizacion );
     SET _id_productocotizacion = LAST_INSERT_ID();
@@ -397,37 +403,42 @@ BEGIN
     WHERE idproductoCotizado = _id_productocotizacion;
 END $
 
+DROP PROCEDURE IF EXISTS NOTIFICACION_INSERTAR
+DELIMITER $$
 CREATE PROCEDURE NOTIFICACION_INSERTAR(
     OUT _id_notificacion INT,
     IN _titulo VARCHAR(100),
     IN _mensaje VARCHAR(255),
-    IN _fecha_hora DATETIME,
-    IN _estado ENUM('ENVIADO', 'RECIBIDO'),
-    IN _id_usuario INT
+    IN _fecha_envio DATETIME,
+    IN _estado VARCHAR(45),
+    IN _asunto VARCHAR(45)
 )
 BEGIN
-    INSERT INTO Notificacion(titulo, mensaje, fecha_hora, estado, idUsuario)
-    VALUES (_titulo, _mensaje, _fecha_hora, _estado, _id_usuario);
+    INSERT INTO Notificacion(tipo, mensaje, fecha_envio, estado, asunto)
+    VALUES (_titulo, _mensaje, _fecha_envio, _estado, _asunto);
     SET _id_notificacion = LAST_INSERT_ID();
-END $
+END $$
 
+DROP PROCEDURE IF EXISTS NOTIFICACION_MODIFICAR
+
+DELIMITER $$
 CREATE PROCEDURE NOTIFICACION_MODIFICAR(
     IN _id_notificacion INT,
     IN _titulo VARCHAR(100),
     IN _mensaje VARCHAR(255),
-    IN _fecha_hora DATETIME,
-    IN _estado ENUM('ENVIADO', 'RECIBIDO'),
-    IN _id_usuario INT
+    IN _fecha_envio DATETIME,
+    IN _estado VARCHAR(45),
+    IN _asunto VARCHAR(45)
 )
 BEGIN
     UPDATE Notificacion
-    SET titulo = _titulo,
+    SET tipo= _titulo,
         mensaje = _mensaje,
-        fecha_hora = _fecha_hora,
+        fecha_envio = _fecha_envio,
         estado = _estado,
-        idUsuario = _id_usuario
+        asunto = _asunto
     WHERE idNotificacion = _id_notificacion;
-END $
+END $$
 
 CREATE PROCEDURE NOTIFICACION_ELIMINAR(
     IN _id_notificacion INT
@@ -448,11 +459,14 @@ CREATE PROCEDURE BOLETA_ELIMINAR(
 BEGIN
 	DELETE FROM Boleta WHERE idBoleta = _id_boleta;
 END $
+DELIMITER $$
 CREATE PROCEDURE BOLETA_LISTAR()
 BEGIN
 	SELECT * FROM Boleta;
-END$
+END $$
 DELIMITER $$
+
+
 
 CREATE PROCEDURE BOLETA_INSERTAR (
     IN _id_boleta INT,
@@ -525,6 +539,13 @@ END$$
 DELIMITER ;
 DELIMITER $$
 
+CREATE DEFINER=`admin`@`%` PROCEDURE `COMPROBANTE_OBTENER`(IN comprobanteId INT)
+BEGIN
+    SELECT * 
+    FROM ComprobantePago 
+    WHERE idComprobantePago = comprobanteId;
+END $$
+
 CREATE PROCEDURE GetComprobantePagoById(IN comprobanteId INT)
 BEGIN
     SELECT * 
@@ -552,29 +573,32 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS FACTURA_INSERTAR
 DELIMITER $$
 
 CREATE PROCEDURE FACTURA_INSERTAR (
     IN p_idFactura INT,
     IN p_ruc VARCHAR(11),
     IN p_razon_social VARCHAR(100),
-    IN p_direccion VARCHAR(200),
+    IN p_direccion_fiscal VARCHAR(200),
     IN p_fecha_emision DATETIME
 )
 BEGIN
-    INSERT INTO Factura (idFactura, RUC, razon_social, direccion, fecha_emision)
-    VALUES (p_idFactura, p_ruc, p_razon_social, p_direccion, p_fecha_emision);
+    INSERT INTO Factura (idFactura, RUC, razon_social, direccion_fiscal, fecha_emision)
+    VALUES (p_idFactura, p_ruc, p_razon_social, p_direccion_fiscal, p_fecha_emision);
 END $$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS FACTURA_ACTUALIZAR
 DELIMITER $$
 
 CREATE PROCEDURE FACTURA_ACTUALIZAR (
     IN p_idFactura INT,
     IN p_ruc VARCHAR(11),
     IN p_razon_social VARCHAR(100),
-    IN p_direccion VARCHAR(200),
+    IN p_direccion_fiscal VARCHAR(200),
     IN p_fecha_emision DATETIME,
     IN p_id_orden INT,
     IN p_metodo_pago VARCHAR(50),
@@ -594,7 +618,7 @@ BEGIN
     UPDATE Factura
     SET RUC = p_ruc,
         razon_social = p_razon_social,
-        direccion = p_direccion,
+        direccion_fiscal = p_direccion_fiscal,
         fecha_emision = p_fecha_emision
     WHERE idFactura = p_idFactura;
 END $$
@@ -629,6 +653,24 @@ END$$
 
 DELIMITER ;
 DELIMITER $$
+CREATE DEFINER=`admin`@`%` PROCEDURE `sp_buscar_usuario_por_id`(
+    IN p_idUsuario INT
+)
+BEGIN
+    SELECT 
+        idUsuario,
+        nombreUsuario,
+        contrasena,
+        activo,
+        correo,
+        tipoUsuario,
+        dni,
+        razonsocial,
+        direccion,
+        RUC
+    FROM Usuario
+    WHERE idUsuario = p_idUsuario;
+END $$
 
 DROP PROCEDURE IF EXISTS PRODUCTO_OBTENER$$
 

@@ -1,6 +1,8 @@
 
 package com.jmq.inversiones.dominio.ventas;
 
+import com.jmq.inversiones.dominio.pagos.Descuento;
+
 public class Producto {
     private int id;
     private String nombre;
@@ -10,6 +12,15 @@ public class Producto {
     private byte[] imagen;
     private boolean activo;
     private Categoria categoria;
+    private Descuento descuento;
+
+    public Descuento getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(Descuento descuento) {
+        this.descuento = descuento;
+    }
 
     public Producto(){
         
@@ -88,6 +99,13 @@ public class Producto {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public double getPrecioConDescuento() {
+        if (descuento != null && descuento.isActivo()) {
+            return precio - (precio * (descuento.getNumDescuento()/ 100));
+        }
+        return precio;
     }
 
     @Override

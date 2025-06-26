@@ -2,7 +2,7 @@ package com.jmq.inversiones.jmqpersistencia.daoimpl;
 
 import com.jmq.inversiones.dbmanager.DBManager;
 import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
-
+import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import com.jmq.inversiones.jmqpersistencia.BaseDAOImpl;
 import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
 import java.sql.Connection;
@@ -142,28 +142,24 @@ public class CotizacionDAOImpl extends BaseDAOImpl<Cotizacion> implements Cotiza
         }
         return null;
     }
-    
+
     @Override
     public List<Cotizacion> obtenerPorUsuario(int idUsuario) {
-        List<Cotizacion> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Cotizacion WHERE idUsuario = ?";
-
+        List<Cotizacion> entities = new ArrayList<>();
         try (Connection conn = DBManager.getInstance().obtenerConexion();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Cotizacion "
+                     + "WHERE idUsuario = ? ")) {
+             
+             ps.setInt(1, idUsuario);
+             ResultSet rs = ps.executeQuery();
 
-            ps.setInt(1, idUsuario);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Cotizacion c = createFromResultSet(rs);
-                    lista.add(c);
-                }
+            while (rs.next()) {
+                entities.add(createFromResultSet(rs));
             }
-
         } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener cotizaciones por usuario", e);
+            throw new RuntimeException("Error al listar cotizaciones", e);
         }
-
-        return lista;
+        return entities;
     }
-
+    
 }

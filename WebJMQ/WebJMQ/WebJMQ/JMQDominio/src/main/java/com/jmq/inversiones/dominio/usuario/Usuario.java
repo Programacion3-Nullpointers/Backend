@@ -1,5 +1,7 @@
 package com.jmq.inversiones.dominio.usuario;
 
+import java.util.Date;
+
 public class Usuario {
     private int id;
     private String nombreUsuario;
@@ -99,10 +101,22 @@ public class Usuario {
     public void setRUC(String RUC) {
         this.RUC = RUC;
     }
+    
 
     @Override
     public String toString() {
-        return "Usuario{" + "id=" + id + ", nombreUsuario=" + nombreUsuario + ", contrasena=" + contrasena + ", activo=" + activo + ", correo=" + correo + ", tipoUsuario=" + tipoUsuario + ", razonsocial=" + razonsocial + ", direccion=" + direccion + ", RUC=" + RUC + '}';
+        return "Usuario{" +
+                "id=" + id +
+                ", nombreUsuario='" + nombreUsuario + '\'' +
+                ", contrasena='" + contrasena + '\'' +
+                ", activo=" + activo +
+                ", correo='" + correo + '\'' +
+                ", tipoUsuario=" + tipoUsuario +
+                ", dni='" + dni + '\'' +
+                ", razonsocial='" + razonsocial + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", RUC='" + RUC + '\'' +
+                '}';
     }
 
     /**
@@ -120,3 +134,4 @@ public class Usuario {
     }
     
 }
+ 

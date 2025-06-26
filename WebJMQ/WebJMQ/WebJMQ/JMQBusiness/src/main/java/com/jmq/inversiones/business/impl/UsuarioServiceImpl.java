@@ -1,19 +1,24 @@
 package com.jmq.inversiones.business.impl;
 
+import com.jmq.inversiones.business.EmailService;
 import com.jmq.inversiones.business.UsuarioService;
 import com.jmq.inversiones.dominio.usuario.TipoUsuario;
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import com.jmq.inversiones.jmqpersistencia.dao.UsuarioDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.UsuarioDAOImpl;
+import java.util.Date;
 import java.util.List;
+import io.jsonwebtoken.*;
 
 public class UsuarioServiceImpl implements UsuarioService{
     
         private final UsuarioDAO usuarioDAO;
-
+        private final EmailService emailService;
+        private static final String SECRET_KEY = "U3Jucj5rM2pQaUtmZ1BzR1pLQXp4YW5VNjg0MjM0NTY=";
     // Constructor que recibe el DAO (Inyección de dependencias)
     public UsuarioServiceImpl() {
         this.usuarioDAO = new UsuarioDAOImpl();
+        this.emailService = new EmailServiceImpl();
     }
 
     @Override
@@ -56,7 +61,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public void actualiarUsuario(Usuario usuario) throws Exception {
+    public void actualizarUsuario(Usuario usuario) throws Exception {
         try {
             if (usuario.getId() <= 0) {
                 throw new Exception("ID de usuario inválido");
@@ -68,7 +73,7 @@ public class UsuarioServiceImpl implements UsuarioService{
                 throw new Exception("La contraseña es requerida");
             }
             if (usuario.getCorreo()== null || usuario.getCorreo().isEmpty()) {
-                throw new Exception("La contraseña es requerida");
+                throw new Exception("El correo es requerido");
             }
             usuarioDAO.actualizar(usuario);
         } catch (Exception e) {
@@ -112,17 +117,84 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     public Usuario buscarUsuarioPorCorreo(String correo) throws Exception {
-        try{
-            if(!correo.isEmpty()){
-            } else {
-                throw new Exception("");
-            }
-            return usuarioDAO.obtenerPorCorreo(correo);
+        if (correo == null || correo.trim().isEmpty()) {
+            throw new Exception("Debe ingresar un correo válido");
         }
-        catch (Exception ex){
-            throw new Exception(""+ex.getMessage());
+
+        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo.trim());
+        if (usuario == null) {
+            throw new Exception("El correo ingresado no está registrado");
+        }
+
+        return usuario;
+    }
+
+
+    @Override
+    public void iniciarRecuperacionPassword(String correo) throws Exception {
+        if (correo == null || correo.isEmpty()) {
+            throw new Exception("Debe ingresar un correo.");
+        }
+
+        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
+        if (usuario == null) {
+            throw new Exception("El correo ingresado no está registrado");
+        }
+
+        String token = generarToken(usuario.getCorreo());
+        String link = "https://localhost:44356/Login/Restablecer.aspx?token="+token; // actualiza con ruta real
+        
+        emailService.enviarRecuperacionPassword(usuario.getCorreo(), usuario.getNombreUsuario(), link);
+    }
+    
+    private String generarToken(String email) {
+        Date ahora = new Date();
+        Date expiracion = new Date(ahora.getTime() + 15 * 60 * 1000); // 15 minutos
+
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(ahora)
+                .setExpiration(expiracion)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes())
+                .compact();
+    }
+    
+    private String validarToken(String token) throws Exception {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY.getBytes())
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject(); // correo
+        } catch (ExpiredJwtException e) {
+            throw new Exception("Token expirado");
+        } catch (JwtException e) {
+            throw new Exception("Token inválido");
         }
     }
     
+    @Override
+    public boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception {
+        String correo = validarToken(token);
+        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
+        if (usuario == null) throw new Exception("Usuario no encontrado");
+
+        if (usuario.getContrasena().equals(nuevaPassword)) {
+            throw new Exception("No puede utilizar su misma contraseña.");
+        }
+        usuario.setContrasena(nuevaPassword);
+        usuarioDAO.actualizar(usuario);
+        return true;
+    }
+    
+    @Override
+    public boolean validarTokenPassword(String token) {
+        try {
+            validarToken(token); // ya tenés este método privado implementado
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
 

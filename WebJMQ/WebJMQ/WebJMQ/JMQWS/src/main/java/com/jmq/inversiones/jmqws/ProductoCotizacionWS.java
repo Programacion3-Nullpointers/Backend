@@ -74,6 +74,16 @@ public class ProductoCotizacionWS {
         }
     }
     
+    @WebMethod(operationName = "obtenerProdCotiza")
+    public ProductoCotizacion obtenerProdCotizacion(int id){
+        try {
+            return prod.buscarProductoCotizacion(id);
+        }
+        catch (Exception ex){
+            throw new WebServiceException("Error al actualizar el producto"+ex.getMessage());
+        }
+    }
+    
     @WebMethod(operationName = "listarProductosPorCotizacion")
     public List<ProductoCotizacion> listarProductosPorCotizacion(int id){
         try {

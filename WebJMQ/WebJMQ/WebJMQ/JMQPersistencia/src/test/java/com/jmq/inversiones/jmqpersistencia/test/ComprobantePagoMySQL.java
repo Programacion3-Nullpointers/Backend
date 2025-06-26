@@ -23,7 +23,7 @@ public class ComprobantePagoMySQL {
 
     @Test
     public void testAgregarYObtener() {
-        ComprobantePago cp = crearComprobantePagoEjemplo(6); // se tiene que eliminar la ordenVenta DE ID=6 primero
+        ComprobantePago cp = crearComprobantePagoEjemplo(4); // se tiene que eliminar la ordenVenta DE ID=6 primero
         dao.agregar(cp);
 
         ComprobantePago obtenido = dao.obtener(cp.getId());
@@ -34,12 +34,12 @@ public class ComprobantePagoMySQL {
 
     @Test
     public void testActualizar() {
-        ComprobantePago cp = dao.obtener(51);
+        ComprobantePago cp = dao.obtener(2);
 
         cp.setMonto_total(999.99);
         dao.actualizar(cp);
 
-        ComprobantePago actualizado = dao.obtener(51);
+        ComprobantePago actualizado = dao.obtener(2);
         assertEquals(999.99, actualizado.getMonto_total());
     }
 
@@ -48,8 +48,8 @@ public class ComprobantePagoMySQL {
 //        ComprobantePago cp = crearComprobantePagoEjemplo(3);
 //        dao.agregar(cp);
 
-        dao.eliminar(64);
-        assertNull(dao.obtener(64));
+        dao.eliminar(5);
+        assertNull(dao.obtener(5));
     }
 
     private ComprobantePago crearComprobantePagoEjemplo(int id) {
