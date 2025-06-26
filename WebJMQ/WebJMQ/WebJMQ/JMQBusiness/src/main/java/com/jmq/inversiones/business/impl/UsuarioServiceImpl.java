@@ -9,6 +9,7 @@ import com.jmq.inversiones.jmqpersistencia.daoimpl.UsuarioDAOImpl;
 import java.util.Date;
 import java.util.List;
 import io.jsonwebtoken.*;
+import java.sql.SQLException;
 
 public class UsuarioServiceImpl implements UsuarioService{
     
@@ -194,6 +195,15 @@ public class UsuarioServiceImpl implements UsuarioService{
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+    
+    @Override
+    public List<Usuario> filtrarUsuarios(String tipoEntidad, Boolean activo) throws SQLException {
+        try {
+            return usuarioDAO.filtrarUsuarios(tipoEntidad, activo);
+        } catch (SQLException e){
+            throw e;
         }
     }
 }
