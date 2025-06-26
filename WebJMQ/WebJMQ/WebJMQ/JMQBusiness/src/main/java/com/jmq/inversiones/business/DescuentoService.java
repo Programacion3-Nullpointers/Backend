@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 package com.jmq.inversiones.business;
 
 import com.jmq.inversiones.dominio.pagos.Descuento;
@@ -11,3 +12,5 @@ public interface DescuentoService {
     List<Descuento> listarDescuentos() throws Exception;
  
 }
+=======
+>>>>>>> Stashed changes
