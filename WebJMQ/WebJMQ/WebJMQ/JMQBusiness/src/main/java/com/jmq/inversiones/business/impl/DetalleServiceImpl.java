@@ -97,4 +97,12 @@ public class DetalleServiceImpl implements DetalleService{
             throw new Exception("Las IDs de producto y/o orden de venta son inválidas.");
         }
     }
+    
+    public List<Detalle> listarPorOrden(int idOrden) throws Exception{
+        try {
+            return detalleDAO.listarPorOrden(idOrden);
+        } catch (Exception e) {
+            throw new Exception("Error al listar detalles por orden: " + e.getMessage(), e);
+        }
+    }
 }

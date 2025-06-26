@@ -9,6 +9,9 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.Connection;
 
 
 public class DetalleDAOImpl extends BaseDAOImpl<Detalle> implements DetalleDAO{
@@ -146,6 +149,43 @@ public class DetalleDAOImpl extends BaseDAOImpl<Detalle> implements DetalleDAO{
     protected void setId(Detalle entity, Integer id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    public List<Detalle> listarPorOrden(int idOrden){
+            List<Detalle> detalles = new ArrayList<>();
 
+    try (Connection conn = DBManager.getInstance().obtenerConexion();
+         CallableStatement cs = conn.prepareCall("{CALL DETALLE_LISTAR_POR_ORDEN(?)}")) {
+
+        cs.setInt(1, idOrden);
+
+        try (ResultSet rs = cs.executeQuery()) {
+            while (rs.next()) {
+                Detalle detalle = new Detalle();
+
+                // Setear datos de Detalle
+                detalle.setCantidad(rs.getInt("cantidad"));
+                detalle.setPrecio_unitario(rs.getDouble("precio_unitario"));
+
+                // Setear Producto
+                Producto producto = new Producto();
+                producto.setId(rs.getInt("producto_id"));
+                producto.setNombre(rs.getString("producto_nombre"));
+                detalle.setProducto(producto);
+
+                // También podrías setear la orden si lo necesitas
+                // OrdenVenta orden = new OrdenVenta();
+                // orden.setId(rs.getInt("id_orden"));
+                // detalle.setOrden(orden);
+
+                detalles.add(detalle);
+            }
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Error al listar detalles por orden", e);
+    }
+
+    return detalles;
+    }
 }
 

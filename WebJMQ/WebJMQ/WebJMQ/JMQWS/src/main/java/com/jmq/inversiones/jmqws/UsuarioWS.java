@@ -122,5 +122,10 @@ public class UsuarioWS {
             throw new RuntimeException("Error al agregar entidad", e);
         }
     }
+    @WebMethod
+    public List<Usuario> filtrarUsuarios(@WebParam(name = "tipoEntidad") String tipoEntidad, 
+                                     @WebParam(name = "activo") Boolean activo)  throws Exception{
+        return usuarioService.filtrarUsuarios(tipoEntidad, activo);
+    }
 }
  
