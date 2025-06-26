@@ -13,4 +13,5 @@ public interface DetalleService {
     void eliminarDetalle(int idOrden, int idProducto) throws Exception;
     Detalle buscarDetalle(int idOrden, int idProducto) throws Exception;
     List<Detalle> listarDetalles() throws Exception;
+    List<Detalle> listarPorOrden(int idOrden) throws Exception;
 }

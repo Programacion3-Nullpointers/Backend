@@ -71,4 +71,15 @@ public class DetalleWS {
             throw new WebServiceException("Error al leer Detalles "+ex.getMessage());
         }
     }
+    
+    @WebMethod(operationName = "ListarPorOrden")
+    public List<Detalle> listarPorOrden(int idOrden){
+        try {
+            return detalleWS.listarPorOrden(idOrden);
+        }
+        catch (Exception ex){
+            throw new WebServiceException("Error al leer Detalles "+ex.getMessage());
+        }
+    }
+    
 }
