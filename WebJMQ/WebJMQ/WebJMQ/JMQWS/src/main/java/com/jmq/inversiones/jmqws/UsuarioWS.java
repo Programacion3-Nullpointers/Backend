@@ -81,6 +81,11 @@ public class UsuarioWS {
         return usuarioService.validarTokenPassword(token);
     }
 
+
+//    @WebMethod
+//    public Usuario obtenerPorToken(String token) throws Exception {
+//        return usuarioService.obtenerPorToken(token);
+//    }
     
     @WebMethod(operationName = "reporteClientes")
     public byte[] reporteClientes(){
@@ -116,6 +121,11 @@ public class UsuarioWS {
         } catch (SQLException e) {
             throw new RuntimeException("Error al agregar entidad", e);
         }
+    }
+    @WebMethod
+    public List<Usuario> filtrarUsuarios(@WebParam(name = "tipoEntidad") String tipoEntidad, 
+                                     @WebParam(name = "activo") Boolean activo)  throws Exception{
+        return usuarioService.filtrarUsuarios(tipoEntidad, activo);
     }
 }
  

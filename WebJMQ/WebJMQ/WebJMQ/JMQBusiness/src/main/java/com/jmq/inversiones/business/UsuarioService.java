@@ -1,6 +1,7 @@
 package com.jmq.inversiones.business;
 
 import com.jmq.inversiones.dominio.usuario.Usuario;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UsuarioService {
@@ -13,4 +14,5 @@ public interface UsuarioService {
     void iniciarRecuperacionPassword(String correo) throws Exception;
     boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception;
     boolean validarTokenPassword(String token);
+    List<Usuario> filtrarUsuarios(String tipoEntidad, Boolean activo) throws SQLException;
 }

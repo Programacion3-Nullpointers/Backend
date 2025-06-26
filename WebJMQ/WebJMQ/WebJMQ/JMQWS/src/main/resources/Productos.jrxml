@@ -12,8 +12,8 @@
 FROM Detalle d
 JOIN OrdenVenta o ON d.id_orden = o.idOrdenVenta
 JOIN Producto p ON d.id_producto = p.idProducto
-WHERE o.estado_compra = 'entregado'
-AND MONTH(o.fecha_orden) = MONTH(CURDATE())
+WHERE
+MONTH(o.fecha_orden) = MONTH(CURDATE())
 AND YEAR(o.fecha_orden) = YEAR(CURDATE())
 GROUP BY d.id_producto
 ORDER BY total_vendido DESC
