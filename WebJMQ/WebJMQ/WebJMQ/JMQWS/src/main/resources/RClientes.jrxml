@@ -1,8 +1,13 @@
 <!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
-<jasperReport name="Productos" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49cee09e-be4b-4a3c-bfd4-7877d8ab70df">
+<jasperReport name="Productos" language="java" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49cee09e-be4b-4a3c-bfd4-7877d8ab70df">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TA"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="logo" forPrompting="false" class="java.awt.Image"/>
+	<parameter name="mesIni" class="java.lang.Integer"/>
+	<parameter name="anioIni" class="java.lang.Integer"/>
+	<parameter name="mesFin" class="java.lang.Integer"/>
+	<parameter name="anioFin" class="java.lang.Integer"/>
+	<parameter name="minCompras" class="java.lang.Integer"/>
 	<query language="sql"><![CDATA[SELECT 
     u.idUsuario,
     u.nombreUsuario,
@@ -16,13 +21,18 @@ JOIN
     OrdenVenta ov ON u.idUsuario = ov.idUsuario
 WHERE 
     ov.activo = 1
-    AND MONTH(ov.fecha_orden) = MONTH(CURDATE())
-	AND YEAR(ov.fecha_orden) = YEAR(CURDATE())
+    AND ($P{mesIni} IS NULL OR MONTH(ov.fecha_orden) >= $P{mesIni})
+    AND ($P{anioIni} IS NULL OR YEAR(ov.fecha_orden) >= $P{anioIni})
+    AND ($P{mesFin} IS NULL OR MONTH(ov.fecha_orden) <= $P{mesFin})
+    AND ($P{anioFin} IS NULL OR YEAR(ov.fecha_orden) <= $P{anioFin})
 GROUP BY 
     u.idUsuario, u.nombreUsuario, u.dni, u.RUC, u.razonsocial
+HAVING 
+    ($P{minCompras} IS NULL OR COUNT(ov.idOrdenVenta) >= $P{minCompras})
 ORDER BY 
     total_ordenes DESC
- LIMIT 10
+LIMIT 10
+
 
 ]]></query>
 	<field name="idUsuario" class="java.lang.Integer">
@@ -55,17 +65,39 @@ ORDER BY
 		<property name="com.jaspersoft.studio.field.label" value="total_ordenes"/>
 	</field>
 	<background splitType="Stretch"/>
-	<title height="88" splitType="Stretch">
+	<title height="80" splitType="Stretch">
 		<element kind="staticText" uuid="457a4c6d-7643-4c15-b3f9-7f6f7191c436" x="120" y="40" width="290" height="40" fontName="Constantia" fontSize="14.0" bold="true" hTextAlign="Center">
-			<text><![CDATA[REPORTE DE USUARIOS MÁS FRECUENTES DEL MES]]></text>
+			<text><![CDATA[REPORTE DE CLIENTES MÁS FRECUENTES]]></text>
 		</element>
 		<element kind="image" uuid="e903c853-1335-4e1c-8b76-743be379d644" x="470" y="30" width="90" height="35">
 			<expression><![CDATA[$P{logo}]]></expression>
 		</element>
 	</title>
-	<pageHeader height="50" splitType="Stretch">
+	<pageHeader height="82" splitType="Stretch">
 		<element kind="textField" uuid="b152205a-6ec2-4c9c-847d-89f8a824c96b" x="470" y="10" width="100" height="30" pattern="MMMMM dd, yyyy">
 			<expression><![CDATA[new java.util.Date()]]></expression>
+		</element>
+		<element kind="textField" uuid="f7acad45-4b84-4536-89b5-43ce36a27b0d" x="0" y="10" width="450" height="20">
+			<expression><![CDATA["Periodo: " + 
+(
+  ($P{mesIni} == null || $P{anioIni} == null) 
+    ? "Sin fecha de inicio" 
+    : ($P{mesIni} + "/" + $P{anioIni})
+)
++ " a " + 
+(
+  ($P{mesFin} == null || $P{anioFin} == null) 
+    ? "Sin fecha de fin" 
+    : ($P{mesFin} + "/" + $P{anioFin})
+)]]></expression>
+		</element>
+		<element kind="textField" uuid="02bccb1e-cd04-4c38-9330-16613f0c2c74" x="0" y="40" width="155" height="30">
+			<expression><![CDATA["Mínimo de compras: " + 
+(
+  $P{minCompras} == null 
+    ? "Ninguno" 
+    : $P{minCompras}
+)]]></expression>
 		</element>
 	</pageHeader>
 	<columnHeader height="31" splitType="Stretch">
@@ -136,4 +168,9 @@ ORDER BY
 			</plot>
 		</element>
 	</summary>
+	<noData height="54">
+		<element kind="staticText" uuid="4c4ab2e8-605d-424a-acba-218bde23894e" x="230" y="12" width="100" height="30">
+			<text><![CDATA[No se halló ningún resultado :(]]></text>
+		</element>
+	</noData>
 </jasperReport>
