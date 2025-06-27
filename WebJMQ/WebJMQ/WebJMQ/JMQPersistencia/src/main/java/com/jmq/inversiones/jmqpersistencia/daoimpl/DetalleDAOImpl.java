@@ -151,41 +151,26 @@ public class DetalleDAOImpl extends BaseDAOImpl<Detalle> implements DetalleDAO{
     }
     
     public List<Detalle> listarPorOrden(int idOrden){
-            List<Detalle> detalles = new ArrayList<>();
+        List<Detalle> detalles = new ArrayList<>();
 
-    try (Connection conn = DBManager.getInstance().obtenerConexion();
-         CallableStatement cs = conn.prepareCall("{CALL DETALLE_LISTAR_POR_ORDEN(?)}")) {
+        String query = "{CALL DETALLE_LISTAR_POR_ORDEN(?)}";
 
-        cs.setInt(1, idOrden);
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(query)) {
 
-        try (ResultSet rs = cs.executeQuery()) {
-            while (rs.next()) {
-                Detalle detalle = new Detalle();
+            cs.setInt(1, idOrden);
 
-                // Setear datos de Detalle
-                detalle.setCantidad(rs.getInt("cantidad"));
-                detalle.setPrecio_unitario(rs.getDouble("precio_unitario"));
-
-                // Setear Producto
-                Producto producto = new Producto();
-                producto.setId(rs.getInt("producto_id"));
-                producto.setNombre(rs.getString("producto_nombre"));
-                detalle.setProducto(producto);
-
-                // También podrías setear la orden si lo necesitas
-                // OrdenVenta orden = new OrdenVenta();
-                // orden.setId(rs.getInt("id_orden"));
-                // detalle.setOrden(orden);
-
-                detalles.add(detalle);
+            try (ResultSet rs = cs.executeQuery()) {
+                while (rs.next()) {
+                    detalles.add(createFromResultSet(rs));
+                }
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar detalles por orden", e);
         }
 
-    } catch (SQLException e) {
-        throw new RuntimeException("Error al listar detalles por orden", e);
-    }
-
-    return detalles;
+        return detalles;
     }
 }
 

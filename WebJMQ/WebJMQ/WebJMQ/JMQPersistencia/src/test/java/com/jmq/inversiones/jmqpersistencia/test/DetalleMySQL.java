@@ -81,6 +81,25 @@ public class DetalleMySQL {
         );
         assertNull(eliminado);
     }
+    
+    @Test
+    public void testListarPorOrden() {
+        // Arrange
+        int idOrdenExistente = 28;
+
+        // Act
+        List<Detalle> detalles = detalleDAO.listarPorOrden(idOrdenExistente);
+
+        // Assert
+        assertNotNull(detalles, "La lista de detalles no debe ser null.");
+        assertFalse(detalles.isEmpty(), "La lista de detalles no debe estar vacía para una orden válida.");
+
+        for (Detalle d : detalles) {
+            assertNotNull(d.getProducto(), "El producto no debe ser null.");
+            assertTrue(d.getCantidad() > 0, "La cantidad debe ser mayor que 0.");
+            assertTrue(d.getPrecio_unitario() > 0, "El precio unitario debe ser mayor que 0.");
+        }
+    }
 
     // ✅ Utiliza una orden activa y un producto existente
     private Detalle crearDetalleEjemplo() {
@@ -90,7 +109,7 @@ public class DetalleMySQL {
 
         // Crear orden con usuario válido
         Usuario usuario = new Usuario();
-        usuario.setId(1); // ⚠️ Este usuario debe existir en la base de datos
+        usuario.setId(1); 
 
         OrdenVenta orden = new OrdenVenta();
         orden.setUsuario(usuario);
