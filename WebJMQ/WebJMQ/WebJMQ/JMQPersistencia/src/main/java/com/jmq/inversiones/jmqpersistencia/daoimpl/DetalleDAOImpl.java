@@ -76,6 +76,14 @@ public class DetalleDAOImpl extends BaseDAOImpl<Detalle> implements DetalleDAO{
         detalle.setCantidad(rs.getInt("cantidad"));
         return detalle;
     }
+    
+    protected Detalle createFromResultSet2(ResultSet rs) throws SQLException {
+        Detalle detalle = new Detalle();
+        detalle.setProducto(this.producto.obtener(rs.getInt("id_producto")));
+        detalle.setPrecio_unitario(rs.getDouble("precio_unitario"));
+        detalle.setCantidad(rs.getInt("cantidad"));
+        return detalle;
+    }
 
 //    @Override
 //    protected void setId(Detalle entity, Integer id) {
@@ -151,41 +159,24 @@ public class DetalleDAOImpl extends BaseDAOImpl<Detalle> implements DetalleDAO{
     }
     
     public List<Detalle> listarPorOrden(int idOrden){
-            List<Detalle> detalles = new ArrayList<>();
+        List<Detalle> detalles = new ArrayList<>();
 
-    try (Connection conn = DBManager.getInstance().obtenerConexion();
-         CallableStatement cs = conn.prepareCall("{CALL DETALLE_LISTAR_POR_ORDEN(?)}")) {
+        String query = "{CALL DETALLE_LISTAR_POR_ORDEN(?)}";
 
-        cs.setInt(1, idOrden);
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             CallableStatement cs = conn.prepareCall(query)) {
 
-        try (ResultSet rs = cs.executeQuery()) {
+            cs.setInt(1, idOrden);
+            ResultSet rs = cs.executeQuery();
             while (rs.next()) {
-                Detalle detalle = new Detalle();
-
-                // Setear datos de Detalle
-                detalle.setCantidad(rs.getInt("cantidad"));
-                detalle.setPrecio_unitario(rs.getDouble("precio_unitario"));
-
-                // Setear Producto
-                Producto producto = new Producto();
-                producto.setId(rs.getInt("producto_id"));
-                producto.setNombre(rs.getString("producto_nombre"));
-                detalle.setProducto(producto);
-
-                // También podrías setear la orden si lo necesitas
-                // OrdenVenta orden = new OrdenVenta();
-                // orden.setId(rs.getInt("id_orden"));
-                // detalle.setOrden(orden);
-
-                detalles.add(detalle);
+                detalles.add(createFromResultSet(rs));
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar detalles por orden", e);
         }
 
-    } catch (SQLException e) {
-        throw new RuntimeException("Error al listar detalles por orden", e);
-    }
-
-    return detalles;
+        return detalles;
     }
 }
 
