@@ -135,7 +135,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
         Usuario usuario = usuarioDAO.obtenerPorCorreo(correo.trim());
         if (usuario == null) {
-            throw new Exception("El correo ingresado no está registrado");
+            return null;
         }
 
         return usuario;
@@ -187,9 +187,13 @@ public class UsuarioServiceImpl implements UsuarioService{
     
     @Override
     public boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception {
+        if (nuevaPassword == null || nuevaPassword.trim().length() < 8) {
+            throw new Exception("La contraseña debe tener al menos 8 caracteres.");
+        }
         String correo = validarToken(token);
         Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
         if (usuario == null) throw new Exception("Usuario no encontrado");
+
 
         // Comparar la nueva con la actual, usando BCrypt
         if (BCrypt.checkpw(nuevaPassword, usuario.getContrasena())) {
