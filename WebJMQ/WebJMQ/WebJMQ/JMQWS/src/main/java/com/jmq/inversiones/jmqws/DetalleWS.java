@@ -78,7 +78,7 @@ public class DetalleWS {
             return detalleWS.listarPorOrden(idOrden);
         }
         catch (Exception ex){
-            throw new WebServiceException("Error al leer Detalles "+ex.getMessage());
+            throw new WebServiceException("Error al leer Detalles por orden "+ex.getMessage());
         }
     }
     
