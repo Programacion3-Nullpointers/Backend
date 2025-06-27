@@ -88,10 +88,17 @@ public class UsuarioWS {
 //    }
     
     @WebMethod(operationName = "reporteClientes")
-    public byte[] reporteClientes(){
+    public byte[] reporteClientes(Integer[] args){
         try{
             Map<String, Object> params = new HashMap<>();  
             params.put("logo",ImageIO.read(new File(getFileResource("logo1.png"))));
+            if (args[1] == null) args[0] = null;
+            if (args[3] == null) args[2] = null;
+            params.put("mesIni",args[0]);
+            params.put("anioIni",args[1]);
+            params.put("mesFin",args[2]);
+            params.put("anioFin",args[3]);
+            params.put("minCompras",args[4]);
             String fileXML = getFileResource("RClientes.jrxml");            
             return generarBufferFromJP(fileXML, params);
         }catch(Exception ex){

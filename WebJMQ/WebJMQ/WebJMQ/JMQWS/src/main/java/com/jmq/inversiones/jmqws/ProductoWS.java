@@ -82,19 +82,21 @@ public class ProductoWS {
 
     
     @WebMethod(operationName = "reporteMasVendidos")
-    public byte[] reporteMasVendidos(){
+    public byte[] reporteMasVendidos(Integer[] args){
         try{
             Map<String, Object> params = new HashMap<>();  
             params.put("logo",ImageIO.read(new File(getFileResource("logo1.png"))));
+            if (args[1] == null) args[0] = null;
+            if (args[3] == null) args[2] = null;
+            params.put("mesIni",args[0]);
+            params.put("anioIni",args[1]);
+            params.put("mesFin",args[2]);
+            params.put("anioFin",args[3]);
             String fileXML = getFileResource("Productos.jrxml");
             return generarBufferFromJP(fileXML, params);
         }catch(Exception ex){
             throw new WebServiceException("Error al generar report: " + ex.getMessage());
         }
-    }
-    
-    private String generarQuery(Integer args[]){
-        return "hola";
     }
     
     @WebMethod(operationName = "reporteStock")
@@ -103,19 +105,11 @@ public class ProductoWS {
         try{
             Map<String, Object> params = new HashMap<>();  
             params.put("logo",ImageIO.read(new File(getFileResource("logo1.png"))));
-            String fileXML = getFileResource("Stock.jrxml");
-            if (args != null) {
-                query = generarQuery(args);
-                JasperDesign jasperDesign = JRXmlLoader.load("Stock.jrxml");
-                JRDesignQuery nuevaQuery = new JRDesignQuery();
-                nuevaQuery.setText(query);
-                jasperDesign.setQuery(nuevaQuery);
-                // Compilar el diseño modificado
-                JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-                //falta hacer que funcione de verdad :(
-                return generarBufferFromJP(fileXML, params);
-            }            
-            else return generarBufferFromJP(fileXML, params);
+            params.put("stockMin",args[0]);
+            params.put("stockMax",args[1]);
+            params.put("idCategoria", args[2]);
+            String fileXML = getFileResource("Stock.jrxml");     
+            return generarBufferFromJP(fileXML, params);
         }catch(Exception ex){
             throw new WebServiceException("Error al generar report: " + ex.getMessage());
         }
@@ -128,24 +122,6 @@ public class ProductoWS {
     }
 
     private byte[] generarBufferFromJP(String inFileXML, Map<String, Object> params) throws JRException {
-         //Se compila una sola vez
-        String fileJasper = inFileXML +".jasper";
-        if(!new File(fileJasper).exists()){
-            //para compilar en GlassFish se requiere las librerias: jasperreports-jdt, ecj
-            JasperCompileManager.compileReportToFile(inFileXML, fileJasper);         
-        }
-        //1- leer el archivo compilado
-        JasperReport jr = (JasperReport) JRLoader.loadObjectFromFile(fileJasper);
-        //2- poblar el reporte
-        try (Connection conn = DBManager.getInstance().obtenerConexion()){
-            JasperPrint jp = JasperFillManager.fillReport(jr,params, conn);          
-            return JasperExportManager.exportReportToPdf(jp);
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al agregar entidad", e);
-        }
-    }
-    
-    private byte[] generarBufferFromJPConCambioDeQuery(String inFileXML, Map<String, Object> params, String query) throws JRException {
          //Se compila una sola vez
         String fileJasper = inFileXML +".jasper";
         if(!new File(fileJasper).exists()){
