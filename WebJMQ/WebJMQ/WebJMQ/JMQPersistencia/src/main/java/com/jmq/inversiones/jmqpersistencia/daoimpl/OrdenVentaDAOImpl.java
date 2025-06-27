@@ -24,7 +24,7 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
     public OrdenVentaDAOImpl(){
         usuario = new UsuarioDAOImpl();
     }
-    @Override
+    @Override   
     protected String getInsertQuery() {
         return "{CALL ORDENVENTA_INSERTAR( ?, ?, ?, ?, ?)}";
     }

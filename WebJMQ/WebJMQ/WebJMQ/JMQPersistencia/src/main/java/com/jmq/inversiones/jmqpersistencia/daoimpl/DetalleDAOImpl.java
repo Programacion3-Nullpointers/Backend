@@ -76,6 +76,14 @@ public class DetalleDAOImpl extends BaseDAOImpl<Detalle> implements DetalleDAO{
         detalle.setCantidad(rs.getInt("cantidad"));
         return detalle;
     }
+    
+    protected Detalle createFromResultSet2(ResultSet rs) throws SQLException {
+        Detalle detalle = new Detalle();
+        detalle.setProducto(this.producto.obtener(rs.getInt("id_producto")));
+        detalle.setPrecio_unitario(rs.getDouble("precio_unitario"));
+        detalle.setCantidad(rs.getInt("cantidad"));
+        return detalle;
+    }
 
 //    @Override
 //    protected void setId(Detalle entity, Integer id) {
@@ -159,11 +167,9 @@ public class DetalleDAOImpl extends BaseDAOImpl<Detalle> implements DetalleDAO{
              CallableStatement cs = conn.prepareCall(query)) {
 
             cs.setInt(1, idOrden);
-
-            try (ResultSet rs = cs.executeQuery()) {
-                while (rs.next()) {
-                    detalles.add(createFromResultSet(rs));
-                }
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+                detalles.add(createFromResultSet(rs));
             }
 
         } catch (SQLException e) {

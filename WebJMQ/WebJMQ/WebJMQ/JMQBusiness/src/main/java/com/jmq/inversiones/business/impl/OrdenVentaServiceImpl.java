@@ -157,7 +157,7 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
             // Convertir String a Enum
             EstadoCompra nuevoEstado;
             try {
-                nuevoEstado = EstadoCompra.valueOf(estado.toUpperCase());
+                nuevoEstado = EstadoCompra.valueOf(estado.toLowerCase());
             } catch (IllegalArgumentException e) {
                 throw new Exception("Estado no válido: " + estado);
             }

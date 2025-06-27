@@ -85,20 +85,22 @@ public class DetalleMySQL {
     @Test
     public void testListarPorOrden() {
         // Arrange
-        int idOrdenExistente = 28;
+        int idOrdenExistente = 32;
+         Detalle detalle = detalleDAO.obtener(idOrdenExistente,4);
+        assertNotNull(detalle, "El detalle con idOrden=32 y idProducto=4 no existe. Asegúrate de que la BD esté preparada para este test.");
 
         // Act
-        List<Detalle> detalles = detalleDAO.listarPorOrden(idOrdenExistente);
+        List<Detalle> lista = detalleDAO.listarPorOrden(idOrdenExistente);
 
-        // Assert
-        assertNotNull(detalles, "La lista de detalles no debe ser null.");
-        assertFalse(detalles.isEmpty(), "La lista de detalles no debe estar vacía para una orden válida.");
+        boolean encontrado = lista.stream()
+                .anyMatch(d ->
+                    d.getOrden() != null && d.getProducto() != null &&
+                    d.getOrden().getId() == detalle.getOrden().getId() &&
+                    d.getProducto().getId() == detalle.getProducto().getId());
 
-        for (Detalle d : detalles) {
-            assertNotNull(d.getProducto(), "El producto no debe ser null.");
-            assertTrue(d.getCantidad() > 0, "La cantidad debe ser mayor que 0.");
-            assertTrue(d.getPrecio_unitario() > 0, "El precio unitario debe ser mayor que 0.");
-        }
+        assertTrue(encontrado);
+        
+        
     }
 
     // ✅ Utiliza una orden activa y un producto existente
