@@ -47,10 +47,6 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         cs.setBoolean(4, usuario.isActivo() == true);
         cs.setString(5, usuario.getCorreo());
         cs.setString(6, usuario.getTipoUsuario().name());
-        cs.setString(7, usuario.getDni());
-        cs.setString(8, usuario.getRazonsocial());
-        cs.setString(9, usuario.getDireccion());
-        cs.setString(10, usuario.getRUC());
         
         if (usuario.getDni() != null) {
             cs.setString(7, usuario.getDni());

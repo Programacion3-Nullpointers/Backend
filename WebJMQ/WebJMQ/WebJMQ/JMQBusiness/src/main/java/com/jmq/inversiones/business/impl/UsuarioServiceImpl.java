@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import io.jsonwebtoken.*;
 import java.sql.SQLException;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UsuarioServiceImpl implements UsuarioService{
     
@@ -32,6 +33,11 @@ public class UsuarioServiceImpl implements UsuarioService{
             if (usuario.getContrasena() == null || usuario.getContrasena().isEmpty()) {
                 throw new Exception("La contraseña es requerida");
             }
+            
+            if (usuario.getContrasena().trim().length() < 8) {
+                throw new Exception("La contraseña debe tener al menos 8 caracteres");
+            }
+
             if (usuario.getCorreo()== null || usuario.getCorreo().isEmpty()) {
                 throw new Exception("La correo es requerido");
             }
@@ -54,7 +60,9 @@ public class UsuarioServiceImpl implements UsuarioService{
                     throw new Exception("El RUC es requerido para empresas");
             }
 
-            
+            String hashedPassword = BCrypt.hashpw(usuario.getContrasena(), BCrypt.gensalt());
+            usuario.setContrasena(hashedPassword);
+
             usuarioDAO.agregar(usuario);
         } catch (Exception e) {
             throw new Exception("Error al registrar usuario: " + e.getMessage(), e);
@@ -76,6 +84,9 @@ public class UsuarioServiceImpl implements UsuarioService{
             if (usuario.getCorreo()== null || usuario.getCorreo().isEmpty()) {
                 throw new Exception("El correo es requerido");
             }
+            String hashedPassword = BCrypt.hashpw(usuario.getContrasena(), BCrypt.gensalt());
+            usuario.setContrasena(hashedPassword);
+
             usuarioDAO.actualizar(usuario);
         } catch (Exception e) {
             throw new Exception("Error al actualizar cliente: " + e.getMessage(), e);
@@ -124,7 +135,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
         Usuario usuario = usuarioDAO.obtenerPorCorreo(correo.trim());
         if (usuario == null) {
-            throw new Exception("El correo ingresado no está registrado");
+            return null;
         }
 
         return usuario;
@@ -176,14 +187,22 @@ public class UsuarioServiceImpl implements UsuarioService{
     
     @Override
     public boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception {
+        if (nuevaPassword == null || nuevaPassword.trim().length() < 8) {
+            throw new Exception("La contraseña debe tener al menos 8 caracteres.");
+        }
         String correo = validarToken(token);
         Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
         if (usuario == null) throw new Exception("Usuario no encontrado");
 
-        if (usuario.getContrasena().equals(nuevaPassword)) {
+
+        // Comparar la nueva con la actual, usando BCrypt
+        if (BCrypt.checkpw(nuevaPassword, usuario.getContrasena())) {
             throw new Exception("No puede utilizar su misma contraseña.");
         }
-        usuario.setContrasena(nuevaPassword);
+
+        // Cifrar la nueva contraseña
+        String hashedPassword = BCrypt.hashpw(nuevaPassword, BCrypt.gensalt());
+        usuario.setContrasena(hashedPassword);
         usuarioDAO.actualizar(usuario);
         return true;
     }

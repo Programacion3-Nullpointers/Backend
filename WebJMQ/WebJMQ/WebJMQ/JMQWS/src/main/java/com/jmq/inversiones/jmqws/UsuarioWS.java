@@ -35,7 +35,7 @@ public class UsuarioWS {
     @WebMethod(operationName = "registrarUsuario")
     public Usuario registrarUsuario(@WebParam(name = "usuario") Usuario usuario) throws Exception {
         usuarioService.registrarUsuario(usuario);
-        return usuarioService.buscarUsuario(usuario.getId());
+        return usuarioService.buscarUsuarioPorCorreo(usuario.getCorreo());
     }
 
     @WebMethod(operationName = "actualizarUsuario")
@@ -81,11 +81,6 @@ public class UsuarioWS {
         return usuarioService.validarTokenPassword(token);
     }
 
-
-//    @WebMethod
-//    public Usuario obtenerPorToken(String token) throws Exception {
-//        return usuarioService.obtenerPorToken(token);
-//    }
     
     @WebMethod(operationName = "reporteClientes")
     public byte[] reporteClientes(Integer[] args){
