@@ -15,4 +15,5 @@ public interface UsuarioService {
     boolean cambiarPasswordConToken(String token, String nuevaPassword) throws Exception;
     boolean validarTokenPassword(String token);
     List<Usuario> filtrarUsuarios(String tipoEntidad, Boolean activo) throws SQLException;
+    Usuario verificarCredenciales(String correo, String password) throws Exception;
 }
