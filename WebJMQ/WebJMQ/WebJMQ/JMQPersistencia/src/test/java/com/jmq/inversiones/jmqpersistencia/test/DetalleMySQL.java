@@ -81,6 +81,27 @@ public class DetalleMySQL {
         );
         assertNull(eliminado);
     }
+    
+    @Test
+    public void testListarPorOrden() {
+        // Arrange
+        int idOrdenExistente = 32;
+         Detalle detalle = detalleDAO.obtener(idOrdenExistente,4);
+        assertNotNull(detalle, "El detalle con idOrden=32 y idProducto=4 no existe. Asegúrate de que la BD esté preparada para este test.");
+
+        // Act
+        List<Detalle> lista = detalleDAO.listarPorOrden(idOrdenExistente);
+
+        boolean encontrado = lista.stream()
+                .anyMatch(d ->
+                    d.getOrden() != null && d.getProducto() != null &&
+                    d.getOrden().getId() == detalle.getOrden().getId() &&
+                    d.getProducto().getId() == detalle.getProducto().getId());
+
+        assertTrue(encontrado);
+        
+        
+    }
 
     // ✅ Utiliza una orden activa y un producto existente
     private Detalle crearDetalleEjemplo() {
@@ -90,7 +111,7 @@ public class DetalleMySQL {
 
         // Crear orden con usuario válido
         Usuario usuario = new Usuario();
-        usuario.setId(1); // ⚠️ Este usuario debe existir en la base de datos
+        usuario.setId(1); 
 
         OrdenVenta orden = new OrdenVenta();
         orden.setUsuario(usuario);

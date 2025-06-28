@@ -25,7 +25,11 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
             setInsertParameters(cs, entity);
             cs.execute();
 
-            setId(entity, cs.getInt(1));
+            int idGenerado = cs.getInt(1);
+            if (idGenerado <= 0) {
+                throw new SQLException("No se generó un ID válido al insertar. El procedimiento pudo haber fallado.");
+            }
+            setId(entity, idGenerado);
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al agregar entidad", e);
