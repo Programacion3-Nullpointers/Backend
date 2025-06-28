@@ -225,5 +225,13 @@ public class UsuarioServiceImpl implements UsuarioService{
             throw e;
         }
     }
+    @Override
+    public Usuario verificarCredenciales(String correo, String password) throws Exception {
+        Usuario usuario = usuarioDAO.obtenerPorCorreo(correo);
+        if (usuario != null && BCrypt.checkpw(password, usuario.getContrasena())) {
+            return usuario;
+        }
+        return null;
+    }
 }
 

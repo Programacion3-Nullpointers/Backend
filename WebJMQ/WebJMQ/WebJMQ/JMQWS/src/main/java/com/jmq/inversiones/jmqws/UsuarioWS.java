@@ -129,5 +129,13 @@ public class UsuarioWS {
                                      @WebParam(name = "activo") Boolean activo)  throws Exception{
         return usuarioService.filtrarUsuarios(tipoEntidad, activo);
     }
+    @WebMethod(operationName = "verificarCrendenciales")
+    public Usuario verificarCredenciales(
+            @WebParam(name = "correo") String correo,
+            @WebParam(name = "password") String password
+    ) throws Exception{
+        return usuarioService.verificarCredenciales(correo, password);
+    }
+    
 }
  
