@@ -39,7 +39,7 @@ public class UsuarioServiceImpl implements UsuarioService{
             }
 
             if (usuario.getCorreo()== null || usuario.getCorreo().isEmpty()) {
-                throw new Exception("La correo es requerido");
+                throw new Exception("El correo es requerido");
             }
             // Asignar valores por defecto si es necesario
             if (usuario.getTipoUsuario() == null) {
@@ -210,7 +210,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public boolean validarTokenPassword(String token) {
         try {
-            validarToken(token); // ya tenés este método privado implementado
+            validarToken(token);
             return true;
         } catch (Exception e) {
             return false;

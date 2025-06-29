@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Usuario` (
   `dni` VARCHAR(45) NULL,
   `razonsocial` VARCHAR(45) NULL,
   `direccion` VARCHAR(45) NULL,
-  `RUC` VARCHAR(45) NULL,
+  `RUC` VARCHAR(11) NULL,
   `saldo` DOUBLE NOT NULL,
   PRIMARY KEY (`idUsuario`))
 ENGINE = InnoDB;
