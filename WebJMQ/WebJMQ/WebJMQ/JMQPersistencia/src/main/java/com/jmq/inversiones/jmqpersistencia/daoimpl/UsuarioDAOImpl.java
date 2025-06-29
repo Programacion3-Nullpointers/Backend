@@ -144,7 +144,7 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         // Convertir el String a Enum.
         TipoUsuario tipo = TipoUsuario.valueOf(tipoUsuarioStr.toUpperCase());
         usu.setTipoUsuario(tipo);
-
+        usu.setDireccion(rs.getString("direccion"));
         switch (tipo) {
             case EMPRESA:
                 usu.setRUC(rs.getString("RUC"));
