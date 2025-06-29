@@ -108,7 +108,7 @@ BEGIN
     VALUES ( _num_descuento, _activo);
     SET _id_descuento = LAST_INSERT_ID();
 END $$
-
+DELIMITER $
 CREATE PROCEDURE DESCUENTO_MODIFICAR(
     IN _id_descuento INT,
     IN _num_descuento INT
@@ -118,14 +118,14 @@ BEGIN
     SET numDescuento = _num_descuento
     WHERE idDescuento = _id_descuento;
 END $
-
+DELIMITER $
 CREATE PROCEDURE DESCUENTO_ELIMINAR(
     IN _id_descuento INT
 )
 BEGIN
     UPDATE Descuento SET activo = 0 WHERE idDescuento = _id_descuento;
 END $
-
+DELIMITER $
 CREATE PROCEDURE DESCUENTO_LISTAR()
 BEGIN
     SELECT * FROM Descuento;
@@ -143,7 +143,7 @@ BEGIN
     VALUES ( _descripcion, _nombre, _id_descuento);
     SET _id_categoria = LAST_INSERT_ID();
 END $$
-
+DELIMITER $
 CREATE PROCEDURE CATEGORIA_MODIFICAR(
     IN _id_categoria INT,
     IN _descripcion VARCHAR(45),
@@ -158,6 +158,7 @@ BEGIN
     WHERE idCategoria = _id_categoria;
 END $
 
+DELIMITER $
 CREATE PROCEDURE CATEGORIA_ELIMINAR(
     IN _id_categoria INT
 )
@@ -165,17 +166,19 @@ BEGIN
     DELETE FROM Categoria WHERE idCategoria = _id_categoria;
 END $
 
+DELIMITER $
 CREATE PROCEDURE CATEGORIA_LISTAR()
 BEGIN
     SELECT * FROM Categoria;
 END $
+
 DELIMITER $
 CREATE PROCEDURE USUARIO_INSERTAR(
     OUT _id_usuario INT,
-    IN _nombre_usuario VARCHAR(45),
-    IN _contrasena VARCHAR(45),
+    IN _nombre_usuario VARCHAR(100),
+    IN _contrasena VARCHAR(100),
     IN _activo TINYINT,
-    IN _correo VARCHAR(45),
+    IN _correo VARCHAR(100),
     IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE','ADMIN'),
     IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
@@ -187,20 +190,18 @@ BEGIN
     VALUES (_nombre_usuario, _contrasena, _activo, _correo, _tipo_usuario, _dni, _razon_social, _direccion, _ruc);
     SET _id_usuario = LAST_INSERT_ID();
 END $
-
+DELIMITER $
 CREATE PROCEDURE USUARIO_MODIFICAR(
     IN _id_usuario INT,
-    IN _nombre_usuario VARCHAR(45),
-    IN _contrasena VARCHAR(45),
+    IN _nombre_usuario VARCHAR(100),
+    IN _contrasena VARCHAR(100),
     IN _activo TINYINT,
-    IN _correo VARCHAR(45),
+    IN _correo VARCHAR(100),
     IN _tipo_usuario ENUM('EMPRESA', 'CLIENTE','ADMIN'),
     IN _dni VARCHAR(45),
     IN _razon_social VARCHAR(45),
     IN _direccion VARCHAR(45),
-    IN _ruc VARCHAR(45),
-    IN _token_reset VARCHAR(45),
-    IN _fecha_expiracion_token DATE
+    IN _ruc VARCHAR(45)
 )
 BEGIN
     UPDATE Usuario
@@ -212,9 +213,7 @@ BEGIN
         dni = _dni,
         razonsocial = _razon_social,
         direccion = _direccion,
-        RUC = _ruc,
-        token_reset = _token_reset,
-        fecha_expiracion_token = _fecha_expiracion_token
+        RUC = _ruc
     WHERE idUsuario = _id_usuario;
 END $
 
