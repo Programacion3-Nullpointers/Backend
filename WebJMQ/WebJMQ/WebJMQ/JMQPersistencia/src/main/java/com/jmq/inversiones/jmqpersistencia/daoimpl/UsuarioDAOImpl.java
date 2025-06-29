@@ -14,12 +14,12 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
 
     @Override
     protected String getInsertQuery() {
-        return "{CALL USUARIO_INSERTAR(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        return "{CALL USUARIO_INSERTAR(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "{CALL USUARIO_MODIFICAR(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        return "{CALL USUARIO_MODIFICAR(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
     }
 
     @Override
@@ -67,6 +67,8 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         } else {
             cs.setNull(10, java.sql.Types.VARCHAR);
         }
+        
+        cs.setDouble(11, usuario.getSaldo());
     }
 
     @Override
@@ -121,6 +123,7 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         else
             cs.setNull(10, Types.VARCHAR);
 
+        cs.setDouble(11, usuario.getSaldo());
     }
 
    @Override
@@ -132,43 +135,34 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         usu.setActivo(rs.getBoolean("activo"));
         usu.setCorreo(rs.getString("correo"));
 
-        // 1. Obtenemos el tipo de usuario UNA SOLA VEZ para más eficiencia.
         String tipoUsuarioStr = rs.getString("tipoUsuario");
 
-        // Si el valor de la base de datos es nulo o está vacío, no podemos continuar.
         if (tipoUsuarioStr == null || tipoUsuarioStr.trim().isEmpty()) {
-            // Puedes lanzar una excepción o simplemente no devolver el usuario.
             throw new SQLException("El tipo de usuario es nulo o vacío para el id: " + usu.getId());
         }
 
-        // 2. Convertimos el String a Enum.
+        // Convertir el String a Enum.
         TipoUsuario tipo = TipoUsuario.valueOf(tipoUsuarioStr.toUpperCase());
         usu.setTipoUsuario(tipo);
 
-        // 3. Usamos un 'switch' para manejar cada caso de forma explícita y segura.
-        //    Es mucho más limpio y fácil de mantener que un if-else.
         switch (tipo) {
             case EMPRESA:
                 usu.setRUC(rs.getString("RUC"));
                 usu.setRazonsocial(rs.getString("razonsocial"));
-                // Nos aseguramos de que los otros campos queden nulos.
                 usu.setDni(null);
                 break;
 
             case CLIENTE:
                 usu.setDni(rs.getString("dni"));
-                // Nos aseguramos de que los otros campos queden nulos.
                 usu.setRUC(null);
                 usu.setRazonsocial(null);
                 break;
 
              case ADMIN:
                  usu.setDni(null);
-            //     usu.setRUC(null);
-            //     usu.setRazonsocial(null);
                  break;
-
         }
+        usu.setSaldo(rs.getDouble("saldo"));
         return usu;
     }
 
@@ -235,5 +229,15 @@ public class UsuarioDAOImpl extends BaseDAOImpl<Usuario> implements UsuarioDAO {
         }
 
         return usuarios;
+    }
+    
+    public void eliminarTest(Integer id) {
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement("DELETE FROM Usuario WHERE idUsuario = ?")) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar entidad", e);
+        }
     }
 }

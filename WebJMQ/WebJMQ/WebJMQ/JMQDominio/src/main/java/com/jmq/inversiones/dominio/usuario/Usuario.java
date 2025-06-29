@@ -1,7 +1,5 @@
 package com.jmq.inversiones.dominio.usuario;
 
-import java.util.Date;
-
 public class Usuario {
     private int id;
     private String nombreUsuario;
@@ -13,12 +11,14 @@ public class Usuario {
     private String razonsocial;
     private String direccion;
     private String RUC;
+    private double saldo;
     
     public Usuario(){
         
     }
 
-    public Usuario(int id, String nombreUsuario, String contrasena, boolean activo, String correo, TipoUsuario tipoUsuario, String razonsocial, String direccion, String RUC) {
+    public Usuario(int id, String nombreUsuario, String contrasena, boolean activo, String correo, TipoUsuario tipoUsuario, String razonsocial, 
+            String direccion, String RUC, double saldo) {
         this.id = id;
         this.nombreUsuario = nombreUsuario;
         this.contrasena = contrasena;
@@ -28,6 +28,7 @@ public class Usuario {
         this.razonsocial = razonsocial;
         this.direccion = direccion;
         this.RUC = RUC;
+        this.saldo = saldo;
     }
 
     public int getId() {
@@ -133,5 +134,12 @@ public class Usuario {
         this.dni = dni;
     }
     
+    public double getSaldo() {
+        return saldo;
+    }
+    
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
 }
  

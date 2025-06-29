@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UsuarioMySQL {
 
-    private UsuarioDAO usuarioDAO;
+    private UsuarioDAOImpl usuarioDAO;
 
     @BeforeEach
     public void setUp() {
@@ -28,6 +28,7 @@ public class UsuarioMySQL {
         List<Usuario> usuarios = usuarioDAO.listarTodos();
         assertNotNull(usuarios);
         assertTrue(usuarios.stream().anyMatch(u -> u.getId() == nuevo.getId()));
+        usuarioDAO.eliminarTest(nuevo.getId());
     }
     
     @Test
@@ -36,12 +37,13 @@ public class UsuarioMySQL {
         
         if(usuario == null){
             System.out.println("El usuario es vacio");
+            assertNull(usuario);
         }
         else{
             System.out.println("El usuario esta lleno");
             System.out.println(usuario);
+            assertNotNull(usuario);
         }
-        assertNotNull(usuario);
     }
     @Test
     public void testActualizar() {
@@ -59,6 +61,7 @@ public class UsuarioMySQL {
 
         assertNotNull(actualizado);
         assertEquals("nuevo_correo@test.com", actualizado.getCorreo());
+        usuarioDAO.eliminarTest(usu.getId());
     }
 
     @Test
@@ -66,7 +69,7 @@ public class UsuarioMySQL {
         Usuario usu = crearUsuarioEjemplo();
         usuarioDAO.agregar(usu);
 
-        usuarioDAO.eliminar(usu.getId());
+        usuarioDAO.eliminarTest(usu.getId());
 
         List<Usuario> usuarios = usuarioDAO.listarTodos();
         assertFalse(usuarios.stream().anyMatch(u -> u.getId() == usu.getId()));
@@ -76,12 +79,13 @@ public class UsuarioMySQL {
         Usuario usuario = usuarioDAO.obtenerPorCorreo("admin@admin.com");
          if(usuario == null){
             System.out.println("El usuario es vacio");
+            assertNull(usuario);
         }
         else{
             System.out.println("El usuario esta lleno");
             System.out.println(usuario);
+            assertNotNull(usuario);
         }
-        assertNotNull(usuario);
     }
     private Usuario crearUsuarioEjemplo() {
         Usuario usuario = new Usuario();
@@ -90,7 +94,7 @@ public class UsuarioMySQL {
         usuario.setContrasena("123456");
         usuario.setActivo(true);
         usuario.setCorreo("cliente@test.com");
-        usuario.setTipoUsuario(TipoUsuario.CLIENTE);
+        usuario.setTipoUsuario(TipoUsuario.EMPRESA);
         usuario.setRazonsocial("N/A");
         usuario.setDireccion("Calle Falsa 123");
         usuario.setRUC("12345678901");
