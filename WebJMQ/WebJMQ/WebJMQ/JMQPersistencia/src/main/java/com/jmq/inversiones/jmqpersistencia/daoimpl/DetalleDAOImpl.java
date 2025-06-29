@@ -158,6 +158,7 @@ public class DetalleDAOImpl extends BaseDAOImpl<Detalle> implements DetalleDAO{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
+    @Override
     public List<Detalle> listarPorOrden(int idOrden){
         List<Detalle> detalles = new ArrayList<>();
 

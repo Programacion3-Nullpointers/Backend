@@ -157,20 +157,8 @@ public class ProductoDAOImpl extends BaseDAOImpl<Producto> implements ProductoDA
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Producto p = new Producto();
-                p.setId(rs.getInt("idProducto"));
-                p.setNombre(rs.getString("nombre"));
-                p.setDescripcion(rs.getString("descripcion"));
-                p.setStock(rs.getInt("stock"));
-                p.setPrecio(rs.getDouble("precio"));
-                p.setActivo(rs.getBoolean("activo"));
-                p.setImagen(rs.getBytes("imagen"));
-
-                Categoria c = new Categoria();
-                c.setId(rs.getInt("idCategoria"));
-                c.setNombre(rs.getString("nombre_categoria"));
-                p.setCategoria(c);
-
+                Producto p = createFromResultSet(rs);
+             
                 productos.add(p);
             }
         }

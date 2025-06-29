@@ -24,17 +24,15 @@ DROP TABLE IF EXISTS `mydb`.`Usuario` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Usuario` (
   `idUsuario` INT NOT NULL AUTO_INCREMENT,
-  `nombreUsuario` VARCHAR(45) NULL,
-  `contrasena` VARCHAR(45) NOT NULL,
+  `nombreUsuario` VARCHAR(100) NULL,
+  `contrasena` VARCHAR(100) NOT NULL,
   `activo` INT NOT NULL,
-  `correo` VARCHAR(45) NOT NULL,
+  `correo` VARCHAR(100) NOT NULL,
   `tipoUsuario` ENUM("EMPRESA", "CLIENTE","ADMIN") NULL,
   `dni` VARCHAR(45) NULL,
   `razonsocial` VARCHAR(45) NULL,
   `direccion` VARCHAR(45) NULL,
   `RUC` VARCHAR(45) NULL,
-  `token_reset` VARCHAR(45) NULL,
-  `fecha_expiracion_token` DATE NULL,
   PRIMARY KEY (`idUsuario`))
 ENGINE = InnoDB;
 

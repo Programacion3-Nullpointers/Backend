@@ -5,6 +5,7 @@ import com.jmq.inversiones.dominio.ventas.EstadoCompra;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.jmqpersistencia.dao.OrdenVentaDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.OrdenVentaDAOImpl;
+import java.sql.SQLException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -69,6 +70,22 @@ public class OrdenVentaMySQL {
     public void testListaOrdenVenta(){
         List<OrdenVenta> lista = ordenVentaDAO.listarPorUsuario(1);
         System.out.println(lista.size());
+    }
+    @Test
+    public void testFiltros() throws SQLException{
+      String estadoCompra = "pendiente";
+        Boolean activo = true;
+        Integer idUsuario = 2;
+        String fechaDesde = "2025-01-17";
+        String fechaHasta = "2025-04-28";
+
+        // Llamada al método
+        List<OrdenVenta> resultado = ordenVentaDAO.filtrarOrdenesVenta(estadoCompra, activo, idUsuario, fechaDesde, fechaHasta);
+
+        // Verificación (esto depende de tu base de datos o mock)
+        if(resultado != null){
+            System.out.println(resultado);
+        }
     }
     private OrdenVenta crearOrdenEjemplo(EstadoCompra estado) {
         Usuario u = new Usuario();

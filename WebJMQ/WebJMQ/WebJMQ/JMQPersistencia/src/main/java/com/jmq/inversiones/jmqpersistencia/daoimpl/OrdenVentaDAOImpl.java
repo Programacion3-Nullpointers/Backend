@@ -13,6 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -193,4 +195,57 @@ public class OrdenVentaDAOImpl extends BaseDAOImpl<OrdenVenta> implements OrdenV
 
         return lista;
     }
+    @Override
+    public List<OrdenVenta> filtrarOrdenesVenta(String estadoCompra, Boolean activo, Integer idUsuario,
+                                            String fechaDesde, String fechaHasta) throws SQLException {
+        List<OrdenVenta> ordenes = new ArrayList<>();
+
+        String sql = "SELECT * FROM OrdenVenta WHERE 1 = 1";
+        List<Object> params = new ArrayList<>();
+
+        if (estadoCompra != null && !estadoCompra.isEmpty()) {
+            sql += " AND estado_compra = ?";
+            params.add(estadoCompra);
+        }
+
+        if (activo != null) {
+            sql += " AND activo = ?";
+            params.add(activo);
+        }
+
+        if (idUsuario != null && idUsuario != 0) {
+            sql += " AND idUsuario = ?";
+            params.add(idUsuario);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        if (fechaDesde != null && !fechaDesde.isEmpty()) {
+            sql += " AND fecha_orden >= ?";
+            params.add(Date.valueOf(LocalDate.parse(fechaDesde, formatter)));
+        }
+
+        if (fechaHasta != null && !fechaHasta.isEmpty()) {
+            sql += " AND fecha_orden <= ?";
+            params.add(Date.valueOf(LocalDate.parse(fechaHasta, formatter)));
+        }
+
+
+        try (Connection conn = DBManager.getInstance().obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrdenVenta ov = createFromResultSet(rs);
+                ordenes.add(ov);
+            }
+        }
+
+        return ordenes;
+    }
+
 }
