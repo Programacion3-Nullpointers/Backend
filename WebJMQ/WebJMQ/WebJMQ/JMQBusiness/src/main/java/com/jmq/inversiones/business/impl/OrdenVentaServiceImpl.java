@@ -9,10 +9,14 @@ import com.jmq.inversiones.dominio.ventas.Producto;
 import com.jmq.inversiones.jmqpersistencia.dao.DetalleDAO;
 import com.jmq.inversiones.jmqpersistencia.dao.OrdenVentaDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoDAOImpl;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OrdenVentaServiceImpl implements OrdenVentaService{
 
@@ -102,7 +106,11 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
             }
             
             // Devolver stock si es necesario
-            actualizarStockProductos(orden.getDetalle(), true);
+            List<Detalle> detalles = orden.getDetalle();
+            if (detalles != null && !detalles.isEmpty()) {
+                actualizarStockProductos(detalles, true);
+            }
+
             
             // Llamar al DAO
             ordenVentaDAO.eliminar(id);
@@ -256,6 +264,18 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
         }
         if (estadoActual == EstadoCompra.cancelado && nuevoEstado != EstadoCompra.cancelado) {
             throw new Exception("No se puede modificar una orden cancelada");
+        }
+    }
+    @Override
+    public List<OrdenVenta> filtrarOrdenesVenta(String estadoCompra, Boolean activo, Integer idUsuario,
+                                           String fechaDesde, String fechaHasta) throws SQLException{
+        try {
+             List<OrdenVenta> lista = ordenVentaDAO.filtrarOrdenesVenta(estadoCompra, activo, idUsuario, fechaDesde, fechaHasta);
+            return lista;
+        } catch (SQLException e) {
+     
+            throw new SQLException("Error al elimnar detalle a orden: " + e.getMessage(), e);
+            
         }
     }
 }

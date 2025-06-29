@@ -98,6 +98,7 @@ public class DetalleServiceImpl implements DetalleService{
         }
     }
     
+    @Override
     public List<Detalle> listarPorOrden(int idOrden) throws Exception{
         try {
             return detalleDAO.listarPorOrden(idOrden);

@@ -13,6 +13,7 @@ import com.jmq.inversiones.jmqpersistencia.daoimpl.*;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
+import java.time.LocalDate;
 import java.util.List;
 /**
  *
@@ -65,6 +66,17 @@ public class OrdenVentaWS {
     }
     @WebMethod(operationName = "obtenerOrdenesVentasPorUsuario")
     public List<OrdenVenta> obtenerOrdenVentasByUsuario(@WebParam(name="id") int id) throws Exception{
+//        ordenVentaService.
         return ordenVentaService.listarOrdenVentaByUsuario(id);
     }
+    @WebMethod(operationName = "filtrarOrdenesVenta")
+    public List<OrdenVenta> filtrarOrdenesVenta(
+        @WebParam(name = "estadoCompra") String estadoCompra,
+        @WebParam(name = "activo") Boolean activo,
+        @WebParam(name = "idUsuario") Integer idUsuario,
+        @WebParam(name = "fechaDesde") String fechaDesde,   // En formato "yyyy-MM-dd"
+        @WebParam(name = "fechaHasta") String fechaHasta
+    )throws Exception{
+            return ordenVentaService.filtrarOrdenesVenta(estadoCompra, activo, idUsuario, fechaDesde, fechaHasta);
+    };
 }
