@@ -7,7 +7,7 @@ import com.jmq.inversiones.business.ventas.ProductoService;
 import com.jmq.inversiones.business.impl.ventas.ProductoServiceImpl;
 import com.jmq.inversiones.dbmanager.DBManager;
 import com.jmq.inversiones.dominio.ventas.Producto;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ventas.ProductoDAOImpl;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;

@@ -7,7 +7,7 @@ package com.jmq.inversiones.business.impl;
 import com.jmq.inversiones.business.impl.usuario.UsuarioServiceImpl;
 import com.jmq.inversiones.business.usuarios.UsuarioService;
 import com.jmq.inversiones.dominio.usuario.Usuario;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.UsuarioDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.usuario.UsuarioDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

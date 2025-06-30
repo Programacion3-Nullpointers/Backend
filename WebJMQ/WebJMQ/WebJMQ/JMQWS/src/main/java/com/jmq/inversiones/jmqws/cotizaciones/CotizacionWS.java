@@ -7,8 +7,8 @@ import com.jmq.inversiones.business.impl.cotizaciones.CotizacionServiceImpl;
 import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
 
 
-import com.jmq.inversiones.jmqpersistencia.daoimpl.CotizacionDAOImpl;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoCotizacionDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.cotizaciones.CotizacionDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.cotizaciones.ProductoCotizacionDAOImpl;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;

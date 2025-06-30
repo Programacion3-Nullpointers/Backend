@@ -3,7 +3,7 @@ package com.jmq.inversiones.business.impl.logistica;
 import com.jmq.inversiones.business.logistica.EntregaService;
 import com.jmq.inversiones.dominio.logistica.Entrega;
 import com.jmq.inversiones.dominio.logistica.TipoEntrega;
-import com.jmq.inversiones.jmqpersistencia.dao.EntregaDAO;
+import com.jmq.inversiones.jmqpersistencia.dao.logistica.EntregaDAO;
 import java.util.Date;
 import java.util.List;
 

@@ -4,7 +4,7 @@ package com.jmq.inversiones.jmqws.pagos;
 import com.jmq.inversiones.business.pagos.DescuentoService;
 import com.jmq.inversiones.business.impl.pagos.DescuentoServiceImpl;
 import com.jmq.inversiones.dominio.pagos.Descuento;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.DescuentoDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.pagos.DescuentoDAOImpl;
 import jakarta.jws.WebService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;

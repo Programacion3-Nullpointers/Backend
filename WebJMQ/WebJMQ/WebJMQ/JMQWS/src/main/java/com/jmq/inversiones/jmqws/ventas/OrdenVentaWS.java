@@ -3,13 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.jmq.inversiones.jmqws.ventas;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ventas.DetalleDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ventas.OrdenVentaDAOImpl;
 import com.jmq.inversiones.business.ventas.OrdenVentaService;
 import com.jmq.inversiones.business.impl.ventas.OrdenVentaServiceImpl;
 import com.jmq.inversiones.dominio.ventas.Detalle;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 
 
-import com.jmq.inversiones.jmqpersistencia.daoimpl.*;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;

@@ -2,8 +2,8 @@ package com.jmq.inversiones.business.impl.ventas;
 
 import com.jmq.inversiones.business.ventas.CategoriaService;
 import com.jmq.inversiones.dominio.ventas.Categoria;
-import com.jmq.inversiones.jmqpersistencia.dao.CategoriaDAO;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.CategoriaDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.dao.ventas.CategoriaDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ventas.CategoriaDAOImpl;
 import java.util.List;
 
 public class CategoriaServiceImpl implements CategoriaService{

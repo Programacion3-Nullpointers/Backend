@@ -4,7 +4,7 @@ import com.jmq.inversiones.business.notificaciones.NotificacionService;
 import com.jmq.inversiones.business.impl.notificaciones.EmailServiceImpl;
 import com.jmq.inversiones.business.impl.notificaciones.NotificacionServiceImpl;
 import com.jmq.inversiones.dominio.notificaciones.Notificacion;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.NotificacionDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.notificaciones.NotificacionDAOImpl;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;

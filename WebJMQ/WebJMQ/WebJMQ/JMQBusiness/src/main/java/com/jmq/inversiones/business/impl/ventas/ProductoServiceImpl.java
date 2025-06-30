@@ -2,7 +2,7 @@ package com.jmq.inversiones.business.impl.ventas;
 
 import com.jmq.inversiones.business.ventas.ProductoService;
 import com.jmq.inversiones.dominio.ventas.Producto;
-import com.jmq.inversiones.jmqpersistencia.dao.ProductoDAO;
+import com.jmq.inversiones.jmqpersistencia.dao.ventas.ProductoDAO;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;

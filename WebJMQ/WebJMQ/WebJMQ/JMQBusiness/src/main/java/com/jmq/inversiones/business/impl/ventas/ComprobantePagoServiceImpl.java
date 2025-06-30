@@ -3,8 +3,8 @@ package com.jmq.inversiones.business.impl.ventas;
 import com.jmq.inversiones.business.ventas.ComprobantePagoService;
 import com.jmq.inversiones.dominio.pagos.ComprobantePago;
 import com.jmq.inversiones.dominio.pagos.MetodoPago;
-import com.jmq.inversiones.jmqpersistencia.dao.ComprobantePagoDAO;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.ComprobantePagoDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.dao.pagos.ComprobantePagoDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.pagos.ComprobantePagoDAOImpl;
 import java.util.Date;
 import java.util.List;
 

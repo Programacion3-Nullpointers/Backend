@@ -3,8 +3,8 @@ package com.jmq.inversiones.business.impl.pagos;
 import com.jmq.inversiones.business.pagos.BoletaService;
 import com.jmq.inversiones.dominio.pagos.Boleta;
 import com.jmq.inversiones.dominio.pagos.MetodoPago;
-import com.jmq.inversiones.jmqpersistencia.dao.BoletaDAO;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.BoletaDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.dao.pagos.BoletaDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.pagos.BoletaDAOImpl;
 import java.util.Date;
 import java.util.List;
 

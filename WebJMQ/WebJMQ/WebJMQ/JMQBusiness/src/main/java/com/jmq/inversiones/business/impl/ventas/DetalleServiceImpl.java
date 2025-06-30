@@ -6,7 +6,7 @@ package com.jmq.inversiones.business.impl.ventas;
 
 import com.jmq.inversiones.business.ventas.DetalleService;
 import com.jmq.inversiones.dominio.ventas.Detalle;
-import com.jmq.inversiones.jmqpersistencia.dao.DetalleDAO;
+import com.jmq.inversiones.jmqpersistencia.dao.ventas.DetalleDAO;
 import java.util.List;
 
 public class DetalleServiceImpl implements DetalleService{

@@ -3,7 +3,7 @@ package com.jmq.inversiones.business.impl.notificaciones;
 import com.jmq.inversiones.business.notificaciones.EmailService;
 import com.jmq.inversiones.business.notificaciones.NotificacionService;
 import com.jmq.inversiones.dominio.notificaciones.Notificacion;
-import com.jmq.inversiones.jmqpersistencia.dao.NotificacionDAO;
+import com.jmq.inversiones.jmqpersistencia.dao.notificaciones.NotificacionDAO;
 import java.util.Date;
 import java.util.List;
 

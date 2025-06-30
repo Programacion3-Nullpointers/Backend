@@ -3,8 +3,8 @@ package com.jmq.inversiones.business.impl.cotizaciones;
 import com.jmq.inversiones.business.cotizaciones.CotizacionService;
 import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
 import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
-import com.jmq.inversiones.jmqpersistencia.dao.CotizacionDAO;
-import com.jmq.inversiones.jmqpersistencia.dao.ProductoCotizacionDAO;
+import com.jmq.inversiones.jmqpersistencia.dao.cotizaciones.CotizacionDAO;
+import com.jmq.inversiones.jmqpersistencia.dao.cotizaciones.ProductoCotizacionDAO;
 import java.util.List;
 
 public class CotizacionServiceImpl implements CotizacionService {

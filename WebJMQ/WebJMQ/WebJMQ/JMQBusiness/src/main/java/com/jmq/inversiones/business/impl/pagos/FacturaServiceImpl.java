@@ -3,8 +3,8 @@ package com.jmq.inversiones.business.impl.pagos;
 import com.jmq.inversiones.business.pagos.FacturaService;
 import com.jmq.inversiones.dominio.pagos.Factura;
 import com.jmq.inversiones.dominio.pagos.MetodoPago;
-import com.jmq.inversiones.jmqpersistencia.dao.FacturaDAO;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.FacturaDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.dao.pagos.FacturaDAO;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.pagos.FacturaDAOImpl;
 import java.util.Date;
 import java.util.List;
 

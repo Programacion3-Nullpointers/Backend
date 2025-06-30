@@ -2,7 +2,7 @@ package com.jmq.inversiones.business.impl.pagos;
 
 import com.jmq.inversiones.business.pagos.DescuentoService;
 import com.jmq.inversiones.dominio.pagos.Descuento;
-import com.jmq.inversiones.jmqpersistencia.dao.DescuentoDAO;
+import com.jmq.inversiones.jmqpersistencia.dao.pagos.DescuentoDAO;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
