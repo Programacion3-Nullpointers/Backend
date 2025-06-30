@@ -1,5 +1,5 @@
 
-package com.jmq.inversiones.jmqws;
+package com.jmq.inversiones.jmqws.ventas;
 
 import com.jmq.inversiones.business.ventas.CategoriaService;
 import com.jmq.inversiones.business.impl.ventas.CategoriaServiceImpl;

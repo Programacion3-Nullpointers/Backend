@@ -1,5 +1,5 @@
 
-package com.jmq.inversiones.jmqws;
+package com.jmq.inversiones.jmqws.pagos;
 
 import com.jmq.inversiones.business.pagos.BoletaService;
 import com.jmq.inversiones.business.impl.pagos.BoletaServiceImpl;

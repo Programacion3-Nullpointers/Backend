@@ -1,4 +1,4 @@
-package com.jmq.inversiones.jmqws;
+package com.jmq.inversiones.jmqws.pagos;
 
 import com.jmq.inversiones.business.ventas.ComprobantePagoService;
 import com.jmq.inversiones.business.impl.ventas.ComprobantePagoServiceImpl;

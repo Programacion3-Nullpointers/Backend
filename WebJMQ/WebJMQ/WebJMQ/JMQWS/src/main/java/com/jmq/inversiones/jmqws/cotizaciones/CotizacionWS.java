@@ -1,4 +1,4 @@
-package com.jmq.inversiones.jmqws;
+package com.jmq.inversiones.jmqws.cotizaciones;
 
 
 

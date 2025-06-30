@@ -1,4 +1,4 @@
-package com.jmq.inversiones.jmqws;
+package com.jmq.inversiones.jmqws.usuario;
 
 import com.jmq.inversiones.business.usuarios.UsuarioService;
 import com.jmq.inversiones.business.impl.usuario.UsuarioServiceImpl;

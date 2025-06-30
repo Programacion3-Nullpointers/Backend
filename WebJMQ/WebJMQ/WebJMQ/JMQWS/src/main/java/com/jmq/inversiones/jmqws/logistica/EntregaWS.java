@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.jmq.inversiones.jmqws;
+package com.jmq.inversiones.jmqws.logistica;
 
 import com.jmq.inversiones.business.logistica.EntregaService;
 import com.jmq.inversiones.business.impl.logistica.EntregaServiceImpl;

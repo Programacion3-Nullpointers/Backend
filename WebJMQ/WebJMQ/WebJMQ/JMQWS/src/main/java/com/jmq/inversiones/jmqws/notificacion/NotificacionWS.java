@@ -1,4 +1,4 @@
-package com.jmq.inversiones.jmqws;
+package com.jmq.inversiones.jmqws.notificacion;
 
 import com.jmq.inversiones.business.notificaciones.NotificacionService;
 import com.jmq.inversiones.business.impl.notificaciones.EmailServiceImpl;
