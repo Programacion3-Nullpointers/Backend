@@ -27,8 +27,9 @@ public class CotizacionWS {
     }
 
     @WebMethod
-    public void registrarCotizacion(@WebParam(name = "cotizacion") Cotizacion cotizacion) throws Exception {
+    public int registrarCotizacion(@WebParam(name = "cotizacion") Cotizacion cotizacion) throws Exception {
         cotizacionService.registrarCotizacion(cotizacion);
+        return cotizacion.getId();
     }
 
     @WebMethod
