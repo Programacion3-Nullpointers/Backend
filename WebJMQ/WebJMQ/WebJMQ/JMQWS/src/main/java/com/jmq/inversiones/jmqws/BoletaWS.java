@@ -1,8 +1,8 @@
 
 package com.jmq.inversiones.jmqws;
 
-import com.jmq.inversiones.business.BoletaService;
-import com.jmq.inversiones.business.impl.BoletaServiceImpl;
+import com.jmq.inversiones.business.pagos.BoletaService;
+import com.jmq.inversiones.business.impl.pagos.BoletaServiceImpl;
 import com.jmq.inversiones.dominio.pagos.Boleta;
 import jakarta.jws.WebService;
 import jakarta.jws.WebMethod;

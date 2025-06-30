@@ -4,8 +4,8 @@
  */
 package com.jmq.inversiones.jmqws;
 
-import com.jmq.inversiones.business.ProductoCotizacionService;
-import com.jmq.inversiones.business.impl.ProductoCotizacionServiceImpl;
+import com.jmq.inversiones.business.cotizaciones.ProductoCotizacionService;
+import com.jmq.inversiones.business.impl.cotizaciones.ProductoCotizacionServiceImpl;
 import com.jmq.inversiones.dominio.cotizaciones.ProductoCotizacion;
 import jakarta.jws.WebService;
 import jakarta.jws.WebMethod;

@@ -1,8 +1,8 @@
 
 package com.jmq.inversiones.jmqws;
 
-import com.jmq.inversiones.business.CategoriaService;
-import com.jmq.inversiones.business.impl.CategoriaServiceImpl;
+import com.jmq.inversiones.business.ventas.CategoriaService;
+import com.jmq.inversiones.business.impl.ventas.CategoriaServiceImpl;
 import com.jmq.inversiones.dominio.ventas.Categoria;
 import com.jmq.inversiones.dominio.pagos.Descuento;
 import jakarta.jws.WebService;

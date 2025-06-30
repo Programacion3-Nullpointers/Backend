@@ -1,7 +1,7 @@
 package com.jmq.inversiones.jmqws;
 
-import com.jmq.inversiones.business.ComprobantePagoService;
-import com.jmq.inversiones.business.impl.ComprobantePagoServiceImpl;
+import com.jmq.inversiones.business.ventas.ComprobantePagoService;
+import com.jmq.inversiones.business.impl.ventas.ComprobantePagoServiceImpl;
 import com.jmq.inversiones.dominio.pagos.ComprobantePago;
 import jakarta.jws.WebService;
 import jakarta.jws.WebMethod;

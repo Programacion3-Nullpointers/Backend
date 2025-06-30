@@ -4,8 +4,8 @@
  */
 package com.jmq.inversiones.jmqws;
 
-import com.jmq.inversiones.business.EntregaService;
-import com.jmq.inversiones.business.impl.EntregaServiceImpl;
+import com.jmq.inversiones.business.logistica.EntregaService;
+import com.jmq.inversiones.business.impl.logistica.EntregaServiceImpl;
 import com.jmq.inversiones.dominio.logistica.Entrega;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.EntregaDAOImpl;
 import jakarta.jws.WebService;

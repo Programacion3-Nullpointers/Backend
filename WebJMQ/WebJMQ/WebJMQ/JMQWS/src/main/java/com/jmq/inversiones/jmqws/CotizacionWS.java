@@ -2,8 +2,8 @@ package com.jmq.inversiones.jmqws;
 
 
 
-import com.jmq.inversiones.business.CotizacionService;
-import com.jmq.inversiones.business.impl.CotizacionServiceImpl;
+import com.jmq.inversiones.business.cotizaciones.CotizacionService;
+import com.jmq.inversiones.business.impl.cotizaciones.CotizacionServiceImpl;
 import com.jmq.inversiones.dominio.cotizaciones.Cotizacion;
 
 

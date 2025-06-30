@@ -1,8 +1,8 @@
 
 package com.jmq.inversiones.jmqws;
 
-import com.jmq.inversiones.business.FacturaService;
-import com.jmq.inversiones.business.impl.FacturaServiceImpl;
+import com.jmq.inversiones.business.pagos.FacturaService;
+import com.jmq.inversiones.business.impl.pagos.FacturaServiceImpl;
 import com.jmq.inversiones.dominio.pagos.Factura;
 import jakarta.jws.WebService;
 import jakarta.jws.WebMethod;

@@ -1,7 +1,7 @@
 package com.jmq.inversiones.jmqws;
 
-import com.jmq.inversiones.business.UsuarioService;
-import com.jmq.inversiones.business.impl.UsuarioServiceImpl;
+import com.jmq.inversiones.business.usuarios.UsuarioService;
+import com.jmq.inversiones.business.impl.usuario.UsuarioServiceImpl;
 import com.jmq.inversiones.dbmanager.DBManager;
 import com.jmq.inversiones.dominio.usuario.Usuario;
 import jakarta.jws.WebMethod;

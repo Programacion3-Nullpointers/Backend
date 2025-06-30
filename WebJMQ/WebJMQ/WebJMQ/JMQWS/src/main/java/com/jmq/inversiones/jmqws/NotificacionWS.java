@@ -1,8 +1,8 @@
 package com.jmq.inversiones.jmqws;
 
-import com.jmq.inversiones.business.NotificacionService;
-import com.jmq.inversiones.business.impl.EmailServiceImpl;
-import com.jmq.inversiones.business.impl.NotificacionServiceImpl;
+import com.jmq.inversiones.business.notificaciones.NotificacionService;
+import com.jmq.inversiones.business.impl.notificaciones.EmailServiceImpl;
+import com.jmq.inversiones.business.impl.notificaciones.NotificacionServiceImpl;
 import com.jmq.inversiones.dominio.notificaciones.Notificacion;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.NotificacionDAOImpl;
 import jakarta.jws.WebMethod;

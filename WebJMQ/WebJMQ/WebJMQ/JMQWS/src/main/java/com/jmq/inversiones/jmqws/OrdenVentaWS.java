@@ -3,8 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.jmq.inversiones.jmqws;
-import com.jmq.inversiones.business.*;
-import com.jmq.inversiones.business.impl.*;
+import com.jmq.inversiones.business.ventas.OrdenVentaService;
+import com.jmq.inversiones.business.impl.ventas.OrdenVentaServiceImpl;
 import com.jmq.inversiones.dominio.ventas.Detalle;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 
