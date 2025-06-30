@@ -7,7 +7,7 @@ package com.jmq.inversiones.jmqws;
 import com.jmq.inversiones.business.DetalleService;
 import com.jmq.inversiones.business.impl.DetalleServiceImpl;
 import com.jmq.inversiones.dominio.ventas.Detalle;
-import com.jmq.inversiones.jmqpersistencia.daoimpl.DetalleDAOImpl;
+import com.jmq.inversiones.jmqpersistencia.daoimpl.ventas.DetalleDAOImpl;
 import jakarta.jws.WebService;
 import jakarta.jws.WebMethod;
 import jakarta.xml.ws.WebServiceException;
