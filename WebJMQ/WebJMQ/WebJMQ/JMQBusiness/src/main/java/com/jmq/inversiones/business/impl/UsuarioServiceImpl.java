@@ -84,8 +84,7 @@ public class UsuarioServiceImpl implements UsuarioService{
             if (usuario.getCorreo()== null || usuario.getCorreo().isEmpty()) {
                 throw new Exception("El correo es requerido");
             }
-            String hashedPassword = BCrypt.hashpw(usuario.getContrasena(), BCrypt.gensalt());
-            usuario.setContrasena(hashedPassword);
+            
 
             usuarioDAO.actualizar(usuario);
         } catch (Exception e) {

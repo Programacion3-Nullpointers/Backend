@@ -79,4 +79,10 @@ public class OrdenVentaWS {
     )throws Exception{
             return ordenVentaService.filtrarOrdenesVenta(estadoCompra, activo, idUsuario, fechaDesde, fechaHasta);
     };
+    
+    @WebMethod(operationName = "generarFactura")
+    public String generarFacturaElectronica(@WebParam(name = "ordenVenta") OrdenVenta orden){
+        return ordenVentaService.generarFactura(orden);
+    }
+    
 }
