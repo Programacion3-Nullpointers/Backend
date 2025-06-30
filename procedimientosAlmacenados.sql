@@ -685,3 +685,19 @@ BEGIN
     FROM Usuario
     WHERE idUsuario = p_idUsuario;
 END $$
+
+CREATE PROCEDURE DETALLE_LISTAR_POR_ORDEN (
+    IN p_id_orden INT
+)
+BEGIN
+    SELECT 
+        id_orden,
+        id_producto,
+        cantidad,
+        precio_unitario
+    FROM Detalle
+    WHERE id_orden = p_id_orden;
+END $$
+
+DELIMITER ;
+DELIMITER ;
