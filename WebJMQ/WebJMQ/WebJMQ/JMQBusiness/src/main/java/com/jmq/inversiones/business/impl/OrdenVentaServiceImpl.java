@@ -6,9 +6,11 @@ import com.jmq.inversiones.dominio.ventas.Detalle;
 import com.jmq.inversiones.dominio.ventas.EstadoCompra;
 import com.jmq.inversiones.dominio.ventas.OrdenVenta;
 import com.jmq.inversiones.dominio.ventas.Producto;
+import com.jmq.inversiones.facturacion.FacturacionAPI;
 import com.jmq.inversiones.jmqpersistencia.dao.DetalleDAO;
 import com.jmq.inversiones.jmqpersistencia.dao.OrdenVentaDAO;
 import com.jmq.inversiones.jmqpersistencia.daoimpl.ProductoDAOImpl;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -278,4 +280,17 @@ public class OrdenVentaServiceImpl implements OrdenVentaService{
             
         }
     }
+    
+    @Override
+    public String generarFactura(OrdenVenta orden){
+        FacturacionAPI factura = new FacturacionAPI();
+        try {
+            
+            return factura.createResponse(orden);
+        } catch (IOException e) {
+            System.err.println("Error al enviar la factura: " + e.getMessage());
+        }
+        return "Error en generacion";
+    }
+    
 }

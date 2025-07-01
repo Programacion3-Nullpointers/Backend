@@ -18,4 +18,5 @@ public interface OrdenVentaService {
     List<OrdenVenta> listarOrdenVentaByUsuario(int id_usuario) throws Exception;
     List<OrdenVenta> filtrarOrdenesVenta(String estadoCompra, Boolean activo, Integer idUsuario,
                                           String fechaDesde, String fechaHasta) throws SQLException;
+    public String generarFactura(OrdenVenta orden);
 }

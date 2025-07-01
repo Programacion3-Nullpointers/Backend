@@ -84,7 +84,18 @@
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
-
+        <!-- OkHttp (cliente HTTP moderno y eficiente) -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+        <!-- Dependecia para el JSONOBJECT -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20240303</version> <!-- Usa la versión más reciente disponible -->
+        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
